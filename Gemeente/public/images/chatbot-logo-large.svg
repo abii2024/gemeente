@@ -1,0 +1,84 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="128" height="128">
+  <!-- Background circle with gradient -->
+  <defs>
+    <linearGradient id="bgGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#1e40af"/>
+      <stop offset="100%" stop-color="#3b82f6"/>
+    </linearGradient>
+    <linearGradient id="roofGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#dc2626"/>
+      <stop offset="100%" stop-color="#b91c1c"/>
+    </linearGradient>
+  </defs>
+  
+  <!-- Outer glow -->
+  <circle cx="64" cy="64" r="62" fill="none" stroke="#ffffff" stroke-width="1" opacity="0.2"/>
+  
+  <!-- Background circle -->
+  <circle cx="64" cy="64" r="60" fill="url(#bgGradient)" stroke="#ffffff" stroke-width="2"/>
+  
+  <!-- Inner accent circle -->
+  <circle cx="64" cy="64" r="54" fill="#3b82f6" opacity="0.8"/>
+  
+  <!-- Gemeente building -->
+  <g transform="translate(32, 32)">
+    <!-- Building shadow -->
+    <rect x="5" y="41" width="48" height="32" fill="#000000" opacity="0.1" rx="2"/>
+    
+    <!-- Building base -->
+    <rect x="4" y="40" width="48" height="32" fill="#ffffff" rx="2"/>
+    
+    <!-- Building roof -->
+    <polygon points="0,40 28,16 56,40" fill="url(#roofGradient)"/>
+    
+    <!-- Roof shadow -->
+    <polygon points="28,16 56,40 54,38 28,14" fill="#000000" opacity="0.2"/>
+    
+    <!-- Dutch flag on roof -->
+    <rect x="24" y="16" width="8" height="16" fill="#ffffff" stroke="#cccccc" stroke-width="0.5"/>
+    <rect x="24" y="16" width="8" height="5" fill="#dc2626"/>
+    <rect x="24" y="21" width="8" height="5" fill="#ffffff"/>
+    <rect x="24" y="26" width="8" height="6" fill="#1e40af"/>
+    
+    <!-- Flag pole -->
+    <rect x="27.5" y="14" width="1" height="4" fill="#666666"/>
+    
+    <!-- Windows row 1 -->
+    <rect x="8" y="46" width="6" height="6" fill="#1e40af" rx="1"/>
+    <rect x="18" y="46" width="6" height="6" fill="#1e40af" rx="1"/>
+    <rect x="32" y="46" width="6" height="6" fill="#1e40af" rx="1"/>
+    <rect x="42" y="46" width="6" height="6" fill="#1e40af" rx="1"/>
+    
+    <!-- Windows row 2 -->
+    <rect x="8" y="56" width="6" height="6" fill="#1e40af" rx="1"/>
+    <rect x="18" y="56" width="6" height="6" fill="#1e40af" rx="1"/>
+    <rect x="32" y="56" width="6" height="6" fill="#1e40af" rx="1"/>
+    <rect x="42" y="56" width="6" height="6" fill="#1e40af" rx="1"/>
+    
+    <!-- Main door -->
+    <rect x="24" y="58" width="8" height="14" fill="#dc2626" rx="4"/>
+    <circle cx="30" cy="64" r="1" fill="#ffffff"/>
+    <rect x="26" y="60" width="4" height="8" fill="#b91c1c" rx="2"/>
+    
+    <!-- Steps -->
+    <rect x="22" y="70" width="12" height="2" fill="#e5e7eb"/>
+    
+    <!-- Chat bubble (larger) -->
+    <g transform="translate(48, 8)">
+      <ellipse cx="8" cy="8" rx="10" ry="8" fill="#ffffff" stroke="#1e40af" stroke-width="2"/>
+      <polygon points="4,12 2,16 8,12" fill="#ffffff" stroke="#1e40af" stroke-width="1"/>
+      
+      <!-- Chat dots (larger) -->
+      <circle cx="4" cy="8" r="1" fill="#1e40af"/>
+      <circle cx="8" cy="8" r="1" fill="#1e40af"/>
+      <circle cx="12" cy="8" r="1" fill="#1e40af"/>
+      
+      <!-- Small sparkle effects -->
+      <circle cx="14" cy="4" r="0.5" fill="#fbbf24" opacity="0.8"/>
+      <circle cx="2" cy="4" r="0.5" fill="#fbbf24" opacity="0.8"/>
+    </g>
+  </g>
+  
+  <!-- Outer ring highlight -->
+  <circle cx="64" cy="64" r="60" fill="none" stroke="#ffffff" stroke-width="1" opacity="0.4"/>
+</svg>

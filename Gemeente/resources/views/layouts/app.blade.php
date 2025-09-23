@@ -13,6 +13,9 @@
 
         <!-- Scripts -->
         @vite(['resources/css/app.css', 'resources/js/app.js'])
+        
+        <!-- Chatbot Script -->
+        <script src="{{ asset('js/chatbot.js') }}" defer></script>
     </head>
     <body class="font-sans antialiased">
         <div class="min-h-screen bg-gray-100">
@@ -32,5 +35,12 @@
                 {{ $slot }}
             </main>
         </div>
+        
+        <!-- Chatbot Widget (only on public pages) -->
+        @auth
+            <div data-chatbot="enabled"></div>
+        @else
+            <div data-chatbot="enabled"></div>
+        @endauth
     </body>
 </html>

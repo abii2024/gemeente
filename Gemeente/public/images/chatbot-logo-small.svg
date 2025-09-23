@@ -1,0 +1,33 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" width="48" height="48">
+  <!-- Background circle -->
+  <circle cx="24" cy="24" r="22" fill="#1e40af"/>
+  
+  <!-- Inner circle -->
+  <circle cx="24" cy="24" r="18" fill="#3b82f6"/>
+  
+  <!-- Simplified gemeente building -->
+  <g transform="translate(12, 12)">
+    <!-- Building -->
+    <rect x="2" y="12" width="16" height="12" fill="#ffffff" rx="1"/>
+    
+    <!-- Roof -->
+    <polygon points="1,12 10,4 19,12" fill="#dc2626"/>
+    
+    <!-- Flag -->
+    <rect x="8" y="4" width="4" height="6" fill="#ffffff"/>
+    <rect x="8" y="4" width="4" height="2" fill="#dc2626"/>
+    <rect x="8" y="8" width="4" height="2" fill="#1e40af"/>
+    
+    <!-- Door -->
+    <rect x="8" y="18" width="4" height="6" fill="#dc2626" rx="2"/>
+    
+    <!-- Chat bubble -->
+    <circle cx="18" cy="6" r="4" fill="#ffffff" stroke="#1e40af" stroke-width="1"/>
+    <polygon points="16,8 15,10 17,8" fill="#ffffff"/>
+    
+    <!-- Chat dots -->
+    <circle cx="16.5" cy="6" r="0.5" fill="#1e40af"/>
+    <circle cx="18" cy="6" r="0.5" fill="#1e40af"/>
+    <circle cx="19.5" cy="6" r="0.5" fill="#1e40af"/>
+  </g>
+</svg>
