@@ -3,7 +3,6 @@
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Web\ComplaintController;
 use App\Http\Controllers\Web\UploadController;
-use App\Http\Controllers\Web\PageController;
 use Illuminate\Support\Facades\Route;
 
 // Public routes

@@ -144,7 +144,7 @@ return [
         ],
 
         'audit' => [
-            'driver' => 'daily', 
+            'driver' => 'daily',
             'path' => storage_path('logs/audit.log'),
             'level' => env('LOG_LEVEL', 'info'),
             'days' => 365, // Keep audit logs longer

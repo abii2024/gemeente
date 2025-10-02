@@ -25,7 +25,9 @@ Schedule::command('complaints:check-overdue')
     ->appendOutputTo(storage_path('logs/overdue-checks.log'));
 
 // Schedule command to clean up temporary uploads
-Schedule::command('storage:link')
-    ->weekly()
-    ->sundays()
-    ->at('03:00');
+Schedule::command('uploads:clean-temp')
+    ->daily()
+    ->at('03:30')
+    ->withoutOverlapping()
+    ->runInBackground()
+    ->appendOutputTo(storage_path('logs/upload-cleanup.log'));

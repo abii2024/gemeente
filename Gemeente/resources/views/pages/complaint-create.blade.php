@@ -67,23 +67,6 @@
                             @enderror
                         </div>
 
-                        <!-- Location -->
-                        <div>
-                            <label for="location" class="block text-sm font-medium text-gray-700 mb-2">
-                                Locatie (Adres of beschrijving) *
-                            </label>
-                            <input type="text" 
-                                   id="location" 
-                                   name="location" 
-                                   value="{{ old('location') }}"
-                                   required 
-                                   class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                                   placeholder="Bijv. Hoofdstraat 123 of bij de fontein in het park">
-                            @error('location')
-                                <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
-                            @enderror
-                        </div>
-
                         <!-- Reporter Phone -->
                         <div>
                             <label for="reporter_phone" class="block text-sm font-medium text-gray-700 mb-2">

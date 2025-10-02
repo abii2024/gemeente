@@ -5,8 +5,8 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Services\ChatbotService;
 use App\Services\PrivacyLogger;
-use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 
 class ChatController extends Controller
 {
@@ -32,7 +32,7 @@ class ChatController extends Controller
 
         try {
             $response = $this->chatbotService->processMessage($message);
-            
+
             // Log conversation for analytics (privacy-safe)
             PrivacyLogger::logUserAction('chatbot_interaction', [
                 'session_hash' => substr(hash('sha256', $sessionId), 0, 16),
@@ -60,8 +60,8 @@ class ChatController extends Controller
                 'fallback_response' => [
                     'type' => 'error',
                     'message' => "Sorry, er ging iets mis! 😕\n\nU kunt altijd:\n📞 Bellen naar 14 020\n🌐 Onze website bezoeken\n📧 Een email sturen",
-                    'quick_replies' => ['Contact opnemen', 'Website bezoeken']
-                ]
+                    'quick_replies' => ['Contact opnemen', 'Website bezoeken'],
+                ],
             ], 500);
         }
     }
@@ -73,19 +73,19 @@ class ChatController extends Controller
     {
         $welcomeResponse = [
             'type' => 'welcome',
-            'message' => "Welkom bij de gemeente chatbot! 🏛️\n\n" .
-                        "Ik kan u helpen met:\n" .
-                        "📋 Klachten indienen en status opzoeken\n" .
-                        "🔍 Uw klacht-ID terugvinden\n" .
-                        "📞 Contact informatie en openingstijden\n" .
-                        "ℹ️ Algemene vragen over gemeente diensten\n\n" .
-                        "Waarmee kan ik u vandaag helpen?",
+            'message' => "Welkom bij de gemeente chatbot! 🏛️\n\n".
+                        "Ik kan u helpen met:\n".
+                        "📋 Klachten indienen en status opzoeken\n".
+                        "🔍 Uw klacht-ID terugvinden\n".
+                        "📞 Contact informatie en openingstijden\n".
+                        "ℹ️ Algemene vragen over gemeente diensten\n\n".
+                        'Waarmee kan ik u vandaag helpen?',
             'quick_replies' => [
                 'Klacht indienen',
                 'Status opzoeken',
                 'Waar vind ik mijn klacht-ID?',
-                'Contact informatie'
-            ]
+                'Contact informatie',
+            ],
         ];
 
         return response()->json([
@@ -103,23 +103,23 @@ class ChatController extends Controller
     {
         $faqResponse = [
             'type' => 'faq',
-            'message' => "Veelgestelde vragen: ❓\n\n" .
-                        "**Klacht gerelateerd:**\n" .
-                        "• Hoe dien ik een klacht in?\n" .
-                        "• Waar vind ik mijn klacht-ID?\n" .
-                        "• Wat betekenen de verschillende statussen?\n" .
-                        "• Hoe lang duurt behandeling?\n\n" .
-                        "**Contact & Service:**\n" .
-                        "• Wat zijn de openingstijden?\n" .
-                        "• Hoe kan ik contact opnemen?\n" .
-                        "• Waar vind ik het gemeentehuis?\n" .
-                        "• Welke diensten zijn online beschikbaar?",
+            'message' => "Veelgestelde vragen: ❓\n\n".
+                        "**Klacht gerelateerd:**\n".
+                        "• Hoe dien ik een klacht in?\n".
+                        "• Waar vind ik mijn klacht-ID?\n".
+                        "• Wat betekenen de verschillende statussen?\n".
+                        "• Hoe lang duurt behandeling?\n\n".
+                        "**Contact & Service:**\n".
+                        "• Wat zijn de openingstijden?\n".
+                        "• Hoe kan ik contact opnemen?\n".
+                        "• Waar vind ik het gemeentehuis?\n".
+                        '• Welke diensten zijn online beschikbaar?',
             'quick_replies' => [
                 'Klacht indienen uitleg',
                 'Status betekenis',
                 'Contact informatie',
-                'Online diensten'
-            ]
+                'Online diensten',
+            ],
         ];
 
         return response()->json([

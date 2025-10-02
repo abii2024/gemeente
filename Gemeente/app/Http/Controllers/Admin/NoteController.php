@@ -5,11 +5,12 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Complaint;
 use App\Models\Note;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 
 class NoteController extends Controller
 {
-    public function store(Request $request, Complaint $complaint)
+    public function store(Request $request, Complaint $complaint): RedirectResponse
     {
         $request->validate([
             'body' => 'required|string|max:1000',
@@ -24,7 +25,7 @@ class NoteController extends Controller
         return redirect()->back()->with('success', 'Notitie toegevoegd.');
     }
 
-    public function destroy(Note $note)
+    public function destroy(Note $note): RedirectResponse
     {
         $note->delete();
 

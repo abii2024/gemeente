@@ -13,14 +13,14 @@ class AdminMiddleware
      */
     public function handle(Request $request, Closure $next): Response
     {
-        if (!auth()->check()) {
+        if (! auth()->check()) {
             return redirect('/login');
         }
 
         $user = auth()->user();
-        
+
         // Check if user has admin role
-        if (!$user->hasRole('admin')) {
+        if (! $user->hasRole('admin')) {
             abort(403, 'Toegang geweigerd. Admin rechten vereist.');
         }
 

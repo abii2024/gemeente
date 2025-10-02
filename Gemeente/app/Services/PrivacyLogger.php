@@ -9,44 +9,55 @@ class PrivacyLogger
 {
     /**
      * Log user action without PII.
+     *
+     * @param  array<string, mixed>  $context
      */
     public static function logUserAction(string $action, array $context = []): void
     {
         $sanitizedContext = self::sanitizeContext($context);
-        
+
         Log::channel('privacy_safe')->info("User action: {$action}", $sanitizedContext);
     }
 
     /**
      * Log security event.
      */
+    /**
+     * @param  array<string, mixed>  $context
+     */
     public static function logSecurityEvent(string $event, array $context = []): void
     {
         $sanitizedContext = self::sanitizeContext($context);
         $sanitizedContext['ip_hash'] = self::hashIp(request()->ip());
         $sanitizedContext['user_agent_hash'] = self::hashUserAgent(request()->userAgent());
-        
+
         Log::channel('security')->warning("Security event: {$event}", $sanitizedContext);
     }
 
     /**
      * Log audit event.
      */
+    /**
+     * @param  array<string, mixed>  $context
+     */
     public static function logAudit(string $action, array $context = []): void
     {
         $sanitizedContext = self::sanitizeContext($context);
         $sanitizedContext['timestamp'] = now()->toISOString();
-        
+
         if (auth()->check()) {
             $sanitizedContext['user_id'] = auth()->id();
             $sanitizedContext['user_role'] = auth()->user()->getRoleNames()->first();
         }
-        
+
         Log::channel('audit')->info("Audit: {$action}", $sanitizedContext);
     }
 
     /**
      * Log complaint action without exposing personal data.
+     */
+    /**
+     * @param  array<string, mixed>  $context
      */
     public static function logComplaintAction(string $action, int $complaintId, array $context = []): void
     {
@@ -60,25 +71,28 @@ class PrivacyLogger
 
     /**
      * Sanitize context data to remove PII.
+     *
+     * @param  array<string, mixed>  $context
+     * @return array<string, mixed>
      */
     private static function sanitizeContext(array $context): array
     {
         $sanitized = [];
-        
+
         foreach ($context as $key => $value) {
             // Skip keys that might contain PII
             if (self::isPotentialPII($key)) {
                 continue;
             }
-            
+
             // Hash values that might be PII
             if (self::shouldHashValue($key, $value)) {
-                $sanitized[$key . '_hash'] = self::hashValue($value);
+                $sanitized[$key.'_hash'] = self::hashValue($value);
             } else {
                 $sanitized[$key] = $value;
             }
         }
-        
+
         return $sanitized;
     }
 
@@ -88,19 +102,19 @@ class PrivacyLogger
     private static function isPotentialPII(string $key): bool
     {
         $piiKeys = [
-            'email', 'name', 'phone', 'address', 'reporter_name', 
-            'reporter_email', 'reporter_phone', 'description', 
-            'internal_notes', 'password', 'token'
+            'email', 'name', 'phone', 'address', 'reporter_name',
+            'reporter_email', 'reporter_phone', 'description',
+            'internal_notes', 'password', 'token',
         ];
-        
+
         $key = strtolower($key);
-        
+
         foreach ($piiKeys as $piiKey) {
             if (str_contains($key, $piiKey)) {
                 return true;
             }
         }
-        
+
         return false;
     }
 
@@ -109,19 +123,19 @@ class PrivacyLogger
      */
     private static function shouldHashValue(string $key, mixed $value): bool
     {
-        if (!is_string($value) && !is_numeric($value)) {
+        if (! is_string($value) && ! is_numeric($value)) {
             return false;
         }
-        
+
         $hashKeys = ['ip', 'user_agent', 'session_id'];
         $key = strtolower($key);
-        
+
         foreach ($hashKeys as $hashKey) {
             if (str_contains($key, $hashKey)) {
                 return true;
             }
         }
-        
+
         return false;
     }
 
@@ -130,9 +144,11 @@ class PrivacyLogger
      */
     private static function hashIp(?string $ip): ?string
     {
-        if (!$ip) return null;
-        
-        return substr(hash('sha256', $ip . config('app.key')), 0, 16);
+        if (! $ip) {
+            return null;
+        }
+
+        return substr(hash('sha256', $ip.config('app.key')), 0, 16);
     }
 
     /**
@@ -140,9 +156,11 @@ class PrivacyLogger
      */
     private static function hashUserAgent(?string $userAgent): ?string
     {
-        if (!$userAgent) return null;
-        
-        return substr(hash('sha256', $userAgent . config('app.key')), 0, 16);
+        if (! $userAgent) {
+            return null;
+        }
+
+        return substr(hash('sha256', $userAgent.config('app.key')), 0, 16);
     }
 
     /**
@@ -150,7 +168,7 @@ class PrivacyLogger
      */
     private static function hashValue(mixed $value): string
     {
-        return substr(hash('sha256', (string) $value . config('app.key')), 0, 16);
+        return substr(hash('sha256', (string) $value.config('app.key')), 0, 16);
     }
 
     /**

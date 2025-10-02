@@ -5,11 +5,12 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\ComplaintResource;
 use App\Models\Complaint;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
 class ComplaintApiController extends Controller
 {
-    public function index(Request $request)
+    public function index(Request $request): JsonResponse
     {
         $query = Complaint::with(['attachments']);
 
@@ -24,7 +25,7 @@ class ComplaintApiController extends Controller
         return ComplaintResource::collection($complaints);
     }
 
-    public function show(Complaint $complaint)
+    public function show(Complaint $complaint): JsonResponse
     {
         $complaint->load(['attachments', 'notes.user', 'statusHistories.user']);
 

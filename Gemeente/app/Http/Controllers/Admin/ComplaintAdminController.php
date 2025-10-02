@@ -6,19 +6,21 @@ use App\Http\Controllers\Controller;
 use App\Models\Complaint;
 use App\Models\StatusHistory;
 use App\Services\PrivacyLogger;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\View\View;
 
 class ComplaintAdminController extends Controller
 {
-    public function index(Request $request)
+    public function index(Request $request): View
     {
         $query = Complaint::with(['attachments']);
 
         // Search by ID
         if ($request->filled('search')) {
             $query->where('id', $request->search)
-                  ->orWhere('title', 'like', '%' . $request->search . '%')
-                  ->orWhere('reporter_name', 'like', '%' . $request->search . '%');
+                ->orWhere('title', 'like', '%'.$request->search.'%')
+                ->orWhere('reporter_name', 'like', '%'.$request->search.'%');
         }
 
         // Filter by status
@@ -31,26 +33,28 @@ class ComplaintAdminController extends Controller
         return view('admin.complaints.index', compact('complaints'));
     }
 
-    public function show(Complaint $complaint)
+    public function show(Complaint $complaint): View
     {
         $complaint->load(['attachments', 'notes.user', 'statusHistories.user']);
 
         return view('admin.complaints.show', compact('complaint'));
     }
 
-    public function edit(Complaint $complaint)
+    public function edit(Complaint $complaint): View
     {
         return view('admin.complaints.edit', compact('complaint'));
     }
 
-    public function update(Request $request, Complaint $complaint)
+    public function update(Request $request, Complaint $complaint): RedirectResponse
     {
         $request->validate([
             'title' => 'required|string|max:255',
             'description' => 'required|string',
-            'category' => 'nullable|string|max:255',
-            'priority' => 'nullable|in:laag,normaal,hoog,urgent',
-            'location' => 'nullable|string|max:255',
+            'category' => 'required|string|in:wegen,openbare_verlichting,afval,groen,overlast,openbare_ruimte,water,overig',
+            'priority' => 'nullable|in:low,medium,high,urgent',
+            'location' => 'nullable|string|max:500',
+            'lat' => 'nullable|numeric|between:-90,90',
+            'lng' => 'nullable|numeric|between:-180,180',
             'reporter_name' => 'required|string|max:255',
             'reporter_email' => 'required|email|max:255',
             'reporter_phone' => 'nullable|string|max:255',
@@ -64,7 +68,7 @@ class ComplaintAdminController extends Controller
             ->with('success', 'Klacht succesvol bijgewerkt.');
     }
 
-    public function updateStatus(Request $request, Complaint $complaint)
+    public function updateStatus(Request $request, Complaint $complaint): RedirectResponse
     {
         $request->validate([
             'status' => 'required|in:open,in_behandeling,opgelost',
@@ -93,10 +97,10 @@ class ComplaintAdminController extends Controller
             ]);
         }
 
-        return redirect()->back()->with('success', 'Status bijgewerkt naar: ' . $newStatus);
+        return redirect()->back()->with('success', 'Status bijgewerkt naar: '.$newStatus);
     }
 
-    public function destroy(Complaint $complaint)
+    public function destroy(Complaint $complaint): RedirectResponse
     {
         $complaintId = $complaint->id;
         $complaint->delete();
@@ -111,7 +115,7 @@ class ComplaintAdminController extends Controller
             ->with('success', 'Klacht succesvol verwijderd.');
     }
 
-    public function map()
+    public function map(): View
     {
         $complaints = Complaint::whereNotNull('lat')
             ->whereNotNull('lng')

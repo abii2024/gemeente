@@ -25,7 +25,7 @@ class StoreComplaintRequest extends FormRequest
             'title' => 'required|string|max:255|min:5',
             'description' => 'required|string|max:2000|min:10',
             'category' => 'required|string|in:wegen,openbare_verlichting,afval,groen,overlast,openbare_ruimte,water,overig',
-            'priority' => 'nullable|string|in:laag,normaal,hoog,urgent',
+            'priority' => 'nullable|string|in:low,medium,high,urgent',
             'location' => 'nullable|string|max:500',
             'lat' => 'nullable|numeric|between:-90,90',
             'lng' => 'nullable|numeric|between:-180,180',
@@ -77,6 +77,7 @@ class StoreComplaintRequest extends FormRequest
             'location' => $this->sanitizeString($this->location),
             'reporter_name' => $this->sanitizeString($this->reporter_name),
             'reporter_email' => strtolower(trim($this->reporter_email)),
+            'priority' => $this->priority ?: 'medium',
         ]);
     }
 
@@ -85,14 +86,16 @@ class StoreComplaintRequest extends FormRequest
      */
     private function sanitizeString(?string $value): ?string
     {
-        if (!$value) return null;
-        
+        if (! $value) {
+            return null;
+        }
+
         // Remove extra whitespace and trim
         $value = preg_replace('/\s+/', ' ', trim($value));
-        
+
         // Remove potentially dangerous characters but keep basic punctuation
         $value = preg_replace('/[<>{}\\\\]/', '', $value);
-        
+
         return $value;
     }
 }

@@ -19,12 +19,12 @@ class NoIndexMiddleware
 
         // Add no-index headers for search engine privacy
         $response->headers->set('X-Robots-Tag', 'noindex, nofollow, noarchive, nosnippet, noimageindex');
-        
+
         // Add security headers
         $response->headers->set('X-Frame-Options', 'DENY');
         $response->headers->set('X-Content-Type-Options', 'nosniff');
         $response->headers->set('Referrer-Policy', 'strict-origin-when-cross-origin');
-        
+
         // Add cache control for admin pages
         $response->headers->set('Cache-Control', 'no-cache, no-store, must-revalidate, private');
         $response->headers->set('Pragma', 'no-cache');

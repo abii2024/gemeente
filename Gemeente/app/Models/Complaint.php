@@ -30,40 +30,49 @@ class Complaint extends Model
         'resolved_at' => 'datetime',
     ];
 
+    /**
+     * @return HasMany<Attachment>
+     */
     public function attachments(): HasMany
     {
         return $this->hasMany(Attachment::class);
     }
 
+    /**
+     * @return HasMany<Note>
+     */
     public function notes(): HasMany
     {
         return $this->hasMany(Note::class);
     }
 
+    /**
+     * @return HasMany<StatusHistory>
+     */
     public function statusHistories(): HasMany
     {
         return $this->hasMany(StatusHistory::class);
     }
 
     // Scopes
-    public function scopeOpen($query)
+    public function scopeOpen($query): void
     {
-        return $query->where('status', 'open');
+        $query->where('status', 'open');
     }
 
-    public function scopeInBehandeling($query)
+    public function scopeInBehandeling($query): void
     {
-        return $query->where('status', 'in_behandeling');
+        $query->where('status', 'in_behandeling');
     }
 
-    public function scopeOpgelost($query)
+    public function scopeOpgelost($query): void
     {
-        return $query->where('status', 'opgelost');
+        $query->where('status', 'opgelost');
     }
 
-    public function scopeRecent($query, $days = 7)
+    public function scopeRecent($query, int $days = 7): void
     {
-        return $query->where('created_at', '>=', now()->subDays($days));
+        $query->where('created_at', '>=', now()->subDays($days));
     }
 
     // Helpers

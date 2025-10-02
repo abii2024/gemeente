@@ -5,7 +5,7 @@
  * Run this script to verify that all security features are properly implemented
  */
 
-require_once __DIR__ . '/vendor/autoload.php';
+require_once __DIR__.'/vendor/autoload.php';
 
 echo "=== GEMEENTE SECURITY IMPLEMENTATION VERIFICATIE ===\n\n";
 

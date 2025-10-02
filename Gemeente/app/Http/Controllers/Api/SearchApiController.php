@@ -5,11 +5,12 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\ComplaintResource;
 use App\Models\Complaint;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
 class SearchApiController extends Controller
 {
-    public function search(Request $request)
+    public function search(Request $request): JsonResponse
     {
         $request->validate([
             'id' => 'nullable|integer',
@@ -33,9 +34,9 @@ class SearchApiController extends Controller
         if ($request->filled('q')) {
             $searchTerm = $request->q;
             $query->where(function ($q) use ($searchTerm) {
-                $q->where('title', 'like', '%' . $searchTerm . '%')
-                  ->orWhere('description', 'like', '%' . $searchTerm . '%')
-                  ->orWhere('reporter_name', 'like', '%' . $searchTerm . '%');
+                $q->where('title', 'like', '%'.$searchTerm.'%')
+                    ->orWhere('description', 'like', '%'.$searchTerm.'%')
+                    ->orWhere('reporter_name', 'like', '%'.$searchTerm.'%');
             });
         }
 

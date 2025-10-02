@@ -3,21 +3,21 @@
 namespace App\Http\Controllers\Web;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
+use Illuminate\View\View;
 
 class PageController extends Controller
 {
-    public function home()
+    public function home(): View
     {
         return view('pages.home');
     }
 
-    public function about()
+    public function about(): View
     {
         return view('pages.about');
     }
 
-    public function contact()
+    public function contact(): View
     {
         return view('pages.contact');
     }

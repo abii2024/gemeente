@@ -1,0 +1,38 @@
+includes:
+    - vendor/larastan/larastan/extension.neon
+    - phpstan-baseline.neon
+
+parameters:
+
+    paths:
+        - app/
+        - config/
+        - database/
+        - routes/
+        - tests/
+
+    # Rule level of PHPStan (0-9, higher means stricter)
+    level: 6
+
+    ignoreErrors:
+        # Ignore Laravel's dynamic properties and methods
+        - '#Cannot call method [a-zA-Z0-9\\_]+\(\) on mixed#'
+        - '#Call to an undefined method [a-zA-Z0-9\\_]+::[a-zA-Z0-9\\_]+\(\)#'
+
+        # Ignore some common Laravel patterns
+        - '#Property App\\Models\\[a-zA-Z0-9\\_]+::\$[a-zA-Z0-9\\_]+ \(array\) does not accept [a-zA-Z0-9\\_\\|]+#'
+
+        # Ignore test-specific patterns
+        - '#Cannot call method [a-zA-Z0-9\\_]+\(\) on Pest\\TestSuite#'
+
+    excludePaths:
+        - storage/
+        - bootstrap/cache/
+        - node_modules/
+        - vendor/
+
+    reportUnmatchedIgnoredErrors: false
+
+    # Laravel-specific configurations
+    checkModelProperties: true
+    checkOctaneCompatibility: false

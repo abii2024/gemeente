@@ -4,8 +4,6 @@ namespace App\Listeners;
 
 use App\Services\PrivacyLogger;
 use Illuminate\Auth\Events\Failed;
-use Illuminate\Contracts\Queue\ShouldQueue;
-use Illuminate\Queue\InteractsWithQueue;
 
 class LogFailedLogin
 {

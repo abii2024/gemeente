@@ -1,0 +1,48 @@
+{
+    "folders": [
+        {
+            "path": "."
+        }
+    ],
+    "settings": {
+        "cSpell.enabled": true,
+        "cSpell.language": "en,nl",
+        "cSpell.words": [
+            "gemeente",
+            "klachten",
+            "laravel",
+            "phpstan",
+            "larastan"
+        ],
+        "cSpell.ignorePaths": [
+            "node_modules",
+            "vendor",
+            "public/build",
+            "storage/logs",
+            "bootstrap/cache",
+            "*.min.js",
+            "*.min.css"
+        ],
+        "cSpell.enabledFileTypes": {
+            "php": true,
+            "blade": true,
+            "markdown": true,
+            "yaml": true,
+            "json": true
+        },
+        "cSpell.checkLimit": 500,
+        "cSpell.numSuggestions": 5,
+        "cSpell.minWordLength": 4,
+        "cSpell.maxNumberOfProblems": 100,
+        "cSpell.diagnosticLevel": "Information",
+        "files.associations": {
+            "*.blade.php": "blade"
+        }
+    },
+    "extensions": {
+        "recommendations": [
+            "streetsidesoftware.code-spell-checker",
+            "streetsidesoftware.code-spell-checker-dutch"
+        ]
+    }
+}

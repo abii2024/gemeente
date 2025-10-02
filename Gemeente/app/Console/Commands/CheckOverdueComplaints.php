@@ -29,29 +29,30 @@ class CheckOverdueComplaints extends Command
     public function handle(): int
     {
         $days = (int) $this->option('days');
-        
+
         $this->info("Checking for complaints older than {$days} days that are not resolved...");
-        
+
         $overdueComplaints = Complaint::where('created_at', '<', now()->subDays($days))
             ->whereIn('status', ['open', 'in_behandeling'])
             ->get();
-            
+
         if ($overdueComplaints->isEmpty()) {
             $this->info('No overdue complaints found.');
             PrivacyLogger::logAudit('overdue_check_completed', [
                 'overdue_count' => 0,
                 'days_threshold' => $days,
             ]);
+
             return self::SUCCESS;
         }
-        
+
         $count = $overdueComplaints->count();
         $this->warn("Found {$count} overdue complaints:");
-        
+
         foreach ($overdueComplaints as $complaint) {
             $daysOld = $complaint->created_at->diffInDays(now());
             $this->line("- Complaint #{$complaint->id}: {$complaint->title} (created {$daysOld} days ago, status: {$complaint->status})");
-            
+
             // Log each overdue complaint for admin attention
             PrivacyLogger::logAudit('overdue_complaint_detected', [
                 'complaint_id' => $complaint->id,
@@ -60,15 +61,15 @@ class CheckOverdueComplaints extends Command
                 'category' => $complaint->category,
             ]);
         }
-        
+
         // Send notification to admins (in real implementation)
         $this->comment("Notifications would be sent to administrators about {$count} overdue complaints.");
-        
+
         PrivacyLogger::logAudit('overdue_check_completed', [
             'overdue_count' => $count,
             'days_threshold' => $days,
         ]);
-        
+
         return self::SUCCESS;
     }
 }

@@ -31,12 +31,12 @@ return new class extends Migration
             $table->dropForeign(['assigned_to']);
             $table->dropColumn([
                 'category',
-                'priority', 
+                'priority',
                 'location',
                 'reporter_phone',
                 'internal_notes',
                 'resolved_at',
-                'assigned_to'
+                'assigned_to',
             ]);
         });
     }

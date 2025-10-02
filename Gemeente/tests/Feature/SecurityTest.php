@@ -3,12 +3,11 @@
 namespace Tests\Feature;
 
 use App\Models\User;
-use App\Models\Complaint;
 use App\Services\PrivacyLogger;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Log;
-use Tests\TestCase;
 use Spatie\Permission\Models\Role;
+use Tests\TestCase;
 
 class SecurityTest extends TestCase
 {
@@ -17,21 +16,21 @@ class SecurityTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
-        
+
         // Create roles
         Role::create(['name' => 'admin']);
         Role::create(['name' => 'user']);
     }
 
     /** @test */
-    public function unauthenticated_users_cannot_access_admin_pages()
+    public function unauthenticated_users_cannot_access_admin_pages(): void
     {
         $response = $this->get('/admin/dashboard');
         $response->assertRedirect('/login');
     }
 
     /** @test */
-    public function non_admin_users_cannot_access_admin_pages()
+    public function non_admin_users_cannot_access_admin_pages(): void
     {
         $user = User::factory()->create();
         $user->assignRole('user');
@@ -41,7 +40,7 @@ class SecurityTest extends TestCase
     }
 
     /** @test */
-    public function admin_users_can_access_admin_pages()
+    public function admin_users_can_access_admin_pages(): void
     {
         $admin = User::factory()->create();
         $admin->assignRole('admin');
@@ -51,34 +50,34 @@ class SecurityTest extends TestCase
     }
 
     /** @test */
-    public function admin_pages_have_no_index_headers()
+    public function admin_pages_have_no_index_headers(): void
     {
         $admin = User::factory()->create();
         $admin->assignRole('admin');
 
         $response = $this->actingAs($admin)->get('/admin/dashboard');
-        
+
         $response->assertHeader('X-Robots-Tag', 'noindex');
         $response->assertHeader('X-Frame-Options', 'DENY');
         $response->assertHeader('Cache-Control', 'no-cache, private, no-store, must-revalidate, max-stale=0, post-check=0, pre-check=0');
     }
 
     /** @test */
-    public function complaint_form_validates_required_fields()
+    public function complaint_form_validates_required_fields(): void
     {
         $response = $this->post('/complaint', []);
-        
+
         $response->assertSessionHasErrors([
             'title',
             'description',
             'category',
             'reporter_name',
-            'reporter_email'
+            'reporter_email',
         ]);
     }
 
     /** @test */
-    public function privacy_logger_sanitizes_pii_data()
+    public function privacy_logger_sanitizes_pii_data(): void
     {
         // Capture log output
         Log::shouldReceive('channel')->with('privacy_safe')->andReturnSelf();
@@ -89,14 +88,14 @@ class SecurityTest extends TestCase
                 $this->assertArrayNotHasKey('email', $context);
                 $this->assertArrayNotHasKey('name', $context);
                 $this->assertArrayNotHasKey('phone', $context);
-                
+
                 // Should contain hashed IP
                 $this->assertArrayHasKey('ip_hash', $context);
-                
+
                 // Should contain safe data
                 $this->assertArrayHasKey('category', $context);
                 $this->assertEquals('test_category', $context['category']);
-                
+
                 return true;
             })
         );
@@ -108,19 +107,19 @@ class SecurityTest extends TestCase
             'phone' => '123456789',
             'ip' => '192.168.1.1',
             'category' => 'test_category',
-            'safe_data' => 'this is safe'
+            'safe_data' => 'this is safe',
         ]);
     }
 
     /** @test */
-    public function csrf_protection_is_enabled_on_forms()
+    public function csrf_protection_is_enabled_on_forms(): void
     {
         $response = $this->post('/complaint', [
             'title' => 'Test Complaint',
             'description' => 'Test Description',
             'category' => 'andere',
             'reporter_name' => 'Test User',
-            'reporter_email' => 'test@example.com'
+            'reporter_email' => 'test@example.com',
         ]);
 
         // Should fail without CSRF token
@@ -128,7 +127,7 @@ class SecurityTest extends TestCase
     }
 
     /** @test */
-    public function file_uploads_are_validated()
+    public function file_uploads_are_validated(): void
     {
         $response = $this->post('/complaint', [
             'title' => 'Test Complaint',
@@ -138,15 +137,15 @@ class SecurityTest extends TestCase
             'reporter_email' => 'test@example.com',
             'attachments' => [
                 // Try to upload invalid file type
-                \Illuminate\Http\UploadedFile::fake()->create('malicious.exe', 1000)
-            ]
+                \Illuminate\Http\UploadedFile::fake()->create('malicious.exe', 1000),
+            ],
         ]);
 
         $response->assertSessionHasErrors(['attachments.0']);
     }
 
     /** @test */
-    public function sensitive_routes_require_authentication()
+    public function sensitive_routes_require_authentication(): void
     {
         $sensitiveRoutes = [
             '/admin/dashboard',

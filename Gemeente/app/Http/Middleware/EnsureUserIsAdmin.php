@@ -15,13 +15,13 @@ class EnsureUserIsAdmin
      */
     public function handle(Request $request, Closure $next): Response
     {
-        if (!auth()->check()) {
+        if (! auth()->check()) {
             return redirect()->route('login');
         }
 
         // Check if user has admin or medewerker role
         $user = auth()->user();
-        if (!$user->hasAnyRole(['admin', 'medewerker'])) {
+        if (! $user->hasAnyRole(['admin', 'medewerker'])) {
             abort(403, 'Access denied. Admin access required.');
         }
 

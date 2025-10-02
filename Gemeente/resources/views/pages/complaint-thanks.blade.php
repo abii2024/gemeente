@@ -12,9 +12,15 @@
                     </div>
                     
                     <h1 class="text-3xl font-bold text-gray-900 mb-4">Bedankt!</h1>
-                    <p class="text-lg text-gray-600 mb-6">
-                        Uw klacht is succesvol ingediend en heeft nummer <strong>#{{ session('complaint_id', 'XXX') }}</strong>.
-                    </p>
+                    @if (session('complaint_id'))
+                        <p class="text-lg text-gray-600 mb-6">
+                            Uw klacht is succesvol ingediend en heeft nummer <strong>#{{ session('complaint_id') }}</strong>.
+                        </p>
+                    @else
+                        <p class="text-lg text-gray-600 mb-6">
+                            Uw klacht is succesvol ingediend.
+                        </p>
+                    @endif
                     <p class="text-gray-600 mb-8">
                         We nemen uw melding serieus en zullen deze zo spoedig mogelijk in behandeling nemen. 
                         U ontvangt een bevestiging op het opgegeven e-mailadres.
