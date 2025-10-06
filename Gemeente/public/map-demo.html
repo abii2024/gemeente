@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gemeente Portal - Klachten Kaart Demo</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f5f5f5;
+        }
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .header h1 {
+            font-size: 24px;
+            margin-bottom: 10px;
+        }
+        .stats {
+            display: flex;
+            gap: 20px;
+            margin-top: 15px;
+        }
+        .stat-card {
+            background: rgba(255,255,255,0.2);
+            padding: 15px;
+            border-radius: 10px;
+            backdrop-filter: blur(10px);
+        }
+        .stat-number {
+            font-size: 32px;
+            font-weight: bold;
+        }
+        .stat-label {
+            font-size: 14px;
+            opacity: 0.9;
+        }
+        .controls {
+            padding: 20px;
+            background: white;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            display: flex;
+            gap: 15px;
+            align-items: center;
+        }
+        .filter-group {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+        .filter-group label {
+            font-size: 12px;
+            color: #666;
+            font-weight: 600;
+        }
+        select, button {
+            padding: 10px 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 14px;
+            cursor: pointer;
+        }
+        button {
+            background: #667eea;
+            color: white;
+            border: none;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+        button:hover {
+            background: #5568d3;
+            transform: translateY(-2px);
+        }
+        #map {
+            height: calc(100vh - 230px);
+            width: 100%;
+        }
+        .legend {
+            position: absolute;
+            bottom: 30px;
+            right: 30px;
+            background: white;
+            padding: 15px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+            z-index: 1000;
+        }
+        .legend-title {
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 5px;
+        }
+        .legend-color {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            border: 2px solid #333;
+        }
+        .loading {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+            z-index: 2000;
+            display: none;
+        }
+        .loading.active {
+            display: block;
+        }
+        .spinner {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #667eea;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 15px;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>🗺️ Gemeente Portal - Klachten Kaart</h1>
+        <div class="stats">
+            <div class="stat-card">
+                <div class="stat-number" id="totalCount">0</div>
+                <div class="stat-label">Totaal Klachten</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number" id="openCount">0</div>
+                <div class="stat-label">Open</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number" id="urgentCount">0</div>
+                <div class="stat-label">Urgent</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="controls">
+        <div class="filter-group">
+            <label>Status Filter</label>
+            <select id="statusFilter">
+                <option value="">Alle Statussen</option>
+                <option value="open">Open</option>
+                <option value="in_progress">In Progress</option>
+                <option value="resolved">Opgelost</option>
+                <option value="closed">Gesloten</option>
+            </select>
+        </div>
+        <button onclick="loadComplaints()">🔄 Ververs Kaart</button>
+        <button onclick="showAllComplaints()">📍 Toon Alles</button>
+    </div>
+
+    <div id="map"></div>
+
+    <div class="legend">
+        <div class="legend-title">Status Legenda</div>
+        <div class="legend-item">
+            <div class="legend-color" style="background: #ef4444;"></div>
+            <span>Open</span>
+        </div>
+        <div class="legend-item">
+            <div class="legend-color" style="background: #f59e0b;"></div>
+            <span>In Progress</span>
+        </div>
+        <div class="legend-item">
+            <div class="legend-color" style="background: #10b981;"></div>
+            <span>Opgelost</span>
+        </div>
+        <div class="legend-item">
+            <div class="legend-color" style="background: #6b7280;"></div>
+            <span>Gesloten</span>
+        </div>
+    </div>
+
+    <div class="loading" id="loading">
+        <div class="spinner"></div>
+        <div>Laden...</div>
+    </div>
+
+    <script>
+        // Initialize map centered on Amsterdam
+        const map = L.map('map').setView([52.3676, 4.9041], 12);
+
+        // Add OpenStreetMap tiles
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '© OpenStreetMap contributors'
+        }).addTo(map);
+
+        let markers = [];
+
+        // Status colors
+        const statusColors = {
+            'open': '#ef4444',
+            'in_progress': '#f59e0b',
+            'resolved': '#10b981',
+            'closed': '#6b7280'
+        };
+
+        // Priority sizes
+        const prioritySizes = {
+            'low': 8,
+            'medium': 10,
+            'high': 12,
+            'urgent': 15
+        };
+
+        function showLoading(show) {
+            const loading = document.getElementById('loading');
+            if (show) {
+                loading.classList.add('active');
+            } else {
+                loading.classList.remove('active');
+            }
+        }
+
+        async function loadComplaints() {
+            showLoading(true);
+
+            // Clear existing markers
+            markers.forEach(marker => map.removeLayer(marker));
+            markers = [];
+
+            try {
+                const status = document.getElementById('statusFilter').value;
+                const url = status
+                    ? `/api/complaints/map?status=${status}`
+                    : '/api/complaints/map';
+
+                const response = await fetch(url);
+                const data = await response.json();
+
+                if (data.success) {
+                    // Update stats
+                    document.getElementById('totalCount').textContent = data.count;
+
+                    let openCount = 0;
+                    let urgentCount = 0;
+
+                    data.data.forEach(complaint => {
+                        if (complaint.status === 'open') openCount++;
+                        if (complaint.priority === 'urgent') urgentCount++;
+
+                        // Create marker
+                        const color = statusColors[complaint.status] || '#6b7280';
+                        const size = prioritySizes[complaint.priority] || 10;
+
+                        const marker = L.circleMarker([complaint.lat, complaint.lng], {
+                            radius: size,
+                            fillColor: color,
+                            color: '#fff',
+                            weight: 2,
+                            opacity: 1,
+                            fillOpacity: 0.8
+                        });
+
+                        // Popup content
+                        const popupContent = `
+                            <div style="min-width: 200px;">
+                                <h3 style="margin: 0 0 10px 0; color: ${color};">
+                                    ${complaint.title}
+                                </h3>
+                                <p style="margin: 5px 0;"><strong>ID:</strong> ${complaint.id}</p>
+                                <p style="margin: 5px 0;"><strong>Status:</strong> ${complaint.status}</p>
+                                <p style="margin: 5px 0;"><strong>Prioriteit:</strong> ${complaint.priority}</p>
+                                <p style="margin: 5px 0;"><strong>Categorie:</strong> ${complaint.category}</p>
+                                <p style="margin: 5px 0;"><strong>Locatie:</strong> ${complaint.location}</p>
+                                <p style="margin: 5px 0; font-size: 12px; color: #666;">
+                                    ${new Date(complaint.created_at).toLocaleDateString('nl-NL')}
+                                </p>
+                            </div>
+                        `;
+
+                        marker.bindPopup(popupContent);
+                        marker.addTo(map);
+                        markers.push(marker);
+                    });
+
+                    document.getElementById('openCount').textContent = openCount;
+                    document.getElementById('urgentCount').textContent = urgentCount;
+
+                    // Fit map to markers
+                    if (markers.length > 0) {
+                        const group = L.featureGroup(markers);
+                        map.fitBounds(group.getBounds().pad(0.1));
+                    }
+                }
+            } catch (error) {
+                console.error('Error loading complaints:', error);
+                alert('Fout bij laden van klachten. Check de console voor details.');
+            } finally {
+                showLoading(false);
+            }
+        }
+
+        function showAllComplaints() {
+            document.getElementById('statusFilter').value = '';
+            loadComplaints();
+        }
+
+        // Load complaints on page load
+        loadComplaints();
+
+        // Auto-refresh every 30 seconds
+        setInterval(loadComplaints, 30000);
+    </script>
+</body>
+</html>

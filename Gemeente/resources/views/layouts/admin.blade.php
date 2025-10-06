@@ -8,28 +8,20 @@
         <title>{{ config('app.name', 'Laravel') }} | Admin</title>
 
         <link rel="preconnect" href="https://fonts.bunny.net">
-        <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
+        <link href="https://fonts.bunny.net/css?family=inter:400,500,600,700,800&display=swap" rel="stylesheet" />
+        <link rel="stylesheet" href="{{ asset('css/gemeente-modern.css') }}">
+        <script src="{{ asset('js/chatbot.js') }}" defer></script>
+        <script src="{{ asset('js/moderne-animations.js') }}" defer></script>
 
         @vite(['resources/css/app.css', 'resources/js/app.js'])
     </head>
-    <body class="font-sans antialiased">
-        <div class="min-h-screen bg-gray-100">
-            @include('layouts.navigation')
-
-            <nav class="bg-white border-b border-gray-200">
-                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                    <div class="flex items-center space-x-4 py-3 text-sm font-medium text-gray-600">
-                        <a href="{{ route('admin.dashboard') }}" class="{{ request()->routeIs('admin.dashboard') ? 'text-blue-600' : 'hover:text-blue-500' }}">Dashboard</a>
-                        <a href="{{ route('admin.complaints.index') }}" class="{{ request()->routeIs('admin.complaints.index') ? 'text-blue-600' : 'hover:text-blue-500' }}">Klachten</a>
-                        <a href="{{ route('admin.complaints.map') }}" class="{{ request()->routeIs('admin.complaints.map') ? 'text-blue-600' : 'hover:text-blue-500' }}">Kaart</a>
-                        <a href="{{ route('admin.database.index') }}" class="{{ request()->routeIs('admin.database.*') ? 'text-blue-600' : 'hover:text-blue-500' }}">Database</a>
-                    </div>
-                </div>
-            </nav>
+    <body class="bg-gradient">
+        <div class="min-h-screen">
+            @include('admin.partials.header')
 
             @isset($header)
-                <header class="bg-white shadow">
-                    <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
+                <header style="background: rgba(255, 255, 255, 0.9); backdrop-filter: blur(20px) saturate(180%); box-shadow: var(--shadow-md); border-bottom: 1px solid rgba(255, 255, 255, 0.3);">
+                    <div class="container" style="padding: 2rem 0;">
                         {{ $header }}
                     </div>
                 </header>
@@ -38,6 +30,8 @@
             <main>
                 {{ $slot }}
             </main>
+
+            @include('admin.partials.footer')
         </div>
     </body>
 </html>

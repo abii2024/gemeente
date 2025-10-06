@@ -1,27 +1,36 @@
 <x-admin-layout>
     <x-slot name="header">
-        <div class="flex items-center justify-between">
-            <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-                Klacht #{{ $complaint->id }}
-            </h2>
-            <div class="flex space-x-2">
-                <a href="{{ route('admin.complaints.edit', $complaint) }}" class="inline-flex items-center px-4 py-2 bg-yellow-500 text-white text-sm font-semibold rounded-md hover:bg-yellow-600">
-                    Bewerken
+        <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 1rem;">
+            <div style="display: flex; align-items: center; gap: 0.75rem;">
+                <span style="font-size: 2rem;">🔍</span>
+                <h2 style="font-size: clamp(1.5rem, 3vw, 2rem); font-weight: 800; color: var(--neutral-900); margin: 0;">
+                    Klacht #{{ $complaint->id }}
+                </h2>
+            </div>
+            <div style="display: flex; gap: 0.75rem; flex-wrap: wrap;">
+                <a href="{{ route('admin.complaints.edit', $complaint) }}"
+                   style="padding: 0.875rem 1.5rem; background: linear-gradient(135deg, #F59E0B 0%, #D97706 100%); color: white; border: none; border-radius: 12px; font-weight: 600; text-decoration: none; transition: all var(--transition-fast); display: inline-flex; align-items: center; gap: 0.5rem;"
+                   onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='var(--shadow-lg)'"
+                   onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='none'">
+                    ✏️ Bewerken
                 </a>
-                <form action="{{ route('admin.complaints.destroy', $complaint) }}" method="POST" onsubmit="return confirm('Weet u zeker dat u deze klacht wilt verwijderen?');">
+                <form action="{{ route('admin.complaints.destroy', $complaint) }}" method="POST" onsubmit="return confirm('Weet u zeker dat u deze klacht wilt verwijderen?');" style="display: inline;">
                     @csrf
                     @method('DELETE')
-                    <button type="submit" class="inline-flex items-center px-4 py-2 bg-red-600 text-white text-sm font-semibold rounded-md hover:bg-red-700">
-                        Verwijderen
+                    <button type="submit"
+                            style="padding: 0.875rem 1.5rem; background: linear-gradient(135deg, #EF4444 0%, #DC2626 100%); color: white; border: none; border-radius: 12px; font-weight: 600; cursor: pointer; transition: all var(--transition-fast); display: inline-flex; align-items: center; gap: 0.5rem;"
+                            onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='var(--shadow-lg)'"
+                            onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='none'">
+                        🗑️ Verwijderen
                     </button>
                 </form>
             </div>
         </div>
     </x-slot>
 
-    <div class="py-12">
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 space-y-6">
-            <!-- Complaint Summary -->
+    <div style="padding: 3rem 0;">
+        <div class="container" style="max-width: 1400px;">
+            <!-- Complaint Summary Card -->
             <div class="bg-white shadow-sm sm:rounded-lg">
                 <div class="p-6 space-y-4">
                     <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">

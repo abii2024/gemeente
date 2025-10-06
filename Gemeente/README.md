@@ -55,6 +55,15 @@ npm run build
 composer dev
 ```
 
+### 👤 Admin Login
+
+Voor toegang tot het admin dashboard:
+
+**Email:** `admin@gemeente.nl`  
+**Wachtwoord:** `admin123`
+
+📖 **Volledige credentials en setup:** Zie [ADMIN_CREDENTIALS.md](ADMIN_CREDENTIALS.md)
+
 ### Development Commands
 
 ```bash
@@ -127,6 +136,7 @@ composer dev
 - 🔍 [Static Analysis](STATIC_ANALYSIS.md) - PHPStan setup and guidelines
 - 🔒 [Security](SECURITY.md) - Security implementation details
 - 🤖 [Chatbot Implementation](CHATBOT_IMPLEMENTATION.md) - AI integration
+- 📊 [Dashboard Documentation](DASHBOARD_DOCUMENTATION.md) - Admin dashboard with interactive map
 
 ## 🛡️ Security & Privacy
 

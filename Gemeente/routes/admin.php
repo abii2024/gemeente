@@ -12,6 +12,15 @@ Route::middleware(['auth', 'admin', 'noindex', 'log.admin'])->prefix('admin')->n
     // Dashboard
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
+    // Dashboard API endpoints
+    Route::prefix('api/dashboard')->name('api.dashboard.')->group(function () {
+        Route::get('/recent-complaints', [DashboardController::class, 'recentComplaints'])->name('recent');
+        Route::get('/search', [DashboardController::class, 'searchById'])->name('search');
+        Route::get('/map-data', [DashboardController::class, 'mapData'])->name('map-data');
+        Route::get('/complaint/{id}', [DashboardController::class, 'complaintDetails'])->name('details');
+        Route::post('/filter', [DashboardController::class, 'filter'])->name('filter');
+    });
+
     // Database management
     Route::get('/database', [DatabaseController::class, 'index'])->name('database.index');
     Route::get('/database/{table}', [DatabaseController::class, 'table'])->name('database.table');

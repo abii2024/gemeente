@@ -1,0 +1,944 @@
+<!DOCTYPE html>
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Admin Dashboard - Gemeente Portal</title>
+    <link rel="preconnect" href="https://fonts.bunny.net">
+    <link href="https://fonts.bunny.net/css?family=inter:400,500,600,700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="{{ asset('css/gemeente-home.css') }}">
+
+    <!-- Leaflet CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+          integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
+          crossorigin="" />
+
+    <script src="{{ asset('js/chatbot.js') }}" defer></script>
+
+    <style>
+        .stat-card {
+            background: white;
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        .stat-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+        .stat-label {
+            color: #6B7280;
+            font-size: 0.875rem;
+            font-weight: 500;
+        }
+        .filter-card, .map-card, .table-card {
+            background: white;
+            border-radius: 12px;
+            padding: 2rem;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            margin-bottom: 2rem;
+        }
+        .section-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            color: #1F2937;
+        }
+        .leaflet-popup-content {
+            margin: 0;
+        }
+        .custom-marker {
+            background: transparent;
+            border: none;
+        }
+        input, select {
+            padding: 0.5rem;
+            border: 1px solid #D1D5DB;
+            border-radius: 8px;
+            font-size: 0.875rem;
+        }
+        input:focus, select:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 0.5rem 1.5rem;
+            border-radius: 8px;
+            border: none;
+            cursor: pointer;
+            font-weight: 500;
+            transition: transform 0.2s;
+        }
+        .btn-primary:hover {
+            transform: translateY(-1px);
+        }
+        .btn-secondary {
+            background: white;
+            color: #667eea;
+            padding: 0.5rem 1.5rem;
+            border-radius: 8px;
+            border: 2px solid #667eea;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.2s;
+        }
+        .btn-secondary:hover {
+            background: #667eea;
+            color: white;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        thead {
+            background: #F9FAFB;
+        }
+        th {
+            padding: 0.75rem 1.5rem;
+            text-align: left;
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: #6B7280;
+            text-transform: uppercase;
+        }
+        td {
+            padding: 1rem 1.5rem;
+            border-top: 1px solid #E5E7EB;
+        }
+        tr:hover {
+            background: #F9FAFB;
+        }
+        .badge {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            border-radius: 9999px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="container">
+            <div class="nav">
+                <a class="logo" href="/">
+                    <div class="logo-icon">G</div>
+                    <div class="logo-text">
+                        <span class="gemeente">Gemeente</span>
+                        Portal
+                    </div>
+                </a>
+
+                <nav class="header-nav">
+                    <a class="nav-item" href="/">Home</a>
+                    <a class="nav-item" href="{{ route('admin.complaints.index') }}">Alle Klachten</a>
+                    <a class="nav-item active" href="{{ route('admin.dashboard') }}">Dashboard</a>
+                    <a class="nav-item" href="{{ route('admin.database.index') }}">Database</a>
+                </nav>
+
+                <div class="header-actions">
+                    <span class="text-gray-700 mr-4">{{ Auth::user()->name }}</span>
+                    <form method="POST" action="{{ route('logout') }}" class="inline">
+                        @csrf
+                        <button type="submit" class="btn btn-secondary">Uitloggen</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main style="background: #F3F4F6; min-height: 100vh; padding: 2rem 0;">
+        <!-- Hero Section -->
+        <section style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 3rem 0; margin-bottom: 2rem;">
+            <div class="container">
+                <div style="text-align: center; color: white;">
+                    <h1 style="font-size: 2.5rem; font-weight: 700; margin-bottom: 0.5rem;">
+                        🏛️ Admin Dashboard
+                    </h1>
+                    <p style="font-size: 1.125rem; opacity: 0.9;">
+                        Beheer alle klachten met interactieve kaart en filters
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <div class="container">
+            <!-- Statistics Cards -->
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem; margin-bottom: 2rem;">
+                <div class="stat-card">
+                    <div class="stat-number" style="color: #3B82F6;">{{ $stats['total_complaints'] }}</div>
+                    <div class="stat-label">Totaal Klachten</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" style="color: #EF4444;">{{ $stats['open_complaints'] }}</div>
+                    <div class="stat-label">Open</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" style="color: #F59E0B;">{{ $stats['in_behandeling_complaints'] }}</div>
+                    <div class="stat-label">In Behandeling</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" style="color: #10B981;">{{ $stats['opgelost_complaints'] }}</div>
+                    <div class="stat-label">Opgelost</div>
+                </div>
+            </div>
+
+            <!-- Search and Filter -->
+            <div class="filter-card">
+                <h3 class="section-title">🔍 Zoeken & Filteren</h3>
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem;">
+                    <div>
+                        <label style="display: block; margin-bottom: 0.5rem; font-weight: 500; color: #374151;">Zoek op ID</label>
+                        <div style="display: flex; gap: 0.5rem;">
+                            <input type="number" id="search-id" placeholder="Klacht ID" style="flex: 1;">
+                            <button onclick="searchById()" class="btn-primary">Zoek</button>
+                        </div>
+                    </div>
+                    <div>
+                        <label style="display: block; margin-bottom: 0.5rem; font-weight: 500; color: #374151;">Status</label>
+                        <select id="filter-status" onchange="applyFilters()" style="width: 100%;">
+                            <option value="">Alle Statussen</option>
+                            <option value="open">Open</option>
+                            <option value="in_progress">In Behandeling</option>
+                            <option value="resolved">Opgelost</option>
+                            <option value="closed">Gesloten</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label style="display: block; margin-bottom: 0.5rem; font-weight: 500; color: #374151;">Prioriteit</label>
+                        <select id="filter-priority" onchange="applyFilters()" style="width: 100%;">
+                            <option value="">Alle Prioriteiten</option>
+                            <option value="low">Laag</option>
+                            <option value="medium">Middel</option>
+                            <option value="high">Hoog</option>
+                            <option value="urgent">Urgent</option>
+                        </select>
+                    </div>
+                    <div style="display: flex; align-items: flex-end;">
+                        <button onclick="resetFilters()" class="btn-secondary" style="width: 100%;">Reset Filters</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Interactive Map -->
+            <div class="map-card">
+                <h3 class="section-title">🗺️ Interactieve Kaart - Alle Klachten</h3>
+                <div id="map" style="height: 600px; width: 100%; border-radius: 12px; overflow: hidden;"></div>
+                <div style="margin-top: 1rem; padding: 1rem; background: #F9FAFB; border-radius: 8px;">
+                    <p style="font-weight: 600; margin-bottom: 0.5rem;">Legenda:</p>
+                    <div style="display: flex; flex-wrap: wrap; gap: 1.5rem;">
+                        <div style="display: flex; align-items: center; gap: 0.5rem;">
+                            <span style="width: 16px; height: 16px; background: #3B82F6; border-radius: 50%; display: inline-block;"></span>
+                            <span>Open</span>
+                        </div>
+                        <div style="display: flex; align-items: center; gap: 0.5rem;">
+                            <span style="width: 16px; height: 16px; background: #EAB308; border-radius: 50%; display: inline-block;"></span>
+                            <span>In Behandeling</span>
+                        </div>
+                        <div style="display: flex; align-items: center; gap: 0.5rem;">
+                            <span style="width: 16px; height: 16px; background: #10B981; border-radius: 50%; display: inline-block;"></span>
+                            <span>Opgelost</span>
+                        </div>
+                        <div style="display: flex; align-items: center; gap: 0.5rem;">
+                            <span style="width: 16px; height: 16px; background: #6B7280; border-radius: 50%; display: inline-block;"></span>
+                            <span>Gesloten</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Recent Complaints Table -->
+            <div class="table-card">
+                <h3 class="section-title">📋 5 Meest Recente Klachten</h3>
+                @if($recent_complaints->count() > 0)
+                    <div style="overflow-x: auto;">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Titel</th>
+                                    <th>Categorie</th>
+                                    <th>Prioriteit</th>
+                                    <th>Status</th>
+                                    <th>Locatie</th>
+                                    <th>Datum</th>
+                                    <th>Acties</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach($recent_complaints as $complaint)
+                                    <tr>
+                                        <td style="font-weight: 600;">#{{ $complaint->id }}</td>
+                                        <td>{{ Str::limit($complaint->title, 40) }}</td>
+                                        <td>{{ $complaint->category }}</td>
+                                        <td>
+                                            <span class="badge" style="
+                                                @if($complaint->priority === 'urgent') background: #FEE2E2; color: #991B1B;
+                                                @elseif($complaint->priority === 'high') background: #FED7AA; color: #9A3412;
+                                                @elseif($complaint->priority === 'medium') background: #FEF3C7; color: #92400E;
+                                                @else background: #D1FAE5; color: #065F46; @endif
+                                            ">
+                                                {{ ucfirst($complaint->priority) }}
+                                            </span>
+                                        </td>
+                                        <td>
+                                            <span class="badge" style="
+                                                @if($complaint->status === 'open') background: #DBEAFE; color: #1E40AF;
+                                                @elseif($complaint->status === 'in_progress') background: #FEF3C7; color: #92400E;
+                                                @elseif($complaint->status === 'resolved') background: #D1FAE5; color: #065F46;
+                                                @else background: #F3F4F6; color: #374151; @endif
+                                            ">
+                                                {{ ucfirst(str_replace('_', ' ', $complaint->status)) }}
+                                            </span>
+                                        </td>
+                                        <td>{{ Str::limit($complaint->location ?? 'Geen locatie', 30) }}</td>
+                                        <td style="color: #6B7280;">{{ $complaint->created_at->format('d-m-Y H:i') }}</td>
+                                        <td>
+                                            <a href="{{ route('admin.complaints.show', $complaint) }}" style="color: #667eea; font-weight: 500;">Bekijk</a>
+                                            @if($complaint->lat && $complaint->lng)
+                                                <button onclick="zoomToComplaint({{ $complaint->lat }}, {{ $complaint->lng }}, {{ $complaint->id }})"
+                                                        style="margin-left: 0.5rem; color: #10B981; background: none; border: none; cursor: pointer; font-weight: 500;">
+                                                    📍 Kaart
+                                                </button>
+                                            @endif
+                                        </td>
+                                    </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+                    </div>
+                @else
+                    <p style="color: #6B7280; text-align: center; padding: 2rem;">Nog geen klachten ingediend.</p>
+                @endif
+            </div>
+        </div>
+    </main>
+
+    <footer style="background: #1F2937; color: white; padding: 2rem 0; text-align: center;">
+        <div class="container">
+            <p style="opacity: 0.8;">© {{ date('Y') }} Gemeente Portal - Admin Dashboard</p>
+        </div>
+    </footer>
+
+    <!-- Leaflet JS -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+            integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
+            crossorigin=""></script>
+
+    <script>
+        let map;
+        let markers = [];
+
+        // Initialize map
+        document.addEventListener('DOMContentLoaded', function() {
+            map = L.map('map').setView([52.3676, 4.9041], 12); // Amsterdam center
+
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: '© OpenStreetMap contributors',
+                maxZoom: 19
+            }).addTo(map);
+
+            loadMapData();
+        });
+
+        // Load all complaints on map
+        function loadMapData(filters = {}) {
+            let url = '{{ route('admin.api.dashboard.map-data') }}';
+            const params = new URLSearchParams(filters);
+            if (params.toString()) {
+                url += '?' + params.toString();
+            }
+
+            fetch(url)
+                .then(response => response.json())
+                .then(data => {
+                    // Clear existing markers
+                    markers.forEach(marker => map.removeLayer(marker));
+                    markers = [];
+
+                    // Add new markers
+                    data.forEach(complaint => {
+                        if (complaint.lat && complaint.lng) {
+                            const color = getMarkerColor(complaint.status);
+                            const marker = L.circleMarker([complaint.lat, complaint.lng], {
+                                radius: 10,
+                                fillColor: color,
+                                color: '#ffffff',
+                                weight: 2,
+                                opacity: 1,
+                                fillOpacity: 0.8
+                            }).addTo(map);
+
+                            const popupContent = `
+                                <div style="min-width: 250px;">
+                                    <h3 style="font-weight: 600; margin-bottom: 8px; color: #1F2937;">
+                                        Klacht #${complaint.id}
+                                    </h3>
+                                    <p style="margin-bottom: 8px;">
+                                        <strong>Titel:</strong> ${complaint.title}
+                                    </p>
+                                    <p style="margin-bottom: 8px;">
+                                        <strong>Beschrijving:</strong> ${complaint.description.substring(0, 100)}...
+                                    </p>
+                                    <p style="margin-bottom: 8px;">
+                                        <strong>Status:</strong> <span style="color: ${color}; font-weight: 600;">${translateStatus(complaint.status)}</span>
+                                    </p>
+                                    <p style="margin-bottom: 8px;">
+                                        <strong>Prioriteit:</strong> ${translatePriority(complaint.priority)}
+                                    </p>
+                                    <p style="margin-bottom: 8px;">
+                                        <strong>Categorie:</strong> ${complaint.category}
+                                    </p>
+                                    <p style="margin-bottom: 8px;">
+                                        <strong>Locatie:</strong> ${complaint.location || 'Geen locatie'}
+                                    </p>
+                                    <p style="margin-bottom: 12px; color: #6B7280; font-size: 0.875rem;">
+                                        ${new Date(complaint.created_at).toLocaleDateString('nl-NL')}
+                                    </p>
+                                    <a href="/admin/complaints/${complaint.id}"
+                                       style="display: inline-block; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                                              color: white; padding: 0.5rem 1rem; border-radius: 8px;
+                                              text-decoration: none; font-weight: 500;">
+                                        Bekijk Details
+                                    </a>
+                                </div>
+                            `;
+
+                            marker.bindPopup(popupContent);
+                            markers.push(marker);
+                        }
+                    });
+
+                    // Fit bounds to show all markers
+                    if (markers.length > 0) {
+                        const group = L.featureGroup(markers);
+                        map.fitBounds(group.getBounds().pad(0.1));
+                    }
+                })
+                .catch(error => console.error('Error loading map data:', error));
+        }
+
+        // Get marker color based on status
+        function getMarkerColor(status) {
+            const colors = {
+                'open': '#3B82F6',          // Blue
+                'in_progress': '#EAB308',   // Yellow
+                'resolved': '#10B981',      // Green
+                'closed': '#6B7280'         // Gray
+            };
+            return colors[status] || '#3B82F6';
+        }
+
+        // Translate status to Dutch
+        function translateStatus(status) {
+            const translations = {
+                'open': 'Open',
+                'in_progress': 'In Behandeling',
+                'resolved': 'Opgelost',
+                'closed': 'Gesloten'
+            };
+            return translations[status] || status;
+        }
+
+        // Translate priority to Dutch
+        function translatePriority(priority) {
+            const translations = {
+                'low': 'Laag',
+                'medium': 'Middel',
+                'high': 'Hoog',
+                'urgent': 'Urgent'
+            };
+            return translations[priority] || priority;
+        }
+
+        // Search by ID
+        function searchById() {
+            const id = document.getElementById('search-id').value;
+            if (!id) {
+                alert('Voer een klacht ID in');
+                return;
+            }
+
+            fetch(`{{ route('admin.api.dashboard.search') }}?id=${id}`)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.error) {
+                        alert(data.error);
+                    } else {
+                        window.location.href = `/admin/complaints/${data.id}`;
+                    }
+                })
+                .catch(error => {
+                    console.error('Error searching:', error);
+                    alert('Er is een fout opgetreden bij het zoeken');
+                });
+        }
+
+        // Apply filters
+        function applyFilters() {
+            const status = document.getElementById('filter-status').value;
+            const priority = document.getElementById('filter-priority').value;
+
+            const filters = {};
+            if (status) filters.status = status;
+            if (priority) filters.priority = priority;
+
+            loadMapData(filters);
+        }
+
+        // Reset filters
+        function resetFilters() {
+            document.getElementById('filter-status').value = '';
+            document.getElementById('filter-priority').value = '';
+            loadMapData();
+        }
+
+        // Zoom to specific complaint
+        function zoomToComplaint(lat, lng, id) {
+            map.setView([lat, lng], 16);
+
+            // Find and open the marker popup
+            markers.forEach(marker => {
+                const markerLatLng = marker.getLatLng();
+                if (Math.abs(markerLatLng.lat - lat) < 0.0001 && Math.abs(markerLatLng.lng - lng) < 0.0001) {
+                    marker.openPopup();
+                }
+            });
+
+            // Scroll to map
+            document.getElementById('map').scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+    </script>
+</body>
+</html>
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+                <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
+                    <div class="p-6">
+                        <div class="flex items-center">
+                            <div class="flex-shrink-0">
+                                <div class="text-2xl font-bold text-blue-600">{{ $stats['total_complaints'] }}</div>
+                            </div>
+                            <div class="ml-5 w-0 flex-1">
+                                <dl>
+                                    <dt class="text-sm font-medium text-gray-500 truncate">Totaal Klachten</dt>
+                                </dl>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
+                    <div class="p-6">
+                        <div class="flex items-center">
+                            <div class="flex-shrink-0">
+                                <div class="text-2xl font-bold text-red-600">{{ $stats['open_complaints'] }}</div>
+                            </div>
+                            <div class="ml-5 w-0 flex-1">
+                                <dl>
+                                    <dt class="text-sm font-medium text-gray-500 truncate">Open</dt>
+                                </dl>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
+                    <div class="p-6">
+                        <div class="flex items-center">
+                            <div class="flex-shrink-0">
+                                <div class="text-2xl font-bold text-yellow-600">{{ $stats['in_behandeling_complaints'] }}</div>
+                            </div>
+                            <div class="ml-5 w-0 flex-1">
+                                <dl>
+                                    <dt class="text-sm font-medium text-gray-500 truncate">In Behandeling</dt>
+                                </dl>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
+                    <div class="p-6">
+                        <div class="flex items-center">
+                            <div class="flex-shrink-0">
+                                <div class="text-2xl font-bold text-green-600">{{ $stats['opgelost_complaints'] }}</div>
+                            </div>
+                            <div class="ml-5 w-0 flex-1">
+                                <dl>
+                                    <dt class="text-sm font-medium text-gray-500 truncate">Opgelost</dt>
+                                </dl>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Search and Filter Section -->
+            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg mb-8">
+                <div class="p-6">
+                    <h3 class="text-lg font-medium text-gray-900 mb-4">Zoeken & Filteren</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                        <!-- Search by ID -->
+                        <div>
+                            <label for="search-id" class="block text-sm font-medium text-gray-700 mb-2">
+                                Zoek op ID
+                            </label>
+                            <div class="flex">
+                                <input type="number" id="search-id"
+                                       class="flex-1 rounded-l-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                                       placeholder="Klacht ID">
+                                <button onclick="searchById()"
+                                        class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-r-md">
+                                    Zoek
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Status Filter -->
+                        <div>
+                            <label for="filter-status" class="block text-sm font-medium text-gray-700 mb-2">
+                                Status
+                            </label>
+                            <select id="filter-status" onchange="applyFilters()"
+                                    class="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
+                                <option value="">Alle Statussen</option>
+                                <option value="open">Open</option>
+                                <option value="in_progress">In Behandeling</option>
+                                <option value="resolved">Opgelost</option>
+                                <option value="closed">Gesloten</option>
+                            </select>
+                        </div>
+
+                        <!-- Priority Filter -->
+                        <div>
+                            <label for="filter-priority" class="block text-sm font-medium text-gray-700 mb-2">
+                                Prioriteit
+                            </label>
+                            <select id="filter-priority" onchange="applyFilters()"
+                                    class="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
+                                <option value="">Alle Prioriteiten</option>
+                                <option value="low">Laag</option>
+                                <option value="medium">Middel</option>
+                                <option value="high">Hoog</option>
+                                <option value="urgent">Urgent</option>
+                            </select>
+                        </div>
+
+                        <!-- Reset Button -->
+                        <div class="flex items-end">
+                            <button onclick="resetFilters()"
+                                    class="w-full bg-gray-600 hover:bg-gray-700 text-white px-4 py-2 rounded-md">
+                                Reset Filters
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Interactive Map Section -->
+            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg mb-8">
+                <div class="p-6">
+                    <h3 class="text-lg font-medium text-gray-900 mb-4">Kaart Weergave - Alle Klachten</h3>
+                    <div id="map" style="height: 600px; width: 100%;" class="rounded-lg border border-gray-300"></div>
+                    <div class="mt-4 text-sm text-gray-600">
+                        <p><strong>Legenda:</strong></p>
+                        <div class="flex flex-wrap gap-4 mt-2">
+                            <div class="flex items-center">
+                                <span class="w-4 h-4 bg-blue-500 rounded-full inline-block mr-2"></span>
+                                <span>Open</span>
+                            </div>
+                            <div class="flex items-center">
+                                <span class="w-4 h-4 bg-yellow-500 rounded-full inline-block mr-2"></span>
+                                <span>In Behandeling</span>
+                            </div>
+                            <div class="flex items-center">
+                                <span class="w-4 h-4 bg-green-500 rounded-full inline-block mr-2"></span>
+                                <span>Opgelost</span>
+                            </div>
+                            <div class="flex items-center">
+                                <span class="w-4 h-4 bg-gray-500 rounded-full inline-block mr-2"></span>
+                                <span>Gesloten</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Recent Complaints Table -->
+            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
+                <div class="p-6">
+                    <h3 class="text-lg font-medium text-gray-900 mb-4">5 Meest Recente Klachten</h3>
+
+                    <div id="recent-complaints-table">
+                        @if($recent_complaints->count() > 0)
+                            <div class="overflow-x-auto">
+                                <table class="min-w-full divide-y divide-gray-200">
+                                    <thead class="bg-gray-50">
+                                        <tr>
+                                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">ID</th>
+                                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Titel</th>
+                                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Categorie</th>
+                                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Prioriteit</th>
+                                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+                                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Locatie</th>
+                                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Datum</th>
+                                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Acties</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody class="bg-white divide-y divide-gray-200">
+                                        @foreach($recent_complaints as $complaint)
+                                            <tr class="hover:bg-gray-50">
+                                                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                                                    #{{ $complaint->id }}
+                                                </td>
+                                                <td class="px-6 py-4 text-sm text-gray-900">
+                                                    {{ Str::limit($complaint->title, 40) }}
+                                                </td>
+                                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                                    {{ $complaint->category }}
+                                                </td>
+                                                <td class="px-6 py-4 whitespace-nowrap">
+                                                    <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full
+                                                        @if($complaint->priority === 'urgent') bg-red-100 text-red-800
+                                                        @elseif($complaint->priority === 'high') bg-orange-100 text-orange-800
+                                                        @elseif($complaint->priority === 'medium') bg-yellow-100 text-yellow-800
+                                                        @else bg-green-100 text-green-800 @endif">
+                                                        {{ ucfirst($complaint->priority) }}
+                                                    </span>
+                                                </td>
+                                                <td class="px-6 py-4 whitespace-nowrap">
+                                                    <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full
+                                                        @if($complaint->status === 'open') bg-blue-100 text-blue-800
+                                                        @elseif($complaint->status === 'in_progress') bg-yellow-100 text-yellow-800
+                                                        @elseif($complaint->status === 'resolved') bg-green-100 text-green-800
+                                                        @else bg-gray-100 text-gray-800 @endif">
+                                                        {{ ucfirst(str_replace('_', ' ', $complaint->status)) }}
+                                                    </span>
+                                                </td>
+                                                <td class="px-6 py-4 text-sm text-gray-500">
+                                                    {{ Str::limit($complaint->location ?? 'Geen locatie', 30) }}
+                                                </td>
+                                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                                    {{ $complaint->created_at->format('d-m-Y H:i') }}
+                                                </td>
+                                                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                                                    <a href="{{ route('admin.complaints.show', $complaint) }}"
+                                                       class="text-blue-600 hover:text-blue-900">Bekijk</a>
+                                                    @if($complaint->lat && $complaint->lng)
+                                                        <button onclick="zoomToComplaint({{ $complaint->lat }}, {{ $complaint->lng }}, {{ $complaint->id }})"
+                                                                class="ml-2 text-green-600 hover:text-green-900">
+                                                            📍 Kaart
+                                                        </button>
+                                                    @endif
+                                                </td>
+                                            </tr>
+                                        @endforeach
+                                    </tbody>
+                                </table>
+                            </div>
+                        @else
+                            <p class="text-gray-500">Nog geen klachten ingediend.</p>
+                        @endif
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Leaflet JS -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+            integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
+            crossorigin=""></script>
+
+    <script>
+        let map;
+        let markers = [];
+        let markersLayer;
+
+        // Initialize map
+        document.addEventListener('DOMContentLoaded', function() {
+            initMap();
+            loadMapData();
+        });
+
+        function initMap() {
+            // Initialize map centered on Netherlands
+            map = L.map('map').setView([52.3676, 4.9041], 12); // Amsterdam coordinates
+
+            // Add OpenStreetMap tile layer
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: '© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+                maxZoom: 19
+            }).addTo(map);
+
+            // Create layer group for markers
+            markersLayer = L.layerGroup().addTo(map);
+        }
+
+        function loadMapData() {
+            fetch('{{ route('admin.api.dashboard.map') }}')
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        displayMarkersOnMap(data.data);
+                    }
+                })
+                .catch(error => console.error('Error loading map data:', error));
+        }
+
+        function displayMarkersOnMap(complaints) {
+            // Clear existing markers
+            markersLayer.clearLayers();
+            markers = [];
+
+            if (complaints.length === 0) {
+                alert('Geen klachten met coördinaten gevonden');
+                return;
+            }
+
+            complaints.forEach(complaint => {
+                const markerColor = getMarkerColor(complaint.status);
+
+                // Create custom marker icon
+                const markerIcon = L.divIcon({
+                    className: 'custom-marker',
+                    html: `<div style="background-color: ${markerColor}; width: 24px; height: 24px; border-radius: 50%; border: 2px solid white; box-shadow: 0 2px 4px rgba(0,0,0,0.3);"></div>`,
+                    iconSize: [24, 24],
+                    iconAnchor: [12, 12]
+                });
+
+                const marker = L.marker([complaint.lat, complaint.lng], { icon: markerIcon })
+                    .addTo(markersLayer);
+
+                // Create popup content
+                const popupContent = `
+                    <div class="p-2">
+                        <h4 class="font-bold text-sm mb-2">#${complaint.id} - ${complaint.title}</h4>
+                        <p class="text-xs text-gray-600 mb-2">${complaint.description}</p>
+                        <div class="flex flex-wrap gap-1 mb-2">
+                            <span class="px-2 py-1 text-xs rounded-full bg-${complaint.statusColor}-100 text-${complaint.statusColor}-800">
+                                ${complaint.status}
+                            </span>
+                            <span class="px-2 py-1 text-xs rounded-full bg-${complaint.priorityColor}-100 text-${complaint.priorityColor}-800">
+                                ${complaint.priority}
+                            </span>
+                        </div>
+                        <p class="text-xs text-gray-500 mb-2"><strong>Categorie:</strong> ${complaint.category}</p>
+                        <p class="text-xs text-gray-500 mb-2"><strong>Locatie:</strong> ${complaint.location || 'Onbekend'}</p>
+                        <p class="text-xs text-gray-500 mb-2"><strong>Datum:</strong> ${complaint.created_at}</p>
+                        <a href="/admin/complaints/${complaint.id}"
+                           class="inline-block mt-2 bg-blue-600 hover:bg-blue-700 text-white text-xs px-3 py-1 rounded">
+                            Bekijk Details
+                        </a>
+                    </div>
+                `;
+
+                marker.bindPopup(popupContent, { maxWidth: 300 });
+                markers.push({ id: complaint.id, marker: marker });
+            });
+
+            // Fit map to show all markers
+            if (complaints.length > 0) {
+                const group = new L.featureGroup(markers.map(m => m.marker));
+                map.fitBounds(group.getBounds().pad(0.1));
+            }
+        }
+
+        function getMarkerColor(status) {
+            const colors = {
+                'open': '#3B82F6',        // blue
+                'in_progress': '#EAB308', // yellow
+                'resolved': '#10B981',    // green
+                'closed': '#6B7280'       // gray
+            };
+            return colors[status] || '#6B7280';
+        }
+
+        function zoomToComplaint(lat, lng, id) {
+            map.setView([lat, lng], 16);
+
+            // Find and open the marker popup
+            const markerObj = markers.find(m => m.id === id);
+            if (markerObj) {
+                markerObj.marker.openPopup();
+            }
+        }
+
+        function searchById() {
+            const id = document.getElementById('search-id').value;
+            if (!id) {
+                alert('Voer een klacht ID in');
+                return;
+            }
+
+            fetch(`{{ route('admin.api.dashboard.search') }}?id=${id}`)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success && data.data) {
+                        // Redirect to complaint detail page
+                        window.location.href = `/admin/complaints/${data.data.id}`;
+                    } else {
+                        alert('Klacht niet gevonden');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('Fout bij zoeken naar klacht');
+                });
+        }
+
+        function applyFilters() {
+            const status = document.getElementById('filter-status').value;
+            const priority = document.getElementById('filter-priority').value;
+
+            const params = new URLSearchParams();
+            if (status) params.append('status', status);
+            if (priority) params.append('priority', priority);
+
+            fetch(`{{ route('admin.api.dashboard.filter') }}`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                },
+                body: JSON.stringify({
+                    status: status,
+                    priority: priority
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    displayMarkersOnMap(data.data);
+                }
+            })
+            .catch(error => console.error('Error applying filters:', error));
+        }
+
+        function resetFilters() {
+            document.getElementById('filter-status').value = '';
+            document.getElementById('filter-priority').value = '';
+            document.getElementById('search-id').value = '';
+            loadMapData();
+        }
+    </script>
+
+    <style>
+        .leaflet-popup-content {
+            margin: 0;
+        }
+        .custom-marker {
+            background: transparent;
+            border: none;
+        }
+    </style>
+</x-admin-layout>

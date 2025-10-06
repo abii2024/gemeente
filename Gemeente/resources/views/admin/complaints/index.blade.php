@@ -1,94 +1,137 @@
 <x-admin-layout>
     <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            Klachtenbeheer
-        </h2>
+        <div style="display: flex; align-items: center; gap: 0.75rem;">
+            <span style="font-size: 2rem;">📋</span>
+            <h2 style="font-size: clamp(1.5rem, 3vw, 2rem); font-weight: 800; color: var(--neutral-900); margin: 0;">
+                Klachtenbeheer
+            </h2>
+        </div>
     </x-slot>
 
-    <div class="py-12">
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 space-y-6">
-            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
-                <div class="p-6">
-                    <form method="GET" class="grid grid-cols-1 md:grid-cols-4 gap-4 md:items-end">
-                        <div>
-                            <label for="search" class="block text-sm font-medium text-gray-700">Zoekterm of ID</label>
-                            <input type="text" name="search" id="search" value="{{ request('search') }}" placeholder="Bijv. 123 of Damrak"
-                                   class="mt-1 w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
-                        </div>
-                        <div>
-                            <label for="status" class="block text-sm font-medium text-gray-700">Status</label>
-                            <select name="status" id="status" class="mt-1 w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
-                                <option value="">Alle</option>
-                                <option value="open" {{ request('status') === 'open' ? 'selected' : '' }}>Open</option>
-                                <option value="in_behandeling" {{ request('status') === 'in_behandeling' ? 'selected' : '' }}>In behandeling</option>
-                                <option value="opgelost" {{ request('status') === 'opgelost' ? 'selected' : '' }}>Opgelost</option>
-                            </select>
-                        </div>
-                        <div class="md:col-span-2 flex space-x-3">
-                            <button type="submit" class="inline-flex items-center justify-center px-4 py-2 bg-blue-600 border border-transparent rounded-md font-semibold text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
-                                Zoeken
-                            </button>
-                            <a href="{{ route('admin.complaints.index') }}" class="inline-flex items-center justify-center px-4 py-2 bg-gray-200 text-gray-700 rounded-md hover:bg-gray-300">
-                                Reset
-                            </a>
-                            <a href="{{ route('admin.complaints.map') }}" class="inline-flex items-center justify-center px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700">
-                                Kaartweergave
-                            </a>
-                        </div>
-                    </form>
-                </div>
+    <div style="padding: 3rem 0;">
+        <div class="container" style="max-width: 1400px;">
+            <!-- Filter Card -->
+            <div style="background: rgba(255, 255, 255, 0.9); backdrop-filter: blur(20px) saturate(180%); padding: 2rem; border-radius: 24px; border: 1px solid rgba(255, 255, 255, 0.5); box-shadow: var(--shadow-xl); margin-bottom: 2rem;">
+                <form method="GET" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1.5rem; align-items: end;">
+                    <div>
+                        <label for="search" style="display: block; margin-bottom: 0.5rem; font-weight: 600; color: var(--neutral-700); font-size: 0.875rem; text-transform: uppercase; letter-spacing: 0.05em;">Zoekterm of ID</label>
+                        <input type="text" name="search" id="search" value="{{ request('search') }}" placeholder="Bijv. 123 of Damrak"
+                               style="width: 100%; padding: 0.875rem 1rem; border: 2px solid var(--neutral-200); border-radius: 12px; font-size: 1rem; transition: all var(--transition-fast); background: white;"
+                               onfocus="this.style.borderColor='var(--primary-500)'; this.style.boxShadow='0 0 0 4px rgba(0, 102, 204, 0.1)'"
+                               onblur="this.style.borderColor='var(--neutral-200)'; this.style.boxShadow='none'">
+                    </div>
+                    <div>
+                        <label for="status" style="display: block; margin-bottom: 0.5rem; font-weight: 600; color: var(--neutral-700); font-size: 0.875rem; text-transform: uppercase; letter-spacing: 0.05em;">Status</label>
+                        <select name="status" id="status"
+                                style="width: 100%; padding: 0.875rem 1rem; border: 2px solid var(--neutral-200); border-radius: 12px; font-size: 1rem; background: white; cursor: pointer; transition: all var(--transition-fast);"
+                                onfocus="this.style.borderColor='var(--primary-500)'; this.style.boxShadow='0 0 0 4px rgba(0, 102, 204, 0.1)'"
+                                onblur="this.style.borderColor='var(--neutral-200)'; this.style.boxShadow='none'">
+                            <option value="">Alle</option>
+                            <option value="open" {{ request('status') === 'open' ? 'selected' : '' }}>Open</option>
+                            <option value="in_behandeling" {{ request('status') === 'in_behandeling' ? 'selected' : '' }}>In behandeling</option>
+                            <option value="opgelost" {{ request('status') === 'opgelost' ? 'selected' : '' }}>Opgelost</option>
+                        </select>
+                    </div>
+                    <div style="display: flex; gap: 0.75rem; flex-wrap: wrap;">
+                        <button type="submit"
+                                style="flex: 1; min-width: 120px; padding: 0.875rem 1.5rem; background: var(--primary-600); color: white; border: none; border-radius: 12px; font-weight: 600; cursor: pointer; transition: all var(--transition-fast); white-space: nowrap;"
+                                onmouseover="this.style.background='var(--primary-700)'; this.style.transform='translateY(-2px)'; this.style.boxShadow='var(--shadow-lg)'"
+                                onmouseout="this.style.background='var(--primary-600)'; this.style.transform='translateY(0)'; this.style.boxShadow='none'">
+                            🔍 Zoeken
+                        </button>
+                        <a href="{{ route('admin.complaints.index') }}"
+                           style="flex: 1; min-width: 100px; padding: 0.875rem 1.5rem; background: white; color: var(--neutral-700); border: 2px solid var(--neutral-300); border-radius: 12px; font-weight: 600; text-align: center; text-decoration: none; transition: all var(--transition-fast); white-space: nowrap;"
+                           onmouseover="this.style.background='var(--neutral-50)'; this.style.borderColor='var(--neutral-400)'"
+                           onmouseout="this.style.background='white'; this.style.borderColor='var(--neutral-300)'">
+                            Reset
+                        </a>
+                        <a href="{{ route('admin.complaints.map') }}"
+                           style="flex: 1; min-width: 140px; padding: 0.875rem 1.5rem; background: linear-gradient(135deg, #10B981 0%, #059669 100%); color: white; border: none; border-radius: 12px; font-weight: 600; text-align: center; text-decoration: none; transition: all var(--transition-fast); white-space: nowrap;"
+                           onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='var(--shadow-lg)'"
+                           onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='none'">
+                            🗺️ Kaartweergave
+                        </a>
+                    </div>
+                </form>
             </div>
 
-            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
-                <div class="p-6">
-                    @if ($complaints->count())
-                        <div class="overflow-x-auto">
-                            <table class="min-w-full divide-y divide-gray-200">
-                                <thead class="bg-gray-50">
-                                    <tr>
-                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">ID</th>
-                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Titel</th>
-                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Categorie</th>
-                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
-                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Urgentie</th>
-                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Aangemaakt</th>
-                                        <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Acties</th>
-                                    </tr>
-                                </thead>
-                                <tbody class="bg-white divide-y divide-gray-200">
-                                    @foreach ($complaints as $complaint)
-                                        <tr>
-                                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">#{{ $complaint->id }}</td>
-                                            <td class="px-6 py-4 text-sm text-gray-900">{{ \Illuminate\Support\Str::limit($complaint->title, 60) }}</td>
-                                            <td class="px-6 py-4 text-sm text-gray-500">{{ ucfirst(str_replace('_', ' ', $complaint->category)) }}</td>
-                                            <td class="px-6 py-4 whitespace-nowrap">
-                                                @php($statusColors = ['open' => 'bg-red-100 text-red-700', 'in_behandeling' => 'bg-yellow-100 text-yellow-700', 'opgelost' => 'bg-green-100 text-green-700'])
-                                                <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full {{ $statusColors[$complaint->status] ?? 'bg-gray-100 text-gray-700' }}">
-                                                    {{ ucfirst(str_replace('_', ' ', $complaint->status)) }}
-                                                </span>
-                                            </td>
-                                            <td class="px-6 py-4 text-sm text-gray-500">
-                                                @php($priorityLabels = ['low' => 'Laag', 'medium' => 'Normaal', 'high' => 'Hoog', 'urgent' => 'Urgent'])
+            <!-- Table Card -->
+            <div style="background: rgba(255, 255, 255, 0.9); backdrop-filter: blur(20px) saturate(180%); padding: 2rem; border-radius: 24px; border: 1px solid rgba(255, 255, 255, 0.5); box-shadow: var(--shadow-xl);">
+                @if ($complaints->count())
+                    <div style="overflow-x: auto; border-radius: 12px;">
+                        <table style="width: 100%; border-collapse: separate; border-spacing: 0;">
+                            <thead>
+                                <tr style="background: linear-gradient(135deg, var(--primary-50) 0%, var(--primary-100) 100%);">
+                                    <th style="padding: 1rem 1.25rem; text-align: left; font-weight: 700; color: var(--primary-900); font-size: 0.875rem; text-transform: uppercase; letter-spacing: 0.05em; border-bottom: 2px solid var(--primary-200); white-space: nowrap;">ID</th>
+                                    <th style="padding: 1rem 1.25rem; text-align: left; font-weight: 700; color: var(--primary-900); font-size: 0.875rem; text-transform: uppercase; letter-spacing: 0.05em; border-bottom: 2px solid var(--primary-200);">Titel</th>
+                                    <th style="padding: 1rem 1.25rem; text-align: left; font-weight: 700; color: var(--primary-900); font-size: 0.875rem; text-transform: uppercase; letter-spacing: 0.05em; border-bottom: 2px solid var(--primary-200); white-space: nowrap;">Categorie</th>
+                                    <th style="padding: 1rem 1.25rem; text-align: left; font-weight: 700; color: var(--primary-900); font-size: 0.875rem; text-transform: uppercase; letter-spacing: 0.05em; border-bottom: 2px solid var(--primary-200); white-space: nowrap;">Status</th>
+                                    <th style="padding: 1rem 1.25rem; text-align: left; font-weight: 700; color: var(--primary-900); font-size: 0.875rem; text-transform: uppercase; letter-spacing: 0.05em; border-bottom: 2px solid var(--primary-200); white-space: nowrap;">Urgentie</th>
+                                    <th style="padding: 1rem 1.25rem; text-align: left; font-weight: 700; color: var(--primary-900); font-size: 0.875rem; text-transform: uppercase; letter-spacing: 0.05em; border-bottom: 2px solid var(--primary-200); white-space: nowrap;">Aangemaakt</th>
+                                    <th style="padding: 1rem 1.25rem; text-align: right; font-weight: 700; color: var(--primary-900); font-size: 0.875rem; text-transform: uppercase; letter-spacing: 0.05em; border-bottom: 2px solid var(--primary-200); white-space: nowrap;">Acties</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach ($complaints as $complaint)
+                                    <tr style="transition: all var(--transition-fast); background: white;"
+                                        onmouseover="this.style.background='rgba(0, 102, 204, 0.03)'; this.style.transform='scale(1.01)'"
+                                        onmouseout="this.style.background='white'; this.style.transform='scale(1)'">
+                                        <td style="padding: 1.25rem; font-weight: 700; color: var(--primary-600); border-bottom: 1px solid var(--neutral-100); white-space: nowrap;">#{{ $complaint->id }}</td>
+                                        <td style="padding: 1.25rem; color: var(--neutral-900); font-weight: 500; border-bottom: 1px solid var(--neutral-100);">{{ \Illuminate\Support\Str::limit($complaint->title, 60) }}</td>
+                                        <td style="padding: 1.25rem; color: var(--neutral-700); border-bottom: 1px solid var(--neutral-100); white-space: nowrap;">{{ ucfirst(str_replace('_', ' ', $complaint->category)) }}</td>
+                                        <td style="padding: 1.25rem; border-bottom: 1px solid var(--neutral-100); white-space: nowrap;">
+                                            @php
+                                                $statusColors = [
+                                                    'open' => 'background: linear-gradient(135deg, #DBEAFE 0%, #BFDBFE 100%); color: #1E40AF; border: 1px solid #93C5FD;',
+                                                    'in_behandeling' => 'background: linear-gradient(135deg, #FEF3C7 0%, #FDE68A 100%); color: #92400E; border: 1px solid #FCD34D;',
+                                                    'opgelost' => 'background: linear-gradient(135deg, #D1FAE5 0%, #A7F3D0 100%); color: #065F46; border: 1px solid #6EE7B7;'
+                                                ];
+                                                $statusStyle = $statusColors[$complaint->status] ?? 'background: linear-gradient(135deg, #F3F4F6 0%, #E5E7EB 100%); color: #374151; border: 1px solid #D1D5DB;';
+                                            @endphp
+                                            <span style="{{ $statusStyle }} padding: 0.5rem 1rem; border-radius: 8px; font-weight: 600; font-size: 0.875rem; display: inline-block;">
+                                                {{ ucfirst(str_replace('_', ' ', $complaint->status)) }}
+                                            </span>
+                                        </td>
+                                        <td style="padding: 1.25rem; color: var(--neutral-700); font-weight: 500; border-bottom: 1px solid var(--neutral-100); white-space: nowrap;">
+                                            @php
+                                                $priorityLabels = ['low' => 'Laag', 'medium' => 'Normaal', 'high' => 'Hoog', 'urgent' => 'Urgent'];
+                                                $priorityColors = [
+                                                    'urgent' => 'color: #991B1B;',
+                                                    'high' => 'color: #9A3412;',
+                                                    'medium' => 'color: #92400E;',
+                                                    'low' => 'color: #065F46;'
+                                                ];
+                                            @endphp
+                                            <span style="{{ $priorityColors[$complaint->priority] ?? 'color: #374151;' }}">
                                                 {{ $priorityLabels[$complaint->priority] ?? 'Onbekend' }}
-                                            </td>
-                                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ $complaint->created_at->format('d-m-Y H:i') }}</td>
-                                            <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium space-x-2">
-                                                <a href="{{ route('admin.complaints.show', $complaint) }}" class="text-blue-600 hover:text-blue-900">Bekijken</a>
-                                                <a href="{{ route('admin.complaints.edit', $complaint) }}" class="text-yellow-600 hover:text-yellow-700">Bewerken</a>
-                                            </td>
-                                        </tr>
-                                    @endforeach
-                                </tbody>
-                            </table>
-                        </div>
+                                            </span>
+                                        </td>
+                                        <td style="padding: 1.25rem; color: var(--neutral-600); font-size: 0.875rem; border-bottom: 1px solid var(--neutral-100); white-space: nowrap;">{{ $complaint->created_at->format('d-m-Y H:i') }}</td>
+                                        <td style="padding: 1.25rem; border-bottom: 1px solid var(--neutral-100); text-align: right; white-space: nowrap;">
+                                            <a href="{{ route('admin.complaints.show', $complaint) }}"
+                                               style="color: var(--primary-600); font-weight: 600; text-decoration: none; margin-right: 0.75rem; transition: color var(--transition-fast);"
+                                               onmouseover="this.style.color='var(--primary-700)'"
+                                               onmouseout="this.style.color='var(--primary-600)'">Bekijken</a>
+                                            <a href="{{ route('admin.complaints.edit', $complaint) }}"
+                                               style="color: #F59E0B; font-weight: 600; text-decoration: none; transition: color var(--transition-fast);"
+                                               onmouseover="this.style.color='#D97706'"
+                                               onmouseout="this.style.color='#F59E0B'">Bewerken</a>
+                                        </td>
+                                    </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+                    </div>
 
-                        <div class="mt-6">
-                            {{ $complaints->withQueryString()->links() }}
-                        </div>
-                    @else
-                        <p class="text-gray-500">Geen klachten gevonden.</p>
-                    @endif
-                </div>
+                    <div style="margin-top: 2rem;">
+                        {{ $complaints->withQueryString()->links() }}
+                    </div>
+                @else
+                    <div style="text-align: center; padding: 3rem;">
+                        <div style="font-size: 3rem; margin-bottom: 1rem; opacity: 0.3;">📋</div>
+                        <p style="color: var(--neutral-600); font-size: 1.125rem; font-weight: 500;">Geen klachten gevonden.</p>
+                    </div>
+                @endif
             </div>
         </div>
     </div>

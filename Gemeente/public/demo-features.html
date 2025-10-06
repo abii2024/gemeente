@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Moderne Features Demo - Gemeente Portal</title>
+    <link rel="preconnect" href="https://fonts.bunny.net">
+    <link href="https://fonts.bunny.net/css?family=inter:400,500,600,700,800&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="css/gemeente-modern.css">
+    <script src="js/moderne-animations.js" defer></script>
+</head>
+<body class="bg-gradient">
+    <header class="header">
+        <div class="container">
+            <div class="nav">
+                <a class="logo" href="#top">
+                    <div class="logo-icon">G</div>
+                    <div class="logo-text">
+                        <span class="gemeente">Gemeente</span>
+                        Portal
+                    </div>
+                </a>
+
+                <nav class="header-nav">
+                    <a class="nav-item active" href="#forms">Forms</a>
+                    <a class="nav-item" href="#animations">Animations</a>
+                    <a class="nav-item" href="#chatbot">Chatbot</a>
+                    <a class="nav-item" href="#mobile">Mobile</a>
+                </nav>
+
+                <button class="hamburger" aria-label="Toggle menu">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <main style="min-height: 100vh; padding: 6rem 0 4rem;">
+        <div class="hero-background">
+            <div class="float-circle"></div>
+            <div class="float-circle" style="animation-delay: 2s;"></div>
+            <div class="float-circle" style="animation-delay: 4s;"></div>
+        </div>
+
+        <section style="padding: 3rem 0; position: relative;">
+            <div class="container">
+                <div class="fade-in" style="text-align: center; max-width: 800px; margin: 0 auto;">
+                    <h1 style="font-size: clamp(2.5rem, 5vw, 4rem); font-weight: 800; margin-bottom: 1rem; color: white; text-shadow: 0 2px 20px rgba(0, 0, 0, 0.1);">
+                        Moderne Features Demo ✨
+                    </h1>
+                    <p style="font-size: clamp(1.125rem, 2.5vw, 1.5rem); color: rgba(255, 255, 255, 0.9); line-height: 1.6;">
+                        Bekijk alle nieuwe moderne features: forms, animaties, chatbot en responsive design
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <div class="container" style="max-width: 1200px;">
+            <!-- Modern Forms Section -->
+            <section id="forms" class="fade-in" style="background: rgba(255, 255, 255, 0.9); backdrop-filter: blur(20px) saturate(180%); padding: 3rem; border-radius: 24px; border: 1px solid rgba(255, 255, 255, 0.5); box-shadow: var(--shadow-xl); margin-bottom: 3rem;">
+                <h2 style="font-size: 2rem; font-weight: 800; color: var(--neutral-900); margin-bottom: 0.5rem;">
+                    📝 Moderne Formulieren
+                </h2>
+                <p style="color: var(--neutral-600); margin-bottom: 2rem;">
+                    Floating labels, real-time validatie, en drag & drop file upload
+                </p>
+
+                <form data-validate style="display: grid; gap: 1.5rem;">
+                    <!-- Floating Label Input -->
+                    <div class="form-group">
+                        <input type="text" class="form-input" id="name" placeholder=" " required>
+                        <label class="form-label" for="name">Volledige Naam</label>
+                    </div>
+
+                    <!-- Email Input -->
+                    <div class="form-group">
+                        <input type="email" class="form-input" id="email" placeholder=" " required>
+                        <label class="form-label" for="email">E-mailadres</label>
+                    </div>
+
+                    <!-- Textarea -->
+                    <div class="form-group">
+                        <textarea class="form-textarea" id="message" rows="4" placeholder=" " required></textarea>
+                        <label class="form-label" for="message">Uw Bericht</label>
+                    </div>
+
+                    <!-- Modern Checkboxes -->
+                    <div>
+                        <p style="font-weight: 600; margin-bottom: 1rem; color: var(--neutral-800);">Selecteer opties:</p>
+                        <label class="checkbox-wrapper">
+                            <input type="checkbox" class="checkbox-input" name="option1">
+                            <span class="checkbox-custom"></span>
+                            <span>Ik ga akkoord met de voorwaarden</span>
+                        </label>
+                        <label class="checkbox-wrapper">
+                            <input type="checkbox" class="checkbox-input" name="option2">
+                            <span class="checkbox-custom"></span>
+                            <span>Stuur mij updates per email</span>
+                        </label>
+                    </div>
+
+                    <!-- Modern Radio Buttons -->
+                    <div>
+                        <p style="font-weight: 600; margin-bottom: 1rem; color: var(--neutral-800);">Kies een prioriteit:</p>
+                        <label class="radio-wrapper">
+                            <input type="radio" class="radio-input" name="priority" value="low">
+                            <span class="radio-custom"></span>
+                            <span>Laag</span>
+                        </label>
+                        <label class="radio-wrapper">
+                            <input type="radio" class="radio-input" name="priority" value="medium" checked>
+                            <span class="radio-custom"></span>
+                            <span>Normaal</span>
+                        </label>
+                        <label class="radio-wrapper">
+                            <input type="radio" class="radio-input" name="priority" value="high">
+                            <span class="radio-custom"></span>
+                            <span>Hoog</span>
+                        </label>
+                    </div>
+
+                    <!-- File Upload -->
+                    <div class="file-upload">
+                        <input type="file" multiple>
+                        <div class="file-upload-icon">📎</div>
+                        <div class="file-upload-text">Sleep bestanden hierheen of klik om te selecteren</div>
+                        <div class="file-upload-hint">Maximaal 10MB per bestand</div>
+                    </div>
+
+                    <!-- Submit Button -->
+                    <button type="submit" class="btn-ripple" style="padding: 1rem 2rem; background: linear-gradient(135deg, var(--primary-600), var(--primary-500)); color: white; border: none; border-radius: 12px; font-weight: 700; font-size: 1.125rem; cursor: pointer; transition: all var(--transition-base);">
+                        Verzenden
+                    </button>
+                </form>
+            </section>
+
+            <!-- Scroll Animations Section -->
+            <section id="animations" style="margin-bottom: 3rem;">
+                <div class="fade-in" style="text-align: center; margin-bottom: 3rem;">
+                    <h2 style="font-size: 2rem; font-weight: 800; color: var(--neutral-900); margin-bottom: 0.5rem;">
+                        ✨ Scroll Animaties
+                    </h2>
+                    <p style="color: var(--neutral-600);">
+                        Elementen komen tot leven terwijl je scrollt
+                    </p>
+                </div>
+
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem;">
+                    <div class="fade-in" style="background: rgba(255, 255, 255, 0.9); backdrop-filter: blur(20px); padding: 2rem; border-radius: 20px; box-shadow: var(--shadow-lg);">
+                        <h3 style="font-size: 1.5rem; font-weight: 700; color: var(--primary-600); margin-bottom: 1rem;">Fade In</h3>
+                        <p style="color: var(--neutral-700);">Deze kaart fadedt in wanneer hij in beeld komt</p>
+                    </div>
+
+                    <div class="slide-in-left" style="background: rgba(255, 255, 255, 0.9); backdrop-filter: blur(20px); padding: 2rem; border-radius: 20px; box-shadow: var(--shadow-lg);">
+                        <h3 style="font-size: 1.5rem; font-weight: 700; color: var(--accent-mint); margin-bottom: 1rem;">Slide In Left</h3>
+                        <p style="color: var(--neutral-700);">Deze kaart schuift in van links</p>
+                    </div>
+
+                    <div class="slide-in-right" style="background: rgba(255, 255, 255, 0.9); backdrop-filter: blur(20px); padding: 2rem; border-radius: 20px; box-shadow: var(--shadow-lg);">
+                        <h3 style="font-size: 1.5rem; font-weight: 700; color: var(--accent-orange); margin-bottom: 1rem;">Slide In Right</h3>
+                        <p style="color: var(--neutral-700);">Deze kaart schuift in van rechts</p>
+                    </div>
+
+                    <div class="scale-in" style="background: rgba(255, 255, 255, 0.9); backdrop-filter: blur(20px); padding: 2rem; border-radius: 20px; box-shadow: var(--shadow-lg);">
+                        <h3 style="font-size: 1.5rem; font-weight: 700; color: var(--accent-coral); margin-bottom: 1rem;">Scale In</h3>
+                        <p style="color: var(--neutral-700);">Deze kaart schaalt in met een bounce effect</p>
+                    </div>
+                </div>
+
+                <!-- Stagger Children Demo -->
+                <div class="stagger-children" style="margin-top: 3rem; display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1.5rem;">
+                    <div style="background: linear-gradient(135deg, rgba(59, 130, 246, 0.1), rgba(37, 99, 235, 0.05)); padding: 1.5rem; border-radius: 16px; text-align: center;">
+                        <div style="font-size: 2rem; margin-bottom: 0.5rem;">1️⃣</div>
+                        <p style="font-weight: 600; color: var(--neutral-800);">Eerste</p>
+                    </div>
+                    <div style="background: linear-gradient(135deg, rgba(16, 185, 129, 0.1), rgba(5, 150, 105, 0.05)); padding: 1.5rem; border-radius: 16px; text-align: center;">
+                        <div style="font-size: 2rem; margin-bottom: 0.5rem;">2️⃣</div>
+                        <p style="font-weight: 600; color: var(--neutral-800);">Tweede</p>
+                    </div>
+                    <div style="background: linear-gradient(135deg, rgba(245, 158, 11, 0.1), rgba(217, 119, 6, 0.05)); padding: 1.5rem; border-radius: 16px; text-align: center;">
+                        <div style="font-size: 2rem; margin-bottom: 0.5rem;">3️⃣</div>
+                        <p style="font-weight: 600; color: var(--neutral-800);">Derde</p>
+                    </div>
+                    <div style="background: linear-gradient(135deg, rgba(239, 68, 68, 0.1), rgba(220, 38, 38, 0.05)); padding: 1.5rem; border-radius: 16px; text-align: center;">
+                        <div style="font-size: 2rem; margin-bottom: 0.5rem;">4️⃣</div>
+                        <p style="font-weight: 600; color: var(--neutral-800);">Vierde</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Loading States Section -->
+            <section class="fade-in" style="background: rgba(255, 255, 255, 0.9); backdrop-filter: blur(20px); padding: 3rem; border-radius: 24px; box-shadow: var(--shadow-xl); margin-bottom: 3rem;">
+                <h2 style="font-size: 2rem; font-weight: 800; color: var(--neutral-900); margin-bottom: 2rem;">
+                    ⏳ Loading States
+                </h2>
+
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 2rem;">
+                    <!-- Spinner -->
+                    <div style="text-align: center;">
+                        <div style="display: flex; justify-content: center; margin-bottom: 1rem;">
+                            <div class="spinner"></div>
+                        </div>
+                        <p style="font-weight: 600; color: var(--neutral-800);">Spinner</p>
+                    </div>
+
+                    <!-- Skeleton -->
+                    <div>
+                        <div class="skeleton" style="height: 20px; width: 80%; margin-bottom: 0.75rem;"></div>
+                        <div class="skeleton" style="height: 20px; width: 100%; margin-bottom: 0.75rem;"></div>
+                        <div class="skeleton" style="height: 20px; width: 60%;"></div>
+                        <p style="font-weight: 600; color: var(--neutral-800); margin-top: 1rem; text-align: center;">Skeleton Loading</p>
+                    </div>
+
+                    <!-- Pulse -->
+                    <div style="text-align: center;">
+                        <div class="pulse" style="width: 80px; height: 80px; background: var(--primary-500); border-radius: 50%; margin: 0 auto 1rem;"></div>
+                        <p style="font-weight: 600; color: var(--neutral-800);">Pulse Animation</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Chatbot Info -->
+            <section id="chatbot" class="slide-in-left" style="background: linear-gradient(135deg, var(--primary-600), var(--primary-500)); padding: 3rem; border-radius: 24px; box-shadow: var(--shadow-xl); margin-bottom: 3rem; color: white;">
+                <div style="text-align: center; max-width: 700px; margin: 0 auto;">
+                    <h2 style="font-size: 2rem; font-weight: 800; margin-bottom: 1rem;">
+                        💬 Moderne Chatbot
+                    </h2>
+                    <p style="font-size: 1.125rem; opacity: 0.95; margin-bottom: 2rem;">
+                        Klik op de chatbot knop rechtsonder om de interactieve assistent te openen. Met glassmorphism design, typing indicators, en intelligente antwoorden!
+                    </p>
+                    <div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
+                        <div style="background: rgba(255, 255, 255, 0.2); padding: 1rem 1.5rem; border-radius: 12px;">
+                            ✨ Glassmorphism design
+                        </div>
+                        <div style="background: rgba(255, 255, 255, 0.2); padding: 1rem 1.5rem; border-radius: 12px;">
+                            💭 Typing indicators
+                        </div>
+                        <div style="background: rgba(255, 255, 255, 0.2); padding: 1rem 1.5rem; border-radius: 12px;">
+                            🎯 Smart responses
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Mobile Responsive Info -->
+            <section id="mobile" class="scale-in" style="background: rgba(255, 255, 255, 0.9); backdrop-filter: blur(20px); padding: 3rem; border-radius: 24px; box-shadow: var(--shadow-xl);">
+                <h2 style="font-size: 2rem; font-weight: 800; color: var(--neutral-900); margin-bottom: 1rem; text-align: center;">
+                    📱 Volledig Responsive
+                </h2>
+                <p style="color: var(--neutral-600); text-align: center; margin-bottom: 2rem; font-size: 1.125rem;">
+                    Probeer de website op verschillende schermformaten
+                </p>
+
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 2rem;">
+                    <div style="text-align: center; padding: 2rem;">
+                        <div style="font-size: 3rem; margin-bottom: 1rem;">📱</div>
+                        <h3 style="font-weight: 700; color: var(--neutral-900); margin-bottom: 0.5rem;">Mobile</h3>
+                        <p style="color: var(--neutral-600);">Hamburger menu met smooth animaties</p>
+                    </div>
+                    <div style="text-align: center; padding: 2rem;">
+                        <div style="font-size: 3rem; margin-bottom: 1rem;">💻</div>
+                        <h3 style="font-weight: 700; color: var(--neutral-900); margin-bottom: 0.5rem;">Desktop</h3>
+                        <p style="color: var(--neutral-600);">Volledig uitgebreide navigatie</p>
+                    </div>
+                    <div style="text-align: center; padding: 2rem;">
+                        <div style="font-size: 3rem; margin-bottom: 1rem;">✋</div>
+                        <h3 style="font-weight: 700; color: var(--neutral-900); margin-bottom: 0.5rem;">Touch-Friendly</h3>
+                        <p style="color: var(--neutral-600);">Minimaal 44px knoppen voor touch</p>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <footer class="footer" style="margin-top: 6rem;">
+        <div class="container">
+            <div style="text-align: center; padding: 2rem 0;">
+                <h3 style="font-size: 1.5rem; font-weight: 700; margin-bottom: 1rem; color: white;">✨ Alle Features Geïmplementeerd!</h3>
+                <p style="color: var(--neutral-300); font-size: 1.125rem;">
+                    Modern design systeem • Scroll animaties • Chatbot • Responsive design
+                </p>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>

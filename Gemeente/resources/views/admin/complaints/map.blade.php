@@ -1,131 +1,160 @@
-<x-admin-layout>
-    <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            {{ __('Klachten Kaart') }}
-        </h2>
-    </x-slot>
+<!DOCTYPE html>
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Klachten Kaart - Gemeente Portal</title>
+    <link rel="preconnect" href="https://fonts.bunny.net">
+    <link href="https://fonts.bunny.net/css?family=inter:400,500,600,700,800&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="{{ asset('css/gemeente-modern.css') }}">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
+    <script src="{{ asset('js/chatbot.js') }}" defer></script>
+    @include('admin.partials.styles')
+</head>
+<body>
+    @include('admin.partials.header')
 
-    <div class="py-12">
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+    <main style="background: #F3F4F6; min-height: 100vh; padding: 2rem 0;">
+        <section style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 3rem 0; margin-bottom: 2rem;">
+            <div class="container">
+                <div style="text-align: center; color: white;">
+                    <h1 style="font-size: 2.5rem; font-weight: 700; margin-bottom: 0.5rem;">🗺️ Klachten Kaart</h1>
+                    <p style="font-size: 1.125rem; opacity: 0.9;">Alle klachten op de kaart met status filtering</p>
+                </div>
+            </div>
+        </section>
+
+        <div class="container">
             <!-- Map Controls -->
-            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg mb-6">
-                <div class="p-6 border-b border-gray-200">
-                    <div class="flex flex-wrap items-center gap-4">
-                        <div class="flex items-center space-x-2">
-                            <label class="text-sm font-medium text-gray-700">Status Filter:</label>
-                            <select id="statusFilter" class="rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50">
+            <div class="filter-card">
+                <div style="display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 1rem;">
+                    <div style="display: flex; gap: 1rem; align-items: center;">
+                        <div>
+                            <label style="display: block; margin-bottom: 0.5rem; font-weight: 500; color: #374151;">Status Filter:</label>
+                            <select id="statusFilter" style="padding: 0.5rem; border: 1px solid #D1D5DB; border-radius: 8px;">
                                 <option value="all">Alle</option>
                                 <option value="open">Open</option>
-                                <option value="in_behandeling">In Behandeling</option>
-                                <option value="opgelost">Opgelost</option>
+                                <option value="in_progress">In Behandeling</option>
+                                <option value="resolved">Opgelost</option>
+                                <option value="closed">Gesloten</option>
                             </select>
                         </div>
-                        
-                        <div class="flex items-center space-x-2">
-                            <button id="refreshMap" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
-                                <svg class="w-4 h-4 inline mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path>
-                                </svg>
-                                Vernieuwen
+                        <div style="padding-top: 1.75rem;">
+                            <button id="refreshMap" class="btn-primary">
+                                🔄 Vernieuwen
                             </button>
                         </div>
+                    </div>
 
-                        <div class="flex items-center space-x-4 ml-auto">
-                            <div class="flex items-center space-x-2">
-                                <span class="w-4 h-4 bg-red-500 rounded-full"></span>
-                                <span class="text-sm text-gray-600">Open ({{ $complaints->where('status', 'open')->count() }})</span>
-                            </div>
-                            <div class="flex items-center space-x-2">
-                                <span class="w-4 h-4 bg-yellow-500 rounded-full"></span>
-                                <span class="text-sm text-gray-600">In Behandeling ({{ $complaints->where('status', 'in_behandeling')->count() }})</span>
-                            </div>
-                            <div class="flex items-center space-x-2">
-                                <span class="w-4 h-4 bg-green-500 rounded-full"></span>
-                                <span class="text-sm text-gray-600">Opgelost ({{ $complaints->where('status', 'opgelost')->count() }})</span>
-                            </div>
+                    <div style="display: flex; gap: 1.5rem; flex-wrap: wrap;">
+                        <div style="display: flex; align-items: center; gap: 0.5rem;">
+                            <span style="width: 16px; height: 16px; background: #EF4444; border-radius: 50%; display: inline-block;"></span>
+                            <span style="font-size: 0.875rem;">Open ({{ $complaints->where('status', 'open')->count() }})</span>
+                        </div>
+                        <div style="display: flex; align-items: center; gap: 0.5rem;">
+                            <span style="width: 16px; height: 16px; background: #EAB308; border-radius: 50%; display: inline-block;"></span>
+                            <span style="font-size: 0.875rem;">In Behandeling ({{ $complaints->where('status', 'in_progress')->count() }})</span>
+                        </div>
+                        <div style="display: flex; align-items: center; gap: 0.5rem;">
+                            <span style="width: 16px; height: 16px; background: #10B981; border-radius: 50%; display: inline-block;"></span>
+                            <span style="font-size: 0.875rem;">Opgelost ({{ $complaints->where('status', 'resolved')->count() }})</span>
+                        </div>
+                        <div style="display: flex; align-items: center; gap: 0.5rem;">
+                            <span style="width: 16px; height: 16px; background: #6B7280; border-radius: 50%; display: inline-block;"></span>
+                            <span style="font-size: 0.875rem;">Gesloten ({{ $complaints->where('status', 'closed')->count() }})</span>
                         </div>
                     </div>
                 </div>
             </div>
 
             <!-- Map Container -->
-            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
-                <div class="p-6">
-                    <div id="map" class="w-full h-96 lg:h-[600px] rounded-lg shadow-inner"></div>
-                </div>
+            <div class="map-card">
+                <h3 class="section-title">📍 Interactieve Kaart</h3>
+                <div id="map" style="height: 700px; width: 100%; border-radius: 12px; overflow: hidden;"></div>
             </div>
 
-            <!-- Complaints List Sidebar -->
-            <div class="mt-6 bg-white overflow-hidden shadow-sm sm:rounded-lg" x-data="{ showList: false }">
-                <div class="p-6">
-                    <button @click="showList = !showList" class="flex items-center justify-between w-full text-left">
-                        <h3 class="text-lg font-medium text-gray-900">Klachten Lijst ({{ $complaints->count() }})</h3>
-                        <svg class="w-5 h-5 transform transition-transform" :class="{ 'rotate-180': showList }" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
-                        </svg>
+            <!-- Complaints List -->
+            <div class="table-card">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+                    <h3 class="section-title" style="margin-bottom: 0;">📋 Alle Klachten ({{ $complaints->count() }})</h3>
+                    <button onclick="toggleList()" class="btn-secondary" id="toggleListBtn">
+                        Toon Lijst
                     </button>
-                    
-                    <div x-show="showList" x-transition class="mt-4">
-                        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                            @foreach($complaints as $complaint)
-                                <div class="border rounded-lg p-4 hover:shadow-md transition-shadow cursor-pointer complaint-item" 
-                                     data-lat="{{ $complaint->lat }}" 
-                                     data-lng="{{ $complaint->lng }}"
-                                     data-id="{{ $complaint->id }}">
-                                    <div class="flex items-start justify-between mb-2">
-                                        <h4 class="font-medium text-gray-900 text-sm">{{ $complaint->title }}</h4>
-                                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium
-                                            @if($complaint->status === 'open') bg-red-100 text-red-800
-                                            @elseif($complaint->status === 'in_behandeling') bg-yellow-100 text-yellow-800
-                                            @else bg-green-100 text-green-800 @endif">
-                                            {{ ucfirst(str_replace('_', ' ', $complaint->status)) }}
-                                        </span>
-                                    </div>
-                                    <p class="text-gray-600 text-sm mb-2">{{ Str::limit($complaint->description, 80) }}</p>
-                                    <p class="text-gray-500 text-xs">{{ $complaint->created_at->format('d-m-Y H:i') }}</p>
+                </div>
+
+                <div id="complaintsList" style="display: none; margin-top: 1.5rem;">
+                    <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 1rem;">
+                        @foreach($complaints as $complaint)
+                            <div class="stat-card complaint-item"
+                                 data-lat="{{ $complaint->lat }}"
+                                 data-lng="{{ $complaint->lng }}"
+                                 data-id="{{ $complaint->id }}"
+                                 style="cursor: pointer; transition: all 0.2s;">
+                                <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 0.75rem;">
+                                    <h4 style="font-weight: 600; color: #1F2937; font-size: 0.95rem;">{{ $complaint->title }}</h4>
+                                    @php
+                                        $statusColors = [
+                                            'open' => 'background: #FEE2E2; color: #991B1B;',
+                                            'in_progress' => 'background: #FEF3C7; color: #92400E;',
+                                            'resolved' => 'background: #D1FAE5; color: #065F46;',
+                                            'closed' => 'background: #F3F4F6; color: #374151;'
+                                        ];
+                                        $statusStyle = $statusColors[$complaint->status] ?? $statusColors['open'];
+                                    @endphp
+                                    <span class="badge" style="{{ $statusStyle }}">
+                                        {{ ucfirst(str_replace('_', ' ', $complaint->status)) }}
+                                    </span>
                                 </div>
-                            @endforeach
-                        </div>
+                                <p style="color: #6B7280; font-size: 0.875rem; margin-bottom: 0.5rem;">
+                                    {{ Str::limit($complaint->description, 80) }}
+                                </p>
+                                <p style="color: #9CA3AF; font-size: 0.75rem;">
+                                    📅 {{ $complaint->created_at->format('d-m-Y H:i') }}
+                                </p>
+                            </div>
+                        @endforeach
                     </div>
                 </div>
             </div>
         </div>
-    </div>
+    </main>
 
-    @push('scripts')
+    @include('admin.partials.footer')
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+
     <script>
+        let map;
+        let markers = [];
+        const complaintsData = @json($complaints);
+
         document.addEventListener('DOMContentLoaded', function() {
             // Initialize map
-            const map = L.map('map').setView([52.3676, 4.9041], 10); // Amsterdam center
+            map = L.map('map').setView([52.3676, 4.9041], 10);
 
-            // Add OpenStreetMap tiles
             L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-                attribution: '© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+                attribution: '© OpenStreetMap contributors',
+                maxZoom: 19
             }).addTo(map);
 
-            // Custom marker icons
+            // Create custom icon function
             const createIcon = (color) => {
                 return L.divIcon({
                     className: 'custom-div-icon',
-                    html: `<div style="background-color: ${color}; width: 20px; height: 20px; border-radius: 50%; border: 3px solid white; box-shadow: 0 2px 4px rgba(0,0,0,0.3);"></div>`,
-                    iconSize: [20, 20],
-                    iconAnchor: [10, 10]
+                    html: `<div style="background-color: ${color}; width: 24px; height: 24px; border-radius: 50%; border: 3px solid white; box-shadow: 0 2px 6px rgba(0,0,0,0.3);"></div>`,
+                    iconSize: [24, 24],
+                    iconAnchor: [12, 12]
                 });
             };
 
             const icons = {
-                open: createIcon('#ef4444'),
-                in_behandeling: createIcon('#eab308'),
-                opgelost: createIcon('#22c55e')
+                open: createIcon('#EF4444'),
+                in_progress: createIcon('#EAB308'),
+                resolved: createIcon('#10B981'),
+                closed: createIcon('#6B7280')
             };
 
-            // Complaints data
-            const complaintsData = @json($complaints);
-            let markers = [];
-
-            // Function to add markers to map
+            // Function to add markers
             function addMarkers(complaints) {
-                // Clear existing markers
                 markers.forEach(marker => map.removeLayer(marker));
                 markers = [];
 
@@ -135,17 +164,27 @@
                             icon: icons[complaint.status] || icons.open
                         });
 
+                        const statusTranslations = {
+                            'open': 'Open',
+                            'in_progress': 'In Behandeling',
+                            'resolved': 'Opgelost',
+                            'closed': 'Gesloten'
+                        };
+
                         const popupContent = `
-                            <div class="p-2 min-w-[250px]">
-                                <h3 class="font-semibold text-gray-900 mb-2">${complaint.title}</h3>
-                                <p class="text-gray-600 text-sm mb-2">${complaint.description.substring(0, 100)}${complaint.description.length > 100 ? '...' : ''}</p>
-                                <div class="flex items-center justify-between text-xs text-gray-500 mb-2">
-                                    <span>Status: <span class="font-medium">${complaint.status.replace('_', ' ')}</span></span>
-                                    <span>${new Date(complaint.created_at).toLocaleDateString('nl-NL')}</span>
+                            <div style="min-width: 250px;">
+                                <h3 style="font-weight: 600; margin-bottom: 8px; color: #1F2937;">${complaint.title}</h3>
+                                <p style="color: #6B7280; font-size: 0.875rem; margin-bottom: 8px;">${complaint.description.substring(0, 100)}${complaint.description.length > 100 ? '...' : ''}</p>
+                                <div style="display: flex; justify-content: space-between; margin-bottom: 8px; font-size: 0.75rem;">
+                                    <span style="color: #9CA3AF;">Status: <strong>${statusTranslations[complaint.status] || complaint.status}</strong></span>
+                                    <span style="color: #9CA3AF;">${new Date(complaint.created_at).toLocaleDateString('nl-NL')}</span>
                                 </div>
-                                <div class="flex items-center justify-between">
-                                    <span class="text-xs text-gray-500">Door: ${complaint.reporter_name}</span>
-                                    <a href="/admin/complaints/${complaint.id}" class="bg-blue-500 text-white px-2 py-1 rounded text-xs hover:bg-blue-600">
+                                <div style="display: flex; justify-content: space-between; align-items: center;">
+                                    <span style="color: #9CA3AF; font-size: 0.75rem;">👤 ${complaint.reporter_name}</span>
+                                    <a href="/admin/complaints/${complaint.id}"
+                                       style="display: inline-block; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                                              color: white; padding: 0.4rem 0.8rem; border-radius: 6px;
+                                              text-decoration: none; font-size: 0.75rem; font-weight: 500;">
                                         Bekijken
                                     </a>
                                 </div>
@@ -158,7 +197,6 @@
                     }
                 });
 
-                // Fit map to show all markers
                 if (markers.length > 0) {
                     const group = new L.featureGroup(markers);
                     map.fitBounds(group.getBounds().pad(0.1));
@@ -168,46 +206,61 @@
             // Initial load
             addMarkers(complaintsData);
 
-            // Status filter functionality
+            // Status filter
             document.getElementById('statusFilter').addEventListener('change', function() {
                 const selectedStatus = this.value;
-                let filteredComplaints;
+                let filtered;
 
                 if (selectedStatus === 'all') {
-                    filteredComplaints = complaintsData;
+                    filtered = complaintsData;
                 } else {
-                    filteredComplaints = complaintsData.filter(complaint => complaint.status === selectedStatus);
+                    filtered = complaintsData.filter(c => c.status === selectedStatus);
                 }
 
-                addMarkers(filteredComplaints);
+                addMarkers(filtered);
             });
 
-            // Refresh map button
+            // Refresh button
             document.getElementById('refreshMap').addEventListener('click', function() {
                 location.reload();
             });
 
-            // Complaint list item click to center map
+            // Complaint item click
             document.querySelectorAll('.complaint-item').forEach(item => {
                 item.addEventListener('click', function() {
                     const lat = parseFloat(this.dataset.lat);
                     const lng = parseFloat(this.dataset.lng);
-                    const id = this.dataset.id;
 
                     if (lat && lng) {
                         map.setView([lat, lng], 16);
-                        
-                        // Find and open the popup for this complaint
+
                         markers.forEach(marker => {
-                            const markerPos = marker.getLatLng();
-                            if (Math.abs(markerPos.lat - lat) < 0.0001 && Math.abs(markerPos.lng - lng) < 0.0001) {
+                            const pos = marker.getLatLng();
+                            if (Math.abs(pos.lat - lat) < 0.0001 && Math.abs(pos.lng - lng) < 0.0001) {
                                 marker.openPopup();
                             }
                         });
+
+                        // Scroll to map
+                        document.getElementById('map').scrollIntoView({ behavior: 'smooth', block: 'center' });
                     }
                 });
             });
         });
+
+        // Toggle complaints list
+        function toggleList() {
+            const list = document.getElementById('complaintsList');
+            const btn = document.getElementById('toggleListBtn');
+
+            if (list.style.display === 'none') {
+                list.style.display = 'block';
+                btn.textContent = 'Verberg Lijst';
+            } else {
+                list.style.display = 'none';
+                btn.textContent = 'Toon Lijst';
+            }
+        }
     </script>
-    @endpush
-</x-admin-layout>
+</body>
+</html>
