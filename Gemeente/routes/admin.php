@@ -4,6 +4,7 @@ use App\Http\Controllers\Admin\ComplaintAdminController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\DatabaseController;
 use App\Http\Controllers\Admin\NoteController;
+use App\Http\Controllers\Admin\UserController;
 use Illuminate\Support\Facades\Route;
 
 // All admin routes require authentication and admin access
@@ -39,5 +40,8 @@ Route::middleware(['auth', 'admin', 'noindex', 'log.admin'])->prefix('admin')->n
         Route::post('/{complaint}/notes', [NoteController::class, 'store'])->name('notes.store');
         Route::delete('/notes/{note}', [NoteController::class, 'destroy'])->name('notes.destroy');
     });
+
+    // User management
+    Route::resource('users', UserController::class);
 
 });

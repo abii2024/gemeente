@@ -5,22 +5,22 @@
 class GemeenteChatbot {
     constructor() {
         console.log('🚀 GemeenteChatbot: Constructor called');
-        
+
         this.isOpen = false;
         this.sessionId = this.generateSessionId();
         this.messageHistory = [];
         this.isTyping = false;
-        
+
         this.init();
     }
 
     init() {
         console.log('🔧 GemeenteChatbot: Initializing widget...');
-        
+
         this.createChatWidget();
         this.bindEvents();
         this.loadWelcomeMessage();
-        
+
         console.log('✨ GemeenteChatbot: Widget created successfully!');
     }
 
@@ -29,7 +29,14 @@ class GemeenteChatbot {
     }
 
     createChatWidget() {
-        // Create chat button
+        // Check if chatbot button already exists - prevent duplicates
+        if (document.getElementById('gemeente-chat-button')) {
+            console.warn('⚠️ Chatbot button already exists, skipping creation');
+            this.chatButton = document.getElementById('gemeente-chat-button');
+            return;
+        }
+
+        // Create chat button only (no chat window)
         const chatButton = document.createElement('div');
         chatButton.id = 'gemeente-chat-button';
         chatButton.className = 'gemeente-chat-button';
@@ -40,57 +47,6 @@ class GemeenteChatbot {
             <div class="chat-button-text">Chat met gemeente</div>
         `;
 
-        // Create chat window
-        const chatWindow = document.createElement('div');
-        chatWindow.id = 'gemeente-chat-window';
-        chatWindow.className = 'gemeente-chat-window gemeente-chat-hidden';
-        chatWindow.innerHTML = `
-            <div class="chat-header">
-                <div class="chat-header-info">
-                    <div class="chat-avatar">
-                        <img src="/images/chatbot-logo-small.svg" width="20" height="20" alt="Gemeente" style="border-radius: 50%;">
-                    </div>
-                    <div class="chat-info">
-                        <div class="chat-title">Gemeente Assistent</div>
-                        <div class="chat-status">Online</div>
-                    </div>
-                </div>
-                <button class="chat-close" id="gemeente-chat-close">
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M18 6L6 18M6 6L18 18" stroke="white" stroke-width="2" stroke-linecap="round"/>
-                    </svg>
-                </button>
-            </div>
-            
-            <div class="chat-messages" id="gemeente-chat-messages">
-                <div class="chat-loading" id="gemeente-chat-loading">
-                    <div class="loading-dots">
-                        <div></div>
-                        <div></div>
-                        <div></div>
-                    </div>
-                    <span>Gemeente assistent laden...</span>
-                </div>
-            </div>
-            
-            <div class="chat-quick-replies" id="gemeente-chat-quick-replies"></div>
-            
-            <div class="chat-input">
-                <div class="input-container">
-                    <input type="text" id="gemeente-chat-input" placeholder="Typ uw vraag..." maxlength="500">
-                    <button id="gemeente-chat-send" disabled>
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M22 2L11 13M22 2L15 22L11 13M22 2L2 9L11 13" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                        </svg>
-                    </button>
-                </div>
-                <div class="input-info">
-                    <span id="gemeente-char-count">0/500</span>
-                    <span class="powered-by">Powered by Gemeente AI</span>
-                </div>
-            </div>
-        `;
-
         // Add styles
         const styles = document.createElement('style');
         styles.textContent = this.getChatStyles();
@@ -98,43 +54,35 @@ class GemeenteChatbot {
 
         // Add to page
         document.body.appendChild(chatButton);
-        document.body.appendChild(chatWindow);
 
-        // Store references
+        // Store reference
         this.chatButton = chatButton;
-        this.chatWindow = chatWindow;
-        this.messagesContainer = document.getElementById('gemeente-chat-messages');
-        this.quickRepliesContainer = document.getElementById('gemeente-chat-quick-replies');
-        this.chatInput = document.getElementById('gemeente-chat-input');
-        this.sendButton = document.getElementById('gemeente-chat-send');
-        this.charCount = document.getElementById('gemeente-char-count');
-        this.loadingElement = document.getElementById('gemeente-chat-loading');
     }
 
     getChatStyles() {
         return `
             .gemeente-chat-button {
                 position: fixed;
-                bottom: 20px;
-                right: 20px;
-                background: linear-gradient(135deg, #2563eb, #1d4ed8);
+                bottom: 24px;
+                right: 24px;
+                background: linear-gradient(135deg, #0ea5e9, #06b6d4);
                 color: white;
                 border-radius: 50px;
-                box-shadow: 0 4px 20px rgba(37, 99, 235, 0.3);
+                box-shadow: 0 4px 16px rgba(14, 165, 233, 0.3);
                 cursor: pointer;
-                z-index: 9999;
+                z-index: 9998;
                 display: flex;
                 align-items: center;
-                padding: 12px 20px;
-                transition: all 0.3s ease;
+                padding: 14px 24px;
+                transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
                 font-family: system-ui, -apple-system, sans-serif;
-                font-size: 14px;
-                font-weight: 500;
+                font-size: 15px;
+                font-weight: 600;
             }
 
             .gemeente-chat-button:hover {
                 transform: translateY(-2px);
-                box-shadow: 0 6px 25px rgba(37, 99, 235, 0.4);
+                box-shadow: 0 6px 25px rgba(14, 165, 233, 0.4);
             }
 
             .chat-button-icon {
@@ -142,28 +90,82 @@ class GemeenteChatbot {
                 display: flex;
                 align-items: center;
             }
+        `;
+    }
 
-            .gemeente-chat-window {
-                position: fixed;
-                bottom: 90px;
-                right: 20px;
-                width: 380px;
-                height: 500px;
+    bindEvents() {
+        // Chat button - does nothing (just decorative)
+        this.chatButton.addEventListener('click', (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            // Button is decorative only - no action
+        });
+    }
+
+    async loadWelcomeMessage() {
+        // No welcome message needed - button is decorative only
+    }
+
+    // Dummy methods to prevent errors
+    toggleChat() {}
+    openChat() {}
+    closeChat() {}
+    handleInput() {}
+    sendMessage() {}
+    addBotMessage() {}
+    addUserMessage() {}
+    addBotMessageWithTyping() {}
+    formatMessage() {}
+    showTypingIndicator() {}
+    hideTypingIndicator() {}
+    showQuickReplies() {}
+    clearQuickReplies() {}
+    handleQuickReply() {}
+    escapeHtml() {}
+    scrollToBottom() {}
+    typeMessage() {}
+    hideLoading() {}
+}
+
+// Initialize chatbot when DOM is ready
+document.addEventListener('DOMContentLoaded', function() {
+    console.log('🤖 Gemeente Chatbot: DOM loaded, initializing button only...');
+
+    // Prevent multiple instances
+    if (window.gemeenteChatbot) {
+        console.warn('⚠️ Chatbot already initialized');
+        return;
+    }
+
+    try {
+        // Create chatbot instance (button only)
+        window.gemeenteChatbot = new GemeenteChatbot();
+        console.log('✅ Chatbot button initialized successfully!');
+    } catch (error) {
+        console.error('❌ Failed to initialize chatbot button', error);
+    }
+});
+
+// Export for manual initialization
+window.GemeenteChatbot = GemeenteChatbot;
+                height: 550px;
+                max-height: calc(100vh - 100px);
                 background: white;
                 border-radius: 16px;
-                box-shadow: 0 10px 50px rgba(0, 0, 0, 0.15);
-                z-index: 10000;
+                box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
+                z-index: 9999;
                 display: flex;
                 flex-direction: column;
                 font-family: system-ui, -apple-system, sans-serif;
-                transition: all 0.3s ease;
+                transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
                 transform-origin: bottom right;
             }
 
             .gemeente-chat-hidden {
-                opacity: 0;
-                visibility: hidden;
-                transform: scale(0.8) translateY(20px);
+                opacity: 0 !important;
+                visibility: hidden !important;
+                transform: scale(0.85) translateY(30px) !important;
+                pointer-events: none !important;
             }
 
             .chat-header {
@@ -418,7 +420,7 @@ class GemeenteChatbot {
                     height: calc(100vh - 140px);
                     bottom: 90px;
                 }
-                
+
                 .gemeente-chat-button {
                     bottom: 20px;
                     right: 20px;
@@ -524,58 +526,16 @@ class GemeenteChatbot {
     }
 
     bindEvents() {
-        // Toggle chat window
-        this.chatButton.addEventListener('click', () => this.toggleChat());
-        document.getElementById('gemeente-chat-close').addEventListener('click', () => this.closeChat());
-
-        // Input handling
-        this.chatInput.addEventListener('input', (e) => this.handleInput(e));
-        this.chatInput.addEventListener('keypress', (e) => {
-            if (e.key === 'Enter' && !e.shiftKey) {
-                e.preventDefault();
-                this.sendMessage();
-            }
-        });
-
-        // Send button
-        this.sendButton.addEventListener('click', () => this.sendMessage());
-
-        // Click outside to close (optional)
-        document.addEventListener('click', (e) => {
-            if (this.isOpen && 
-                !this.chatWindow.contains(e.target) && 
-                !this.chatButton.contains(e.target)) {
-                // Optional: auto-close when clicking outside
-                // this.closeChat();
-            }
+        // Chat button - does nothing (just decorative)
+        this.chatButton.addEventListener('click', (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            // Button is decorative only - no action
         });
     }
 
     async loadWelcomeMessage() {
-        try {
-            // Show typing indicator for welcome message
-            this.showTypingIndicator();
-            
-            // Add small delay to simulate loading
-            await new Promise(resolve => setTimeout(resolve, 1000));
-            
-            const response = await fetch('/api/chat/welcome');
-            const data = await response.json();
-            
-            this.hideTypingIndicator();
-            
-            if (data.success) {
-                await this.addBotMessageWithTyping(data.response);
-            }
-        } catch (error) {
-            console.error('Failed to load welcome message:', error);
-            this.hideTypingIndicator();
-            await this.addBotMessageWithTyping({
-                type: 'error',
-                message: 'Welkom bij de gemeente chatbot! 🏛️\n\nWaarmee kan ik u helpen?',
-                quick_replies: ['Klacht indienen', 'Contact informatie', 'Paspoort info', 'Afval informatie']
-            });
-        }
+        // No welcome message needed - button is decorative only
     }
 
     toggleChat() {
@@ -590,17 +550,26 @@ class GemeenteChatbot {
         this.isOpen = true;
         this.chatWindow.classList.remove('gemeente-chat-hidden');
         this.chatInput.focus();
-        
-        // Update button text
-        this.chatButton.querySelector('.chat-button-text').textContent = 'Sluit chat';
+
+        // Hide the chat button when window is open
+        this.chatButton.classList.add('hidden');
     }
 
     closeChat() {
+        console.log('🔴 Closing chat window');
         this.isOpen = false;
-        this.chatWindow.classList.add('gemeente-chat-hidden');
-        
-        // Update button text
-        this.chatButton.querySelector('.chat-button-text').textContent = 'Chat met gemeente';
+
+        // Hide chat window
+        if (this.chatWindow) {
+            this.chatWindow.classList.add('gemeente-chat-hidden');
+            console.log('✅ Chat window hidden');
+        }
+
+        // Show the chat button again
+        if (this.chatButton) {
+            this.chatButton.classList.remove('hidden');
+            console.log('✅ Chat button shown');
+        }
     }
 
     hideLoading() {
@@ -612,13 +581,13 @@ class GemeenteChatbot {
     handleInput(e) {
         const value = e.target.value;
         const length = value.length;
-        
+
         // Update character count
         this.charCount.textContent = `${length}/500`;
-        
+
         // Enable/disable send button
         this.sendButton.disabled = length === 0 || length > 500;
-        
+
         // Color coding for character count
         if (length > 450) {
             this.charCount.style.color = '#ef4444';
@@ -635,11 +604,11 @@ class GemeenteChatbot {
 
         // Add user message
         this.addUserMessage(message);
-        
+
         // Clear input
         this.chatInput.value = '';
         this.handleInput({ target: { value: '' } });
-        
+
         // Show typing indicator
         this.showTypingIndicator();
 
@@ -657,7 +626,7 @@ class GemeenteChatbot {
             });
 
             const data = await response.json();
-            
+
             this.hideTypingIndicator();
 
             if (data.success) {
@@ -694,10 +663,10 @@ class GemeenteChatbot {
                 </svg>
             </div>
         `;
-        
+
         this.messagesContainer.appendChild(messageElement);
         this.scrollToBottom();
-        
+
         // Store in history
         this.messageHistory.push({ type: 'user', message, timestamp: Date.now() });
     }
@@ -705,7 +674,7 @@ class GemeenteChatbot {
     async addBotMessageWithTyping(response) {
         const messageElement = document.createElement('div');
         messageElement.className = 'message bot';
-        
+
         messageElement.innerHTML = `
             <div class="message-avatar">
                 <img src="/images/chatbot-logo-small.svg" width="24" height="24" alt="Gemeente" style="border-radius: 50%;">
@@ -714,22 +683,22 @@ class GemeenteChatbot {
                 <div class="typing-text"></div>
             </div>
         `;
-        
+
         this.messagesContainer.appendChild(messageElement);
         this.scrollToBottom();
-        
+
         const typingContainer = messageElement.querySelector('.typing-text');
         let messageContent = this.formatMessage(response.message);
-        
+
         // Type out the message character by character
         await this.typeMessage(typingContainer, messageContent);
-        
+
         // Add action button if present
         if (response.action_button) {
             const buttonHtml = `<br><a href="${response.action_button.url}" class="action-button" target="_blank">${response.action_button.text}</a>`;
             typingContainer.innerHTML += buttonHtml;
         }
-        
+
         // Add quick replies if present
         if (response.quick_replies && response.quick_replies.length > 0) {
             await new Promise(resolve => setTimeout(resolve, 500)); // Small delay before showing quick replies
@@ -737,7 +706,7 @@ class GemeenteChatbot {
         } else {
             this.clearQuickReplies();
         }
-        
+
         // Store in history
         this.messageHistory.push({ type: 'bot', response, timestamp: Date.now() });
     }
@@ -747,29 +716,29 @@ class GemeenteChatbot {
         const tempDiv = document.createElement('div');
         tempDiv.innerHTML = message;
         const plainText = tempDiv.textContent || tempDiv.innerText || '';
-        
+
         // Split message into words for better typing effect
         const words = plainText.split(' ');
         container.innerHTML = '';
-        
+
         for (let i = 0; i < words.length; i++) {
             // Add word with appropriate formatting
             const wordElement = document.createElement('span');
             wordElement.textContent = words[i] + (i < words.length - 1 ? ' ' : '');
-            
+
             // Find corresponding HTML formatting for this word
             const wordStart = plainText.indexOf(words.slice(0, i + 1).join(' '));
             const wordEnd = wordStart + words.slice(0, i + 1).join(' ').length;
-            
+
             container.appendChild(wordElement);
-            
+
             // Scroll to bottom after each word
             this.scrollToBottom();
-            
+
             // Wait between words (faster typing)
             await new Promise(resolve => setTimeout(resolve, 50 + Math.random() * 30));
         }
-        
+
         // Replace with properly formatted HTML
         container.innerHTML = message;
         this.scrollToBottom();
@@ -778,7 +747,7 @@ class GemeenteChatbot {
     showTypingIndicator() {
         // Remove existing typing indicator
         this.hideTypingIndicator();
-        
+
         const typingElement = document.createElement('div');
         typingElement.className = 'message bot typing-indicator';
         typingElement.id = 'typing-indicator';
@@ -794,7 +763,7 @@ class GemeenteChatbot {
                 </div>
             </div>
         `;
-        
+
         this.messagesContainer.appendChild(typingElement);
         this.scrollToBottom();
     }
@@ -809,39 +778,39 @@ class GemeenteChatbot {
     addBotMessage(response) {
         const messageElement = document.createElement('div');
         messageElement.className = 'message bot';
-        
+
         let messageContent = this.formatMessage(response.message);
-        
+
         // Add action button if present
         if (response.action_button) {
             messageContent += `<br><a href="${response.action_button.url}" class="action-button" target="_blank">${response.action_button.text}</a>`;
         }
-        
+
         messageElement.innerHTML = `
             <div class="message-avatar">
                 <img src="/images/chatbot-logo-small.svg" width="24" height="24" alt="Gemeente" style="border-radius: 50%;">
             </div>
             <div class="message-bubble">${messageContent}</div>
         `;
-        
+
         this.messagesContainer.appendChild(messageElement);
-        
+
         // Add quick replies if present
         if (response.quick_replies && response.quick_replies.length > 0) {
             this.showQuickReplies(response.quick_replies);
         } else {
             this.clearQuickReplies();
         }
-        
+
         this.scrollToBottom();
-        
+
         // Store in history
         this.messageHistory.push({ type: 'bot', response, timestamp: Date.now() });
     }
 
     showQuickReplies(replies) {
         this.clearQuickReplies();
-        
+
         replies.forEach(reply => {
             const button = document.createElement('button');
             button.className = 'quick-reply';
@@ -866,7 +835,7 @@ class GemeenteChatbot {
     showTypingIndicator() {
         // Remove existing typing indicator
         this.hideTypingIndicator();
-        
+
         this.isTyping = true;
         const typingElement = document.createElement('div');
         typingElement.className = 'message bot typing-indicator';
@@ -883,7 +852,7 @@ class GemeenteChatbot {
                 </div>
             </div>
         `;
-        
+
         this.messagesContainer.appendChild(typingElement);
         this.scrollToBottom();
     }
@@ -898,7 +867,7 @@ class GemeenteChatbot {
 
     formatMessage(message) {
         if (!message) return '';
-        
+
         return message
             .replace(/\n\n/g, '<br><br>')
             .replace(/\n/g, '<br>')
@@ -923,7 +892,13 @@ class GemeenteChatbot {
 // Initialize chatbot when DOM is loaded
 document.addEventListener('DOMContentLoaded', function() {
     console.log('🤖 Gemeente Chatbot: DOM loaded, initializing...');
-    
+
+    // Prevent multiple instances
+    if (window.gemeenteChatbot) {
+        console.warn('⚠️ Chatbot instance already exists, skipping initialization');
+        return;
+    }
+
     try {
         // Initialize chatbot on all pages
         window.gemeenteChatbot = new GemeenteChatbot();

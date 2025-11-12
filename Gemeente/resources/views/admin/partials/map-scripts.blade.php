@@ -69,7 +69,7 @@
                                     ${new Date(complaint.created_at).toLocaleDateString('nl-NL')}
                                 </p>
                                 <a href="/admin/complaints/${complaint.id}"
-                                   style="display: inline-block; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                                   style="display: inline-block; background: linear-gradient(135deg, #0ea5e9 0%, #06b6d4 100%);
                                           color: white; padding: 0.5rem 1rem; border-radius: 8px;
                                           text-decoration: none; font-weight: 500;">
                                     Bekijk Details
@@ -96,7 +96,7 @@
         const colors = {
             'open': '#3B82F6',          // Blue
             'in_progress': '#EAB308',   // Yellow
-            'resolved': '#10B981',      // Green
+            'resolved': '#0ea5e9',      // Green
             'closed': '#6B7280'         // Gray
         };
         return colors[status] || '#3B82F6';

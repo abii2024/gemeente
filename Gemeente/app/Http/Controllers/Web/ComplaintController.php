@@ -48,13 +48,17 @@ class ComplaintController extends Controller
 
                     // Save resized version
                     $resizedPath = 'complaints/'.basename($originalPath);
-                    $image->save(storage_path('app/public/'.$resizedPath), quality: 85);
+                    $absolutePath = Storage::disk('public')->path($resizedPath);
+
+                    if (! is_dir(dirname($absolutePath))) {
+                        mkdir(dirname($absolutePath), 0755, true);
+                    }
+
+                    $image->save($absolutePath, quality: 85);
                     $finalPath = $resizedPath;
 
                     // Remove original if resizing was successful
-                    if (file_exists(storage_path('app/public/'.$resizedPath))) {
-                        Storage::disk('public')->delete($originalPath);
-                    }
+                    Storage::disk('public')->delete($originalPath);
                 }
 
                 $complaint->attachments()->create([
@@ -80,5 +84,30 @@ class ComplaintController extends Controller
     public function thanks(): View
     {
         return view('pages.complaint-thanks');
+    }
+
+    public function track(): View
+    {
+        // Validate that both id and email are provided
+        $id = request()->input('id');
+        $email = request()->input('email');
+
+        if (!$id || !$email) {
+            abort(403, 'Klacht ID en e-mailadres zijn verplicht.');
+        }
+
+        // Find complaint and verify email
+        $complaint = Complaint::with('attachments')->findOrFail($id);
+
+        if ($complaint->reporter_email !== $email) {
+            abort(403, 'E-mailadres komt niet overeen met de melding.');
+        }
+
+        // Log tracking access (privacy-friendly)
+        PrivacyLogger::logComplaintAction('tracked', $complaint->id, [
+            'status' => $complaint->status,
+        ]);
+
+        return view('pages.complaint-track', compact('complaint'));
     }
 }

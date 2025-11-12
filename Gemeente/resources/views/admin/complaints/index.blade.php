@@ -46,7 +46,7 @@
                             Reset
                         </a>
                         <a href="{{ route('admin.complaints.map') }}"
-                           style="flex: 1; min-width: 140px; padding: 0.875rem 1.5rem; background: linear-gradient(135deg, #10B981 0%, #059669 100%); color: white; border: none; border-radius: 12px; font-weight: 600; text-align: center; text-decoration: none; transition: all var(--transition-fast); white-space: nowrap;"
+                           style="flex: 1; min-width: 140px; padding: 0.875rem 1.5rem; background: linear-gradient(135deg, #0ea5e9 0%, #06b6d4 100%); color: white; border: none; border-radius: 12px; font-weight: 600; text-align: center; text-decoration: none; transition: all var(--transition-fast); white-space: nowrap;"
                            onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='var(--shadow-lg)'"
                            onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='none'">
                             🗺️ Kaartweergave

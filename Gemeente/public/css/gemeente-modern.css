@@ -330,10 +330,7 @@ body {
 .hero {
     position: relative;
     padding: var(--space-2xl) 0;
-    background: linear-gradient(135deg,
-        rgba(0, 102, 204, 0.03) 0%,
-        rgba(78, 205, 196, 0.05) 50%,
-        rgba(255, 107, 53, 0.03) 100%);
+    background: linear-gradient(135deg, #0ea5e9 0%, #06b6d4 100%);
     overflow: hidden;
 }
 

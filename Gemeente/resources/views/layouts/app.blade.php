@@ -9,16 +9,20 @@
 
         <!-- Fonts -->
         <link rel="preconnect" href="https://fonts.bunny.net">
-        <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
+        <link href="https://fonts.bunny.net/css?family=inter:400,500,600,700,800&display=swap" rel="stylesheet" />
+
+        <!-- Modern CSS -->
+        <link rel="stylesheet" href="{{ asset('css/gemeente-modern.css') }}">
 
         <!-- Scripts -->
         @vite(['resources/css/app.css', 'resources/js/app.js'])
-        
+
         <!-- Chatbot Script -->
         <script src="{{ asset('js/chatbot.js') }}" defer></script>
+        <script src="{{ asset('js/moderne-animations.js') }}" defer></script>
     </head>
-    <body class="font-sans antialiased">
-        <div class="min-h-screen bg-gray-100">
+    <body>
+        <div class="min-h-screen">
             @include('layouts.navigation')
 
             <!-- Page Heading -->
@@ -32,10 +36,10 @@
 
             <!-- Page Content -->
             <main>
-                {{ $slot }}
+                @yield('content')
             </main>
         </div>
-        
+
         <!-- Chatbot Widget (only on public pages) -->
         @auth
             <div data-chatbot="enabled"></div>

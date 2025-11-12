@@ -1,0 +1,281 @@
+/**
+ * ============================================================================
+ * GEMEENTE PORTAL - DARK MODE UTILITIES
+ * Extra dark mode specific styling & utilities
+ * ============================================================================
+ *
+ * Note: Basis dark mode kleuren zitten al in design-tokens.css
+ * Dit bestand bevat extra utilities en fine-tuning
+ */
+
+@media (prefers-color-scheme: dark) {
+
+  /* ==========================================================================
+     IMAGE & MEDIA ADJUSTMENTS
+     ========================================================================== */
+
+  /* Reduceer brightness van images in dark mode */
+  img:not([data-no-dark-adjust]) {
+    filter: brightness(0.9);
+  }
+
+  /* Logo's en icons behouden normale brightness */
+  [data-logo],
+  [data-icon],
+  .logo,
+  .icon {
+    filter: none;
+  }
+
+  /* ==========================================================================
+     FORMS - Dark mode specifieke styling
+     ========================================================================== */
+
+  /* Autofill styling in dark mode */
+  input:-webkit-autofill,
+  input:-webkit-autofill:hover,
+  input:-webkit-autofill:focus,
+  select:-webkit-autofill,
+  select:-webkit-autofill:hover,
+  select:-webkit-autofill:focus,
+  textarea:-webkit-autofill,
+  textarea:-webkit-autofill:hover,
+  textarea:-webkit-autofill:focus {
+    -webkit-text-fill-color: var(--color-fg-primary);
+    -webkit-box-shadow: 0 0 0 1000px var(--color-bg-secondary) inset;
+    box-shadow: 0 0 0 1000px var(--color-bg-secondary) inset;
+    transition: background-color 5000s ease-in-out 0s;
+  }
+
+  /* Select dropdown arrow in dark mode */
+  select.form-select {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3E%3Cpath stroke='%23d1d5db' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='m6 8 4 4 4-4'/%3E%3C/svg%3E");
+  }
+
+  /* ==========================================================================
+     CODE BLOCKS - Syntax highlighting aanpassing
+     ========================================================================== */
+
+  code,
+  pre {
+    background-color: var(--color-bg-tertiary);
+    color: var(--color-fg-primary);
+    border-color: var(--color-border-primary);
+  }
+
+  /* ==========================================================================
+     SCROLLBAR STYLING - Dark scrollbars
+     ========================================================================== */
+
+  /* Firefox */
+  * {
+    scrollbar-color: var(--color-bg-tertiary) var(--color-bg-primary);
+    scrollbar-width: thin;
+  }
+
+  /* Webkit browsers */
+  ::-webkit-scrollbar {
+    width: 12px;
+    height: 12px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background-color: var(--color-bg-primary);
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background-color: var(--color-bg-tertiary);
+    border-radius: var(--radius-full);
+    border: 2px solid var(--color-bg-primary);
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background-color: var(--color-border-primary);
+  }
+
+  /* ==========================================================================
+     SELECTION COLORS
+     ========================================================================== */
+
+  ::selection {
+    background-color: var(--color-brand-primary);
+    color: var(--color-brand-contrast);
+  }
+
+  /* ==========================================================================
+     MAPS & INTERACTIVE ELEMENTS
+     ========================================================================== */
+
+  /* Leaflet map adjustments */
+  .leaflet-container {
+    filter: invert(0.9) hue-rotate(180deg) brightness(0.95);
+  }
+
+  /* Revert inversion for map controls & popups */
+  .leaflet-control,
+  .leaflet-popup-content-wrapper {
+    filter: invert(0.9) hue-rotate(180deg);
+  }
+
+  /* ==========================================================================
+     BACKDROP FILTERS
+     ========================================================================== */
+
+  /* Glassmorphism effect in dark mode */
+  .glass-dark {
+    background-color: rgb(0 0 0 / 0.3);
+    backdrop-filter: blur(var(--blur-md)) saturate(180%);
+    border: 1px solid rgb(255 255 255 / 0.1);
+  }
+
+  /* ==========================================================================
+     FOCUS INDICATORS - Hogere visibility in dark mode
+     ========================================================================== */
+
+  :focus-visible {
+    outline-color: var(--color-brand-primary);
+    outline-width: 2px;
+    outline-offset: 3px;
+  }
+
+  /* ==========================================================================
+     TABLES
+     ========================================================================== */
+
+  table {
+    border-color: var(--color-border-primary);
+  }
+
+  thead {
+    background-color: var(--color-bg-tertiary);
+    border-bottom-color: var(--color-border-primary);
+  }
+
+  tbody tr:nth-child(even) {
+    background-color: var(--color-bg-secondary);
+  }
+
+  tbody tr:hover {
+    background-color: var(--color-bg-tertiary);
+  }
+
+  /* ==========================================================================
+     TOOLTIPS & POPOVERS
+     ========================================================================== */
+
+  [data-tooltip],
+  .tooltip {
+    background-color: var(--color-bg-tertiary);
+    color: var(--color-fg-primary);
+    border-color: var(--color-border-primary);
+    box-shadow: var(--shadow-xl);
+  }
+
+  /* ==========================================================================
+     CONTRAST ADJUSTMENTS - Voor betere leesbaarheid
+     ========================================================================== */
+
+  /* Subtle text heeft iets meer contrast nodig in dark mode */
+  .text-muted,
+  .text-secondary {
+    color: var(--color-fg-secondary);
+  }
+
+  /* Links zijn zichtbaarder in dark mode */
+  a:not(.btn):not(.nav-link) {
+    color: oklch(75% 0.18 260);
+  }
+
+  a:not(.btn):not(.nav-link):hover {
+    color: oklch(80% 0.20 260);
+  }
+}
+
+/* ==========================================================================
+   FORCED DARK MODE - Voor gebruikers die expliciet dark mode kiezen
+   ==========================================================================
+   Sommige OS'en hebben forced dark mode waar je websites extra kan aanpassen
+*/
+
+@media (prefers-color-scheme: dark) and (prefers-contrast: high) {
+  :root {
+    /* Extra contrast voor high contrast dark mode */
+    --color-bg-primary: oklch(10% 0 0);
+    --color-fg-primary: oklch(98% 0 0);
+    --color-border-primary: oklch(40% 0 0);
+  }
+
+  /* Dikkere borders voor betere zichtbaarheid */
+  .btn,
+  .card,
+  .form-input,
+  .form-select,
+  .form-textarea {
+    border-width: 2px;
+  }
+}
+
+/* ==========================================================================
+   DARK MODE TOGGLE UTILITY - Voor manual toggle
+   ==========================================================================
+   Als je een dark mode toggle wilt toevoegen, gebruik [data-theme="dark"]
+*/
+
+[data-theme="dark"] {
+  color-scheme: dark;
+
+  /* Kopieer alle dark mode variabelen */
+  --color-bg-primary: oklch(15% 0.01 255);
+  --color-bg-secondary: oklch(18% 0.01 255);
+  --color-bg-tertiary: oklch(22% 0.01 255);
+
+  --color-fg-primary: oklch(92% 0.02 255);
+  --color-fg-secondary: oklch(70% 0.02 255);
+  --color-fg-tertiary: oklch(50% 0.01 255);
+
+  --color-brand-primary: oklch(65% 0.18 260);
+  --color-brand-hover: oklch(70% 0.19 260);
+  --color-brand-active: oklch(75% 0.20 260);
+  --color-brand-contrast: oklch(15% 0.02 260);
+
+  --color-brand-light: oklch(30% 0.10 260);
+  --color-brand-lighter: oklch(22% 0.06 260);
+
+  --color-success: oklch(70% 0.18 150);
+  --color-success-contrast: oklch(92% 0.02 150);
+  --color-success-light: oklch(25% 0.10 150);
+
+  --color-warning: oklch(75% 0.16 80);
+  --color-warning-contrast: oklch(15% 0.02 80);
+  --color-warning-light: oklch(28% 0.10 80);
+
+  --color-error: oklch(65% 0.20 25);
+  --color-error-contrast: oklch(15% 0.02 25);
+  --color-error-light: oklch(28% 0.12 25);
+
+  --color-info: oklch(70% 0.14 240);
+  --color-info-contrast: oklch(92% 0.02 240);
+  --color-info-light: oklch(28% 0.08 240);
+
+  --color-border-primary: oklch(30% 0.01 255);
+  --color-border-secondary: oklch(25% 0.01 255);
+  --color-border-focus: oklch(65% 0.18 260);
+}
+
+/* Light mode toggle */
+[data-theme="light"] {
+  color-scheme: light;
+  /* Gebruik default :root variabelen */
+}
+
+/* ==========================================================================
+   PRINT STYLES - Altijd light mode voor printen
+   ========================================================================== */
+
+@media print {
+  * {
+    color-scheme: light;
+    background-color: white !important;
+    color: black !important;
+  }
+}

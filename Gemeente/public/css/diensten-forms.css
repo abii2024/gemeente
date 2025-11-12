@@ -1,0 +1,286 @@
+/**
+ * ============================================================================
+ * GEMEENTE PORTAL - DIENSTEN FORMULIEREN
+ * Geoptimaliseerde styling voor alle diensten aanvraag pagina's
+ * ============================================================================
+ */
+
+/* Diensten Page Container */
+.diensten-container {
+    max-width: 1024px;
+    margin: 0 auto;
+    padding: 2rem 1rem;
+}
+
+/* Header Section */
+.diensten-header {
+    margin-bottom: 2rem;
+}
+
+.back-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: var(--color-brand-primary);
+    font-weight: 500;
+    text-decoration: none;
+    margin-bottom: 1rem;
+    transition: color 0.2s;
+}
+
+.back-link:hover {
+    color: var(--color-brand-hover);
+}
+
+.back-link svg {
+    width: 1.25rem;
+    height: 1.25rem;
+}
+
+.diensten-title {
+    font-size: var(--font-size-4xl);
+    font-weight: 700;
+    color: var(--color-fg-primary);
+    margin-bottom: 0.5rem;
+}
+
+.diensten-subtitle {
+    font-size: var(--font-size-lg);
+    color: var(--color-fg-secondary);
+}
+
+/* Info Alert */
+.info-alert {
+    display: flex;
+    gap: 1rem;
+    padding: 1.5rem;
+    margin-bottom: 2rem;
+    border-radius: var(--radius-lg);
+    border-left: 4px solid;
+    box-shadow: var(--shadow-sm);
+}
+
+.info-alert-blue {
+    background-color: oklch(95% 0.05 260);
+    border-color: oklch(60% 0.15 260);
+}
+
+.info-alert-green {
+    background-color: oklch(95% 0.05 150);
+    border-color: oklch(65% 0.18 150);
+}
+
+.info-alert-purple {
+    background-color: oklch(95% 0.05 290);
+    border-color: oklch(60% 0.15 290);
+}
+
+.info-alert-indigo {
+    background-color: oklch(95% 0.05 270);
+    border-color: oklch(60% 0.15 270);
+}
+
+.info-alert-orange {
+    background-color: oklch(95% 0.05 60);
+    border-color: oklch(70% 0.16 60);
+}
+
+.info-alert-icon {
+    flex-shrink: 0;
+}
+
+.info-alert-icon svg {
+    width: 1.5rem;
+    height: 1.5rem;
+}
+
+.info-alert-content h3 {
+    font-size: var(--font-size-lg);
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+}
+
+.info-alert-list {
+    font-size: var(--font-size-sm);
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+}
+
+/* Form Card */
+.diensten-form-card {
+    background-color: var(--color-bg-primary);
+    border-radius: var(--radius-xl);
+    box-shadow: var(--shadow-lg);
+    padding: 2rem;
+    border: 1px solid var(--color-border-primary);
+}
+
+/* Form Sections */
+.form-section {
+    margin-bottom: 2rem;
+}
+
+.form-section-title {
+    font-size: var(--font-size-2xl);
+    font-weight: 700;
+    color: var(--color-fg-primary);
+    margin-bottom: 1.5rem;
+    padding-bottom: 0.75rem;
+    border-bottom: 1px solid var(--color-border-primary);
+}
+
+/* Grid Layouts */
+.form-grid {
+    display: grid;
+    gap: 1.5rem;
+}
+
+.form-grid-2 {
+    grid-template-columns: 1fr;
+}
+
+@media (min-width: 768px) {
+    .form-grid-2 {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+.form-grid-full {
+    grid-column: 1 / -1;
+}
+
+/* Form Controls - gebruik moderne components */
+.diensten-form-card .form-input,
+.diensten-form-card .form-select,
+.diensten-form-card .form-textarea {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    border: 1px solid var(--color-border-primary);
+    border-radius: var(--radius-md);
+    background-color: var(--color-bg-primary);
+    color: var(--color-fg-primary);
+    font-size: var(--font-size-base);
+    transition: all 0.2s;
+}
+
+/* Color variants for inputs */
+.focus-blue:focus {
+    outline: none;
+    border-color: oklch(60% 0.15 260);
+    box-shadow: 0 0 0 3px oklch(92% 0.04 260);
+}
+
+.focus-green:focus {
+    outline: none;
+    border-color: oklch(65% 0.18 150);
+    box-shadow: 0 0 0 3px oklch(90% 0.08 150);
+}
+
+.focus-purple:focus {
+    outline: none;
+    border-color: oklch(60% 0.15 290);
+    box-shadow: 0 0 0 3px oklch(92% 0.04 290);
+}
+
+.focus-indigo:focus {
+    outline: none;
+    border-color: oklch(60% 0.15 270);
+    box-shadow: 0 0 0 3px oklch(92% 0.04 270);
+}
+
+.focus-orange:focus {
+    outline: none;
+    border-color: oklch(70% 0.16 60);
+    box-shadow: 0 0 0 3px oklch(92% 0.08 60);
+}
+
+/* Form Actions */
+.form-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--color-border-primary);
+}
+
+@media (min-width: 640px) {
+    .form-actions {
+        flex-direction: row;
+        justify-content: flex-end;
+    }
+}
+
+/* Buttons - color variants */
+.btn-blue {
+    background-color: oklch(60% 0.15 260);
+    color: white;
+}
+
+.btn-blue:hover {
+    background-color: oklch(55% 0.16 260);
+}
+
+.btn-green {
+    background-color: oklch(65% 0.18 150);
+    color: white;
+}
+
+.btn-green:hover {
+    background-color: oklch(60% 0.19 150);
+}
+
+.btn-purple {
+    background-color: oklch(60% 0.15 290);
+    color: white;
+}
+
+.btn-purple:hover {
+    background-color: oklch(55% 0.16 290);
+}
+
+.btn-indigo {
+    background-color: oklch(60% 0.15 270);
+    color: white;
+}
+
+.btn-indigo:hover {
+    background-color: oklch(55% 0.16 270);
+}
+
+.btn-orange {
+    background-color: oklch(70% 0.16 60);
+    color: white;
+}
+
+.btn-orange:hover {
+    background-color: oklch(65% 0.17 60);
+}
+
+/* Required Field Indicator */
+.required {
+    color: var(--color-error);
+    margin-left: 0.25rem;
+}
+
+/* Help Text */
+.help-text {
+    font-size: var(--font-size-xs);
+    color: var(--color-fg-secondary);
+    margin-top: 0.25rem;
+}
+
+/* Responsive adjustments */
+@media (max-width: 640px) {
+    .diensten-container {
+        padding: 1rem 0.5rem;
+    }
+
+    .diensten-form-card {
+        padding: 1.5rem;
+    }
+
+    .diensten-title {
+        font-size: var(--font-size-3xl);
+    }
+}

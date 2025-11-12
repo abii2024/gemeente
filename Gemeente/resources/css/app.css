@@ -1,3 +1,351 @@
+/**
+ * ============================================================================
+ * GEMEENTE PORTAL - MAIN STYLESHEET
+ * Modern CSS Architecture met 2025 best practices
+ * ============================================================================
+ *
+ * Layer structure:
+ * 1. reset     - CSS reset & normalization
+ * 2. tokens    - Design tokens (colors, typography, spacing)
+ * 3. base      - HTML element defaults
+ * 4. components - Reusable components
+ * 5. utilities  - Helper classes
+ * 6. overrides  - Project-specific overrides
+ *
+ * Cascade order zorgt voor voorspelbare specificity
+ */
+
+/* ==========================================================================
+   DESIGN TOKENS - Foundation
+   ========================================================================== */
+@import './design-tokens.css';
+
+/* ==========================================================================
+   MODERN COMPONENTS - Reusable UI elements
+   ========================================================================== */
+@import './modern-components.css';
+
+/* ==========================================================================
+   LAYOUT SYSTEM - Grid, Flex & Container Queries
+   ========================================================================== */
+@import './layout-system.css';
+
+/* ==========================================================================
+   ANIMATIONS - View transitions & scroll-driven animations
+   ========================================================================== */
+@import './animations.css';
+
+/* ==========================================================================
+   DARK MODE - Theme-specific styling
+   ========================================================================== */
+@import './dark-mode.css';
+
+/* ==========================================================================
+   TAILWIND CSS - Utility-first framework
+   ==========================================================================
+   Tailwind layers komen na onze custom components
+   Dit zorgt dat Tailwind utilities hogere prioriteit hebben
+*/
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* ==========================================================================
+   BASE LAYER - HTML element defaults
+   ========================================================================== */
+@layer base {
+  /* Box sizing & smooth rendering */
+  *,
+  *::before,
+  *::after {
+    box-sizing: border-box;
+  }
+
+  html {
+    /* Smooth scrolling (respecteert reduced-motion) */
+    scroll-behavior: smooth;
+
+    /* Better font rendering */
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+
+    /* Prevent text size adjust on orientation change */
+    -webkit-text-size-adjust: 100%;
+
+    /* Better tap highlighting */
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  body {
+    /* Typography */
+    font-family: var(--font-sans);
+    font-size: var(--font-size-base);
+    line-height: var(--line-height-normal);
+    font-weight: var(--font-weight-normal);
+
+    /* Colors */
+    color: var(--color-fg-primary);
+    background-color: var(--color-bg-primary);
+
+    /* Layout */
+    min-height: 100vh;
+    margin: 0;
+
+    /* Better text rendering */
+    font-feature-settings: "kern" 1, "liga" 1, "calt" 1;
+    font-variant-ligatures: common-ligatures;
+    font-optical-sizing: auto;
+  }
+
+  /* Headings */
+  h1, h2, h3, h4, h5, h6 {
+    font-weight: var(--font-weight-bold);
+    line-height: var(--line-height-tight);
+    margin: 0;
+    color: var(--color-fg-primary);
+  }
+
+  h1 {
+    font-size: var(--font-size-4xl);
+    letter-spacing: var(--letter-spacing-tight);
+  }
+
+  h2 {
+    font-size: var(--font-size-3xl);
+    letter-spacing: var(--letter-spacing-tight);
+  }
+
+  h3 {
+    font-size: var(--font-size-2xl);
+  }
+
+  h4 {
+    font-size: var(--font-size-xl);
+  }
+
+  h5 {
+    font-size: var(--font-size-lg);
+  }
+
+  h6 {
+    font-size: var(--font-size-base);
+    font-weight: var(--font-weight-semibold);
+  }
+
+  /* Paragraphs */
+  p {
+    margin: 0;
+    max-width: 65ch; /* Optimal line length voor leesbaarheid */
+  }
+
+  /* Links */
+  a {
+    color: var(--color-brand-primary);
+    text-decoration: none;
+    transition: color var(--duration-base) var(--ease-out);
+  }
+
+  a:hover {
+    color: var(--color-brand-hover);
+    text-decoration: underline;
+  }
+
+  /* Lists */
+  ul, ol {
+    padding-left: var(--space-6);
+    margin: 0;
+  }
+
+  li {
+    margin-block: var(--space-1);
+  }
+
+  /* Images & Media */
+  img, picture, video, canvas, svg {
+    display: block;
+    max-width: 100%;
+    height: auto;
+  }
+
+  /* Forms */
+  button, input, textarea, select {
+    font: inherit;
+    color: inherit;
+  }
+
+  button {
+    cursor: pointer;
+    border: none;
+    background: none;
+    padding: 0;
+  }
+
+  /* Tables */
+  table {
+    border-collapse: collapse;
+    width: 100%;
+  }
+
+  th, td {
+    padding: var(--space-3);
+    text-align: left;
+    border-bottom: 1px solid var(--color-border-secondary);
+  }
+
+  th {
+    font-weight: var(--font-weight-semibold);
+    background-color: var(--color-bg-secondary);
+  }
+
+  /* Code */
+  code, kbd, samp, pre {
+    font-family: var(--font-mono);
+    font-size: 0.9em;
+  }
+
+  code {
+    padding: var(--space-1) var(--space-2);
+    background-color: var(--color-bg-tertiary);
+    border-radius: var(--radius-sm);
+  }
+
+  pre {
+    padding: var(--space-4);
+    background-color: var(--color-bg-tertiary);
+    border-radius: var(--radius-md);
+    overflow-x: auto;
+    max-width: 100%;
+  }
+
+  pre code {
+    padding: 0;
+    background: none;
+  }
+
+  /* Horizontal rule */
+  hr {
+    border: none;
+    border-top: 1px solid var(--color-border-primary);
+    margin-block: var(--space-8);
+  }
+
+  /* Blockquote */
+  blockquote {
+    margin: 0;
+    padding-left: var(--space-6);
+    border-left: 4px solid var(--color-brand-primary);
+    font-style: italic;
+    color: var(--color-fg-secondary);
+  }
+
+  /* Focus outline - WCAG 2.1 compliant */
+  :focus-visible {
+    outline: 2px solid var(--color-border-focus);
+    outline-offset: 2px;
+  }
+
+  /* Remove outline for mouse users */
+  :focus:not(:focus-visible) {
+    outline: none;
+  }
+
+  /* Selection */
+  ::selection {
+    background-color: var(--color-brand-light);
+    color: var(--color-brand-primary);
+  }
+
+  /* Fieldset */
+  fieldset {
+    border: 1px solid var(--color-border-primary);
+    border-radius: var(--radius-md);
+    padding: var(--space-6);
+    margin: 0;
+  }
+
+  legend {
+    font-weight: var(--font-weight-semibold);
+    padding-inline: var(--space-2);
+  }
+}
+
+/* ==========================================================================
+   UTILITY OVERRIDES - Project-specific utilities
+   ========================================================================== */
+@layer utilities {
+  /* Typography utilities */
+  .text-balance {
+    text-wrap: balance;
+  }
+
+  .text-pretty {
+    text-wrap: pretty;
+  }
+
+  /* Smooth scrolling for specific elements */
+  .scroll-smooth {
+    scroll-behavior: smooth;
+  }
+
+  /* Screen reader only */
+  .sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border-width: 0;
+  }
+
+  /* Remove animations for reduced motion users */
+  @media (prefers-reduced-motion: reduce) {
+    .scroll-smooth {
+      scroll-behavior: auto;
+    }
+  }
+}
+
+/* ==========================================================================
+   PROJECT OVERRIDES - Gemeente-specific customizations
+   ========================================================================== */
+@layer overrides {
+  /* Alpine.js cloaking */
+  [x-cloak] {
+    display: none !important;
+  }
+
+  /* Leaflet map fixes */
+  .leaflet-container {
+    font-family: var(--font-sans);
+    font-size: var(--font-size-sm);
+  }
+
+  /* Custom scrollbar voor specifieke elementen */
+  .custom-scrollbar {
+    scrollbar-width: thin;
+    scrollbar-color: var(--color-brand-primary) var(--color-bg-secondary);
+  }
+
+  .custom-scrollbar::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+
+  .custom-scrollbar::-webkit-scrollbar-track {
+    background: var(--color-bg-secondary);
+    border-radius: var(--radius-full);
+  }
+
+  .custom-scrollbar::-webkit-scrollbar-thumb {
+    background: var(--color-brand-primary);
+    border-radius: var(--radius-full);
+  }
+
+  .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+    background: var(--color-brand-hover);
+  }
+}

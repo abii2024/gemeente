@@ -10,7 +10,7 @@
                             </svg>
                         </div>
                     </div>
-                    
+
                     <h1 class="text-3xl font-bold text-gray-900 mb-4">Bedankt!</h1>
                     @if (session('complaint_id'))
                         <p class="text-lg text-gray-600 mb-6">
@@ -22,17 +22,27 @@
                         </p>
                     @endif
                     <p class="text-gray-600 mb-8">
-                        We nemen uw melding serieus en zullen deze zo spoedig mogelijk in behandeling nemen. 
+                        We nemen uw melding serieus en zullen deze zo spoedig mogelijk in behandeling nemen.
                         U ontvangt een bevestiging op het opgegeven e-mailadres.
                     </p>
-                    
+
                     <div class="space-y-4">
-                        <a href="{{ route('home') }}" 
-                           class="inline-block bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-lg">
+                        @if (session('complaint_id'))
+                            <div class="mb-4 p-4 bg-blue-50 rounded-lg border border-blue-200">
+                                <p class="text-sm text-blue-800 mb-2">💡 <strong>Tip:</strong> Volg de status van je melding</p>
+                                <a href="{{ route('complaint.search') }}?id={{ session('complaint_id') }}"
+                                   class="inline-block bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg text-sm">
+                                    🔍 Track Melding #{{ session('complaint_id') }}
+                                </a>
+                            </div>
+                        @endif
+
+                        <a href="{{ route('home') }}"
+                           class="inline-block bg-gray-600 hover:bg-gray-700 text-white font-bold py-3 px-6 rounded-lg">
                             Terug naar Home
                         </a>
                         <br>
-                        <a href="{{ route('complaint.create') }}" 
+                        <a href="{{ route('complaint.create') }}"
                            class="inline-block text-blue-600 hover:text-blue-800 underline">
                             Nieuwe klacht indienen
                         </a>

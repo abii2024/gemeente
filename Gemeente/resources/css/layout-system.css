@@ -1,0 +1,376 @@
+/**
+ * ============================================================================
+ * GEMEENTE PORTAL - LAYOUT SYSTEM
+ * Modern layout patterns met Grid, Flexbox & Container Queries
+ * ============================================================================
+ */
+
+@layer base {
+
+  /* ==========================================================================
+     CONTAINER - Responsive wrapper met container queries
+     ========================================================================== */
+
+  :where(.container) {
+    /* Container query support */
+    container-type: inline-size;
+    container-name: main;
+
+    /* Centering */
+    margin-inline: auto;
+
+    /* Responsive max-width */
+    width: min(100% - var(--space-8), var(--container-xl));
+
+    /* Default padding */
+    padding-inline: var(--space-4);
+  }
+
+  /* Size variants */
+  :where(.container-sm) {
+    width: min(100% - var(--space-8), var(--container-sm));
+  }
+
+  :where(.container-md) {
+    width: min(100% - var(--space-8), var(--container-md));
+  }
+
+  :where(.container-lg) {
+    width: min(100% - var(--space-8), var(--container-lg));
+  }
+
+  :where(.container-xl) {
+    width: min(100% - var(--space-8), var(--container-xl));
+  }
+
+  :where(.container-2xl) {
+    width: min(100% - var(--space-8), var(--container-2xl));
+  }
+
+  :where(.container-full) {
+    width: 100%;
+    max-width: none;
+  }
+
+  /* ==========================================================================
+     GRID LAYOUTS
+     ========================================================================== */
+
+  /* Basic grid */
+  :where(.grid) {
+    display: grid;
+    gap: var(--space-6);
+  }
+
+  /* Auto-fit columns - responsive zonder media queries */
+  :where(.grid-auto-fit) {
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 250px), 1fr));
+  }
+
+  :where(.grid-auto-fill) {
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 250px), 1fr));
+  }
+
+  /* Explicit columns */
+  :where(.grid-cols-1) { grid-template-columns: repeat(1, 1fr); }
+  :where(.grid-cols-2) { grid-template-columns: repeat(2, 1fr); }
+  :where(.grid-cols-3) { grid-template-columns: repeat(3, 1fr); }
+  :where(.grid-cols-4) { grid-template-columns: repeat(4, 1fr); }
+  :where(.grid-cols-5) { grid-template-columns: repeat(5, 1fr); }
+  :where(.grid-cols-6) { grid-template-columns: repeat(6, 1fr); }
+  :where(.grid-cols-12) { grid-template-columns: repeat(12, 1fr); }
+
+  /* Container query responsive columns */
+  @container main (min-width: 640px) {
+    :where(.grid-cols-sm-2) { grid-template-columns: repeat(2, 1fr); }
+    :where(.grid-cols-sm-3) { grid-template-columns: repeat(3, 1fr); }
+  }
+
+  @container main (min-width: 768px) {
+    :where(.grid-cols-md-2) { grid-template-columns: repeat(2, 1fr); }
+    :where(.grid-cols-md-3) { grid-template-columns: repeat(3, 1fr); }
+    :where(.grid-cols-md-4) { grid-template-columns: repeat(4, 1fr); }
+  }
+
+  @container main (min-width: 1024px) {
+    :where(.grid-cols-lg-3) { grid-template-columns: repeat(3, 1fr); }
+    :where(.grid-cols-lg-4) { grid-template-columns: repeat(4, 1fr); }
+    :where(.grid-cols-lg-6) { grid-template-columns: repeat(6, 1fr); }
+  }
+
+  /* Gap utilities */
+  :where(.gap-0) { gap: 0; }
+  :where(.gap-2) { gap: var(--space-2); }
+  :where(.gap-4) { gap: var(--space-4); }
+  :where(.gap-6) { gap: var(--space-6); }
+  :where(.gap-8) { gap: var(--space-8); }
+  :where(.gap-10) { gap: var(--space-10); }
+  :where(.gap-12) { gap: var(--space-12); }
+
+  /* Column & Row gaps apart */
+  :where(.gap-x-4) { column-gap: var(--space-4); }
+  :where(.gap-x-6) { column-gap: var(--space-6); }
+  :where(.gap-y-4) { row-gap: var(--space-4); }
+  :where(.gap-y-6) { row-gap: var(--space-6); }
+
+  /* Grid spanning */
+  :where(.col-span-full) { grid-column: 1 / -1; }
+  :where(.col-span-2) { grid-column: span 2; }
+  :where(.col-span-3) { grid-column: span 3; }
+  :where(.col-span-4) { grid-column: span 4; }
+  :where(.col-span-6) { grid-column: span 6; }
+
+  /* ==========================================================================
+     FLEXBOX LAYOUTS
+     ========================================================================== */
+
+  :where(.flex) {
+    display: flex;
+    gap: var(--space-4);
+  }
+
+  :where(.flex-col) {
+    flex-direction: column;
+  }
+
+  :where(.flex-row) {
+    flex-direction: row;
+  }
+
+  :where(.flex-wrap) {
+    flex-wrap: wrap;
+  }
+
+  /* Alignment */
+  :where(.items-start) { align-items: flex-start; }
+  :where(.items-center) { align-items: center; }
+  :where(.items-end) { align-items: flex-end; }
+  :where(.items-stretch) { align-items: stretch; }
+
+  :where(.justify-start) { justify-content: flex-start; }
+  :where(.justify-center) { justify-content: center; }
+  :where(.justify-end) { justify-content: flex-end; }
+  :where(.justify-between) { justify-content: space-between; }
+  :where(.justify-around) { justify-content: space-around; }
+  :where(.justify-evenly) { justify-content: space-evenly; }
+
+  /* Flex grow/shrink */
+  :where(.flex-1) { flex: 1 1 0%; }
+  :where(.flex-auto) { flex: 1 1 auto; }
+  :where(.flex-none) { flex: none; }
+
+  /* ==========================================================================
+     STACK LAYOUTS - Vertical spacing
+     ========================================================================== */
+
+  :where(.stack) {
+    display: flex;
+    flex-direction: column;
+  }
+
+  :where(.stack) > * + * {
+    margin-top: var(--space-4);
+  }
+
+  :where(.stack-2) > * + * { margin-top: var(--space-2); }
+  :where(.stack-3) > * + * { margin-top: var(--space-3); }
+  :where(.stack-4) > * + * { margin-top: var(--space-4); }
+  :where(.stack-6) > * + * { margin-top: var(--space-6); }
+  :where(.stack-8) > * + * { margin-top: var(--space-8); }
+
+  /* ==========================================================================
+     SIDEBAR LAYOUT - Auto-switching sidebar
+     ========================================================================== */
+
+  :where(.sidebar-layout) {
+    display: grid;
+    gap: var(--space-6);
+  }
+
+  /* Container query voor sidebar */
+  @container (min-width: 768px) {
+    :where(.sidebar-layout) {
+      grid-template-columns: 250px 1fr;
+    }
+  }
+
+  @container (min-width: 1024px) {
+    :where(.sidebar-layout) {
+      grid-template-columns: 300px 1fr;
+    }
+  }
+
+  /* ==========================================================================
+     CLUSTER LAYOUT - Voor navigation, tags, etc
+     ========================================================================== */
+
+  :where(.cluster) {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+    align-items: center;
+  }
+
+  :where(.cluster-4) {
+    gap: var(--space-4);
+  }
+
+  /* ==========================================================================
+     CENTER LAYOUT - Perfecte centrering
+     ========================================================================== */
+
+  :where(.center) {
+    display: grid;
+    place-items: center;
+  }
+
+  :where(.center-text) {
+    text-align: center;
+  }
+
+  /* ==========================================================================
+     SECTION SPACING
+     ========================================================================== */
+
+  :where(.section) {
+    padding-block: var(--space-16);
+  }
+
+  :where(.section-sm) {
+    padding-block: var(--space-8);
+  }
+
+  :where(.section-lg) {
+    padding-block: var(--space-24);
+  }
+
+  /* Container query voor responsive section padding */
+  @container main (min-width: 768px) {
+    :where(.section) {
+      padding-block: var(--space-20);
+    }
+
+    :where(.section-lg) {
+      padding-block: var(--space-32);
+    }
+  }
+
+  /* ==========================================================================
+     ASPECT RATIOS - Voor images & video
+     ========================================================================== */
+
+  :where(.aspect-square) { aspect-ratio: 1 / 1; }
+  :where(.aspect-video) { aspect-ratio: 16 / 9; }
+  :where(.aspect-4-3) { aspect-ratio: 4 / 3; }
+  :where(.aspect-portrait) { aspect-ratio: 3 / 4; }
+
+  /* ==========================================================================
+     WIDTH & HEIGHT UTILITIES
+     ========================================================================== */
+
+  :where(.w-full) { width: 100%; }
+  :where(.w-screen) { width: 100vw; }
+  :where(.w-auto) { width: auto; }
+  :where(.w-fit) { width: fit-content; }
+
+  :where(.h-full) { height: 100%; }
+  :where(.h-screen) { height: 100vh; }
+  :where(.h-auto) { height: auto; }
+
+  :where(.min-h-screen) { min-height: 100vh; }
+  :where(.min-h-full) { min-height: 100%; }
+
+  /* ==========================================================================
+     OVERFLOW
+     ========================================================================== */
+
+  :where(.overflow-auto) { overflow: auto; }
+  :where(.overflow-hidden) { overflow: hidden; }
+  :where(.overflow-scroll) { overflow: scroll; }
+
+  :where(.overflow-x-auto) { overflow-x: auto; }
+  :where(.overflow-y-auto) { overflow-y: auto; }
+
+  /* ==========================================================================
+     POSITION
+     ========================================================================== */
+
+  :where(.relative) { position: relative; }
+  :where(.absolute) { position: absolute; }
+  :where(.fixed) { position: fixed; }
+  :where(.sticky) { position: sticky; }
+
+  /* Inset utilities */
+  :where(.inset-0) { inset: 0; }
+  :where(.top-0) { top: 0; }
+  :where(.right-0) { right: 0; }
+  :where(.bottom-0) { bottom: 0; }
+  :where(.left-0) { left: 0; }
+
+  /* ==========================================================================
+     VISIBILITY
+     ========================================================================== */
+
+  :where(.hidden) { display: none; }
+  :where(.invisible) { visibility: hidden; }
+
+  /* Responsive visibility met container queries */
+  @container main (max-width: 640px) {
+    :where(.hidden-sm) { display: none; }
+  }
+
+  @container main (min-width: 640px) {
+    :where(.visible-sm) { display: block; }
+  }
+
+  @container main (min-width: 768px) {
+    :where(.visible-md) { display: block; }
+  }
+
+  /* ==========================================================================
+     SPACING UTILITIES - Margin & Padding
+     ========================================================================== */
+
+  /* Margin */
+  :where(.m-0) { margin: 0; }
+  :where(.m-2) { margin: var(--space-2); }
+  :where(.m-4) { margin: var(--space-4); }
+  :where(.m-6) { margin: var(--space-6); }
+  :where(.m-8) { margin: var(--space-8); }
+  :where(.m-auto) { margin: auto; }
+
+  /* Margin inline (horizontal) */
+  :where(.mx-auto) { margin-inline: auto; }
+  :where(.mx-2) { margin-inline: var(--space-2); }
+  :where(.mx-4) { margin-inline: var(--space-4); }
+  :where(.mx-6) { margin-inline: var(--space-6); }
+
+  /* Margin block (vertical) */
+  :where(.my-2) { margin-block: var(--space-2); }
+  :where(.my-4) { margin-block: var(--space-4); }
+  :where(.my-6) { margin-block: var(--space-6); }
+  :where(.my-8) { margin-block: var(--space-8); }
+
+  /* Padding */
+  :where(.p-0) { padding: 0; }
+  :where(.p-2) { padding: var(--space-2); }
+  :where(.p-4) { padding: var(--space-4); }
+  :where(.p-6) { padding: var(--space-6); }
+  :where(.p-8) { padding: var(--space-8); }
+  :where(.p-10) { padding: var(--space-10); }
+  :where(.p-12) { padding: var(--space-12); }
+
+  /* Padding inline */
+  :where(.px-2) { padding-inline: var(--space-2); }
+  :where(.px-4) { padding-inline: var(--space-4); }
+  :where(.px-6) { padding-inline: var(--space-6); }
+  :where(.px-8) { padding-inline: var(--space-8); }
+
+  /* Padding block */
+  :where(.py-2) { padding-block: var(--space-2); }
+  :where(.py-4) { padding-block: var(--space-4); }
+  :where(.py-6) { padding-block: var(--space-6); }
+  :where(.py-8) { padding-block: var(--space-8); }
+  :where(.py-12) { padding-block: var(--space-12); }
+  :where(.py-16) { padding-block: var(--space-16); }
+}

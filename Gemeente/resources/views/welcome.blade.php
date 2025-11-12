@@ -96,73 +96,49 @@
                         <div class="service-icon">🆔</div>
                         <h3>Paspoort & ID</h3>
                         <p>Vraag paspoorten, Nederlandse identiteitskaarten en uittreksels eenvoudig online aan.</p>
-                        <a class="btn btn-ghost" href="#contact" style="margin-top: 1rem;">Documenten aanvragen →</a>
-                    </div>
-
-                    <div class="service-card">
-                        <div class="service-icon">🏠</div>
-                        <h3>Verhuizing</h3>
-                        <p>Geef uw verhuizing online door en regel alle benodigde formaliteiten in één keer.</p>
-                        <a class="btn btn-ghost" href="#contact" style="margin-top: 1rem;">Verhuizing doorgeven →</a>
-                    </div>
-
-                    <div class="service-card">
-                        <div class="service-icon">💰</div>
-                        <h3>Belastingen</h3>
-                        <p>Bekijk uw gemeentelijke aanslagen en betaal veilig online via het portaal.</p>
-                        <a class="btn btn-ghost" href="#contact" style="margin-top: 1rem;">Belastingen betalen →</a>
+                        <a class="btn btn-ghost" href="{{ route('diensten.paspoort') }}" style="margin-top: 1rem;">Paspoort aanvragen →</a>
                     </div>
 
                     <div class="service-card">
                         <div class="service-icon">🚗</div>
-                        <h3>Parkeren</h3>
-                        <p>Regel bewoners- en bezoekersvergunningen en beheer uw parkeervoorzieningen.</p>
-                        <a class="btn btn-ghost" href="#contact" style="margin-top: 1rem;">Parkeren regelen →</a>
+                        <h3>Rijbewijs</h3>
+                        <p>Vraag uw rijbewijs aan of verleng deze eenvoudig online via ons digitale loket.</p>
+                        <a class="btn btn-ghost" href="{{ route('diensten.rijbewijs') }}" style="margin-top: 1rem;">Rijbewijs aanvragen →</a>
                     </div>
 
                     <div class="service-card">
-                        <div class="service-icon">💼</div>
-                        <h3>Uitkeringen</h3>
-                        <p>Vind informatie over bijstand, toeslagen en andere vormen van financiële ondersteuning.</p>
-                        <a class="btn btn-ghost" href="#contact" style="margin-top: 1rem;">Uitkeringen aanvragen →</a>
+                        <div class="service-icon">�</div>
+                        <h3>Vergunningen</h3>
+                        <p>Vraag vergunningen aan voor bouw, evenementen, horeca en meer.</p>
+                        <a class="btn btn-ghost" href="{{ route('diensten.vergunning') }}" style="margin-top: 1rem;">Vergunning aanvragen →</a>
+                    </div>
+
+                    <div class="service-card">
+                        <div class="service-icon">🅿️</div>
+                        <h3>Parkeren</h3>
+                        <p>Regel bewoners- en bezoekersvergunningen en beheer uw parkeervoorzieningen.</p>
+                        <a class="btn btn-ghost" href="{{ route('diensten.parkeren') }}" style="margin-top: 1rem;">Parkeren regelen →</a>
+                    </div>
+
+                    <div class="service-card">
+                        <div class="service-icon">�</div>
+                        <h3>Subsidies</h3>
+                        <p>Vraag financiële ondersteuning aan voor uw projecten of vereniging.</p>
+                        <a class="btn btn-ghost" href="{{ route('diensten.subsidie') }}" style="margin-top: 1rem;">Subsidie aanvragen →</a>
                     </div>
                 </div>
             </div>
         </section>
 
-        <section class="slide-in-left" style="padding: 4rem 0; background: linear-gradient(180deg, var(--neutral-50) 0%, white 100%);" id="contact">
+        <section class="slide-in-left" style="padding: 4rem 0; background: linear-gradient(135deg, #0ea5e9 0%, #06b6d4 100%);" id="contact">
             <div class="container">
-                <div style="text-align: center; max-width: 700px; margin: 0 auto 3rem;">
-                    <h2 style="font-size: 2.5rem; font-weight: 800; margin-bottom: 1rem;">
-                        Contact & Openingstijden
+                <div style="text-align: center; max-width: 700px; margin: 0 auto;">
+                    <h2 style="font-size: 2.5rem; font-weight: 800; margin-bottom: 1rem; color: white;">
+                        Hulp Nodig?
                     </h2>
-                    <p style="font-size: 1.125rem; color: var(--neutral-600);">
-                        Onze medewerkers staan klaar om u te helpen. Neem contact op of bezoek ons stadskantoor.
+                    <p style="font-size: 1.125rem; color: rgba(255, 255, 255, 0.9);">
+                        Gebruik onze chatbot rechtsonder voor directe hulp.
                     </p>
-                </div>
-
-                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem;">
-                    <div style="padding: 2rem; background: white; border-radius: var(--radius-xl); box-shadow: var(--shadow-md); border: 1px solid var(--neutral-200);">
-                        <h3 style="font-size: 1.5rem; font-weight: 700; margin-bottom: 1.5rem; color: var(--primary-600);">📞 Contact</h3>
-                        <p style="margin-bottom: 0.75rem;"><strong>Telefoon:</strong> 14 010</p>
-                        <p style="margin-bottom: 0.75rem;"><strong>Email:</strong> info@gemeente.nl</p>
-                        <p style="margin-bottom: 0.75rem;"><strong>Adres:</strong> Hoofdstraat 1<br>1234 AB Gemeente</p>
-                    </div>
-
-                    <div style="padding: 2rem; background: white; border-radius: var(--radius-xl); box-shadow: var(--shadow-md); border: 1px solid var(--neutral-200);">
-                        <h3 style="font-size: 1.5rem; font-weight: 700; margin-bottom: 1.5rem; color: var(--accent-mint);">⏰ Openingstijden</h3>
-                        <p style="margin-bottom: 0.75rem;">Ma t/m vr: 08:30 - 17:00 uur</p>
-                        <p style="margin-bottom: 0.75rem;">Zaterdag: 09:00 - 13:00 uur</p>
-                        <p style="margin-bottom: 0.75rem;">Zondag: Gesloten</p>
-                        <p style="margin-top: 1.5rem; padding-top: 1.5rem; border-top: 1px solid var(--neutral-200);"><strong>Online:</strong> 24/7 beschikbaar</p>
-                    </div>
-
-                    <div style="padding: 2rem; background: white; border-radius: var(--radius-xl); box-shadow: var(--shadow-md); border: 1px solid var(--neutral-200);">
-                        <h3 style="font-size: 1.5rem; font-weight: 700; margin-bottom: 1.5rem; color: var(--accent-orange);">💬 Extra Ondersteuning</h3>
-                        <p style="margin-bottom: 0.75rem;">Onze digitale assistent helpt u stap voor stap met veelgestelde vragen.</p>
-                        <p style="margin-bottom: 0.75rem;"><strong>Chat:</strong> Klik op de chatbot rechtsonder</p>
-                        <p><strong>Loket:</strong> Maak een afspraak via het klantcontactcentrum.</p>
-                    </div>
                 </div>
             </div>
         </section>

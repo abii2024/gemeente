@@ -5,6 +5,7 @@ namespace Tests\Feature;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Hash;
+use Spatie\Permission\Models\Role;
 use Tests\TestCase;
 
 class AdminLoginTest extends TestCase
@@ -13,18 +14,7 @@ class AdminLoginTest extends TestCase
 
     public function test_admin_can_login_with_correct_credentials(): void
     {
-        // Create admin role
-        \Spatie\Permission\Models\Role::create(['name' => 'admin']);
-
-        // Create admin user
-        $admin = User::create([
-            'name' => 'Admin User',
-            'email' => 'admin@gemeente.nl',
-            'password' => Hash::make('admin123'),
-            'email_verified_at' => now(),
-        ]);
-
-        $admin->assignRole('admin');
+        $admin = $this->seedAdminUser();
 
         // Attempt login
         $response = $this->post('/login', [
@@ -39,10 +29,27 @@ class AdminLoginTest extends TestCase
 
     public function test_admin_user_exists_in_database(): void
     {
+        $seeded = $this->seedAdminUser();
         $user = User::where('email', 'admin@gemeente.nl')->first();
 
         $this->assertNotNull($user, 'Admin user should exist in database');
         $this->assertEquals('Admin User', $user->name);
         $this->assertTrue(Hash::check('admin123', $user->password), 'Password should match');
+    }
+
+    private function seedAdminUser(): User
+    {
+        $role = Role::firstOrCreate(['name' => 'admin', 'guard_name' => 'web']);
+
+        $admin = User::create([
+            'name' => 'Admin User',
+            'email' => 'admin@gemeente.nl',
+            'password' => Hash::make('admin123'),
+            'email_verified_at' => now(),
+        ]);
+
+        $admin->assignRole($role);
+
+        return $admin;
     }
 }

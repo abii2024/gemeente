@@ -47,10 +47,11 @@ class ComplaintAdminController extends Controller
 
     public function update(Request $request, Complaint $complaint): RedirectResponse
     {
-        $request->validate([
+        $validated = $request->validate([
             'title' => 'required|string|max:255',
             'description' => 'required|string',
-            'category' => 'required|string|in:wegen,openbare_verlichting,afval,groen,overlast,openbare_ruimte,water,overig',
+            'category' => 'required|string|in:wegen_onderhoud,stoepen,fietspaden,verkeersborden,wegmarkeringen,parkeren,straatverlichting,parkverlichting,tunnel_verlichting,afval_ophaling,afval_container,zwerfvuil,graffiti,hondenpoep,straat_reiniging,bomen,onkruid,parken,speeltuinen,groenstroken,riool_verstopt,wateroverlast,put_deksel,lekkage,straatmeubilair,fietsenrekken,bushokje,speelplaats,bankjes,geluidsoverlast,stankoverlast,wildgroei,drugsoverlast,dierenplaag,illegaal_afval,overig',
+            'status' => 'nullable|in:open,in_progress,resolved,closed',
             'priority' => 'nullable|in:low,medium,high,urgent',
             'location' => 'nullable|string|max:500',
             'lat' => 'nullable|numeric|between:-90,90',
@@ -62,9 +63,30 @@ class ComplaintAdminController extends Controller
             'assigned_to' => 'nullable|exists:users,id',
         ]);
 
-        $complaint->update($request->validated());
+        // Track status change if status was updated
+        if (isset($validated['status']) && $validated['status'] !== $complaint->status) {
+            $oldStatus = $complaint->status;
+            $newStatus = $validated['status'];
 
-        return redirect()->route('admin.complaints.show', $complaint)
+            // Record status change
+            StatusHistory::create([
+                'complaint_id' => $complaint->id,
+                'user_id' => auth()->id(),
+                'from' => $oldStatus,
+                'to' => $newStatus,
+            ]);
+
+            // Log status change without PII
+            PrivacyLogger::logComplaintAction('status_changed', $complaint->id, [
+                'from_status' => $oldStatus,
+                'to_status' => $newStatus,
+                'admin_user_id' => auth()->id(),
+            ]);
+        }
+
+        $complaint->update($validated);
+
+        return redirect()->route('admin.complaints.edit', $complaint)
             ->with('success', 'Klacht succesvol bijgewerkt.');
     }
 

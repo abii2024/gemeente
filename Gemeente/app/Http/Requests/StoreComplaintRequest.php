@@ -24,13 +24,13 @@ class StoreComplaintRequest extends FormRequest
         return [
             'title' => 'required|string|max:255|min:5',
             'description' => 'required|string|max:2000|min:10',
-            'category' => 'required|string|in:wegen,openbare_verlichting,afval,groen,overlast,openbare_ruimte,water,overig',
+            'category' => 'required|string|in:wegen_onderhoud,stoepen,fietspaden,verkeersborden,wegmarkeringen,parkeren,straatverlichting,parkverlichting,tunnel_verlichting,afval_ophaling,afval_container,zwerfvuil,graffiti,hondenpoep,straat_reiniging,bomen,onkruid,parken,speeltuinen,groenstroken,riool_verstopt,wateroverlast,put_deksel,lekkage,straatmeubilair,fietsenrekken,bushokje,speelplaats,bankjes,geluidsoverlast,stankoverlast,wildgroei,drugsoverlast,dierenplaag,illegaal_afval,overig',
             'priority' => 'nullable|string|in:low,medium,high,urgent',
             'location' => 'nullable|string|max:500',
             'lat' => 'nullable|numeric|between:-90,90',
             'lng' => 'nullable|numeric|between:-180,180',
             'reporter_name' => 'required|string|max:255|min:2|regex:/^[a-zA-Z\s\-\.\']+$/',
-            'reporter_email' => 'required|email:rfc,dns|max:255',
+            'reporter_email' => 'required|email:rfc|max:255',
             'reporter_phone' => 'nullable|string|max:20|regex:/^[\+\-\(\)\s\d]+$/',
             'attachments' => 'nullable|array|max:5',
             'attachments.*' => 'file|mimes:jpeg,jpg,png,gif,pdf|max:10240', // 10MB per file

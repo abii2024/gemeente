@@ -15,7 +15,7 @@
     @include('admin.partials.header')
 
     <main style="background: #F3F4F6; min-height: 100vh; padding: 2rem 0;">
-        <section style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 3rem 0; margin-bottom: 2rem;">
+        <section style="background: linear-gradient(135deg, #0ea5e9 0%, #06b6d4 100%); padding: 3rem 0; margin-bottom: 2rem;">
             <div class="container">
                 <div style="text-align: center; color: white;">
                     <h1 style="font-size: 2.5rem; font-weight: 700; margin-bottom: 0.5rem;">🗺️ Klachten Kaart</h1>
@@ -56,7 +56,7 @@
                             <span style="font-size: 0.875rem;">In Behandeling ({{ $complaints->where('status', 'in_progress')->count() }})</span>
                         </div>
                         <div style="display: flex; align-items: center; gap: 0.5rem;">
-                            <span style="width: 16px; height: 16px; background: #10B981; border-radius: 50%; display: inline-block;"></span>
+                            <span style="width: 16px; height: 16px; background: #0ea5e9; border-radius: 50%; display: inline-block;"></span>
                             <span style="font-size: 0.875rem;">Opgelost ({{ $complaints->where('status', 'resolved')->count() }})</span>
                         </div>
                         <div style="display: flex; align-items: center; gap: 0.5rem;">
@@ -149,7 +149,7 @@
             const icons = {
                 open: createIcon('#EF4444'),
                 in_progress: createIcon('#EAB308'),
-                resolved: createIcon('#10B981'),
+                resolved: createIcon('#0ea5e9'),
                 closed: createIcon('#6B7280')
             };
 
@@ -182,7 +182,7 @@
                                 <div style="display: flex; justify-content: space-between; align-items: center;">
                                     <span style="color: #9CA3AF; font-size: 0.75rem;">👤 ${complaint.reporter_name}</span>
                                     <a href="/admin/complaints/${complaint.id}"
-                                       style="display: inline-block; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                                       style="display: inline-block; background: linear-gradient(135deg, #0ea5e9 0%, #06b6d4 100%);
                                               color: white; padding: 0.4rem 0.8rem; border-radius: 6px;
                                               text-decoration: none; font-size: 0.75rem; font-weight: 500;">
                                         Bekijken

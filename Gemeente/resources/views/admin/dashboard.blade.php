@@ -70,7 +70,7 @@
                      onmouseover="this.style.transform='translateY(-8px)'; this.style.boxShadow='0 25px 50px -12px rgba(16, 185, 129, 0.25)'"
                      onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='var(--shadow-lg)'">
                     <div style="position: absolute; top: -20px; right: -20px; width: 100px; height: 100px; background: radial-gradient(circle, rgba(16, 185, 129, 0.15) 0%, transparent 70%); border-radius: 50%;"></div>
-                    <div style="font-size: 2.5rem; font-weight: 800; color: #10B981; margin-bottom: 0.5rem; position: relative;">{{ $stats['opgelost_complaints'] }}</div>
+                    <div style="font-size: 2.5rem; font-weight: 800; color: #0ea5e9; margin-bottom: 0.5rem; position: relative;">{{ $stats['opgelost_complaints'] }}</div>
                     <div style="font-size: 1rem; font-weight: 600; color: var(--neutral-700); text-transform: uppercase; letter-spacing: 0.05em; position: relative;">Opgelost</div>
                 </div>
             </div>
@@ -153,7 +153,7 @@
                             <span style="font-weight: 600; color: var(--neutral-700);">In Behandeling</span>
                         </div>
                         <div style="display: flex; align-items: center; gap: 0.75rem;">
-                            <span style="width: 20px; height: 20px; background: #10B981; border-radius: 50%; display: inline-block; box-shadow: 0 2px 8px rgba(16, 185, 129, 0.4);"></span>
+                            <span style="width: 20px; height: 20px; background: #0ea5e9; border-radius: 50%; display: inline-block; box-shadow: 0 2px 8px rgba(16, 185, 129, 0.4);"></span>
                             <span style="font-weight: 600; color: var(--neutral-700);">Opgelost</span>
                         </div>
                         <div style="display: flex; align-items: center; gap: 0.75rem;">
@@ -232,9 +232,9 @@
                                             </a>
                                             @if($complaint->lat && $complaint->lng)
                                                 <button onclick="zoomToComplaint({{ $complaint->lat }}, {{ $complaint->lng }}, {{ $complaint->id }})"
-                                                        style="margin-left: 0.75rem; color: #10B981; background: none; border: none; cursor: pointer; font-weight: 600; transition: color var(--transition-fast);"
-                                                        onmouseover="this.style.color='#059669'"
-                                                        onmouseout="this.style.color='#10B981'">
+                                                        style="margin-left: 0.75rem; color: #0ea5e9; background: none; border: none; cursor: pointer; font-weight: 600; transition: color var(--transition-fast);"
+                                                        onmouseover="this.style.color='#06b6d4'"
+                                                        onmouseout="this.style.color='#0ea5e9'">
                                                     📍 Kaart
                                                 </button>
                                             @endif
