@@ -25,14 +25,38 @@
                     </div>
                 </a>
 
-                <nav class="header-nav">
+                <nav class="header-nav" style="display: flex; align-items: center; gap: 1rem;">
                     <a class="nav-item active" href="#hero">Home</a>
-                    <a class="nav-item" href="{{ route('complaint.create') }}">Melding Doen</a>
-                    <a class="nav-item" href="#services">Diensten</a>
-                    <a class="nav-item" href="#contact">Contact</a>
+
+                    <!-- Melding Dropdown -->
+                    <div style="position: relative; display: inline-block;">
+                        <button class="btn btn-primary" onclick="toggleMeldingDropdown()" style="padding: 0.5rem 1.25rem; cursor: pointer; border: none;">
+                            📋 Melding ▼
+                        </button>
+                        <div id="meldingDropdown" style="display: none; position: absolute; top: 100%; left: 0; margin-top: 0.5rem; background: white; border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.2); min-width: 280px; z-index: 1000;">
+                            <a href="{{ route('complaint.create') }}" style="display: flex; align-items: center; gap: 1rem; padding: 1rem 1.5rem; text-decoration: none; color: #1f2937; border-bottom: 1px solid #e5e7eb; transition: background 0.2s;" onmouseover="this.style.background='#f3f4f6'" onmouseout="this.style.background='white'">
+                                <span style="font-size: 2rem;">📋</span>
+                                <div>
+                                    <div style="font-weight: 600; margin-bottom: 0.25rem;">Melding Maken</div>
+                                    <div style="font-size: 0.875rem; color: #6b7280;">Dien een nieuwe klacht in</div>
+                                </div>
+                            </a>
+                            <a href="{{ route('complaint.search') }}" style="display: flex; align-items: center; gap: 1rem; padding: 1rem 1.5rem; text-decoration: none; color: #1f2937; transition: background 0.2s;" onmouseover="this.style.background='#f3f4f6'" onmouseout="this.style.background='white'">
+                                <span style="font-size: 2rem;">📊</span>
+                                <div>
+                                    <div style="font-weight: 600; margin-bottom: 0.25rem;">Mijn Meldingen</div>
+                                    <div style="font-size: 0.875rem; color: #6b7280;">Bekijk de status van uw meldingen</div>
+                                </div>
+                            </a>
+                        </div>
+                    </div>
+
+                    <a class="btn btn-secondary" href="#services" style="padding: 0.5rem 1.25rem;">
+                        Alle Diensten →
+                    </a>
 
                     @if (Route::has('login'))
-                        <div class="header-actions" style="display: flex; gap: 0.75rem;">
+                        <div class="header-actions" style="display: flex; gap: 0.75rem; margin-left: auto;">
                             @auth
                                 <a class="btn btn-ghost" href="{{ url('/dashboard') }}">Dashboard</a>
                             @else
@@ -44,6 +68,22 @@
                         </div>
                     @endif
                 </nav>
+
+                <script>
+                function toggleMeldingDropdown() {
+                    const dropdown = document.getElementById('meldingDropdown');
+                    dropdown.style.display = dropdown.style.display === 'none' ? 'block' : 'none';
+                }
+
+                // Close dropdown when clicking outside
+                document.addEventListener('click', function(event) {
+                    const dropdown = document.getElementById('meldingDropdown');
+                    const button = event.target.closest('.btn-primary');
+                    if (!button && dropdown) {
+                        dropdown.style.display = 'none';
+                    }
+                });
+                </script>
 
                 <button class="hamburger" aria-label="Toggle menu">
                     <span></span>

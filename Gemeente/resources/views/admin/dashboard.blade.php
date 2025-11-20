@@ -145,19 +145,27 @@
                     <p style="font-weight: 700; margin-bottom: 1rem; color: var(--neutral-900); font-size: 1rem; text-transform: uppercase; letter-spacing: 0.05em;">Legenda:</p>
                     <div style="display: flex; flex-wrap: wrap; gap: 1.5rem;">
                         <div style="display: flex; align-items: center; gap: 0.75rem;">
-                            <span style="width: 20px; height: 20px; background: #3B82F6; border-radius: 50%; display: inline-block; box-shadow: 0 2px 8px rgba(59, 130, 246, 0.4);"></span>
+                            <svg width="24" height="30" viewBox="0 0 24 36" style="filter: drop-shadow(0 2px 4px rgba(0,0,0,0.2));">
+                                <path d="M12 0C7.03 0 3 4.03 3 9c0 6.75 9 18 9 18s9-11.25 9-18c0-4.97-4.03-9-9-9z" fill="#EF4444" stroke="#fff" stroke-width="1.5"/>
+                            </svg>
                             <span style="font-weight: 600; color: var(--neutral-700);">Open</span>
                         </div>
                         <div style="display: flex; align-items: center; gap: 0.75rem;">
-                            <span style="width: 20px; height: 20px; background: #EAB308; border-radius: 50%; display: inline-block; box-shadow: 0 2px 8px rgba(234, 179, 8, 0.4);"></span>
+                            <svg width="24" height="30" viewBox="0 0 24 36" style="filter: drop-shadow(0 2px 4px rgba(0,0,0,0.2));">
+                                <path d="M12 0C7.03 0 3 4.03 3 9c0 6.75 9 18 9 18s9-11.25 9-18c0-4.97-4.03-9-9-9z" fill="#F59E0B" stroke="#fff" stroke-width="1.5"/>
+                            </svg>
                             <span style="font-weight: 600; color: var(--neutral-700);">In Behandeling</span>
                         </div>
                         <div style="display: flex; align-items: center; gap: 0.75rem;">
-                            <span style="width: 20px; height: 20px; background: #0ea5e9; border-radius: 50%; display: inline-block; box-shadow: 0 2px 8px rgba(16, 185, 129, 0.4);"></span>
+                            <svg width="24" height="30" viewBox="0 0 24 36" style="filter: drop-shadow(0 2px 4px rgba(0,0,0,0.2));">
+                                <path d="M12 0C7.03 0 3 4.03 3 9c0 6.75 9 18 9 18s9-11.25 9-18c0-4.97-4.03-9-9-9z" fill="#10B981" stroke="#fff" stroke-width="1.5"/>
+                            </svg>
                             <span style="font-weight: 600; color: var(--neutral-700);">Opgelost</span>
                         </div>
                         <div style="display: flex; align-items: center; gap: 0.75rem;">
-                            <span style="width: 20px; height: 20px; background: #6B7280; border-radius: 50%; display: inline-block; box-shadow: 0 2px 8px rgba(107, 114, 128, 0.4);"></span>
+                            <svg width="24" height="30" viewBox="0 0 24 36" style="filter: drop-shadow(0 2px 4px rgba(0,0,0,0.2));">
+                                <path d="M12 0C7.03 0 3 4.03 3 9c0 6.75 9 18 9 18s9-11.25 9-18c0-4.97-4.03-9-9-9z" fill="#6B7280" stroke="#fff" stroke-width="1.5"/>
+                            </svg>
                             <span style="font-weight: 600; color: var(--neutral-700);">Gesloten</span>
                         </div>
                     </div>

@@ -1,8 +1,15 @@
-# Gemeente Klachtensysteem - Definition of Fun
+# Definition of Fun - Gemeente Portal
 
-## 📋 Overzicht
+## 🎉 Wat is Definition of Fun?
 
-Dit document beschrijft hoe we als team willen werken aan het Gemeente Klachtensysteem. Het legt vast wat "fun" betekent in ons ontwikkelproces - hoe we samenwerken, communiceren, en zorgen voor een positieve en productieve werkomgeving.
+Terwijl Definition of Done focust op **kwaliteit en voltooiing**, focust Definition of Fun op **plezier en motivatie** tijdens het development proces. Dit document beschrijft wat dit project leuk en bevredigend maakte.
+
+**Project:** Gemeente Portal - Klachten Management Systeem  
+**Developer:** Abdisamad Abdulle  
+**Periode:** September 2025 - November 2025  
+**Status:** Succesvol Afgerond! 🚀
+
+**Laatst Bijgewerkt:** 20 November 2025
 
 ## 🎯 Doel
 

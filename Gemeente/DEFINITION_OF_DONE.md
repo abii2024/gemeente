@@ -1,8 +1,12 @@
-# Gemeente Klachtensysteem - Definition of Done
+# Gemeente Portal - Definition of Done
 
 ## 📋 Overzicht
 
-Dit document definieert de kwaliteitscriteria en acceptatieeisen voor het Gemeente Klachtensysteem. Het beschrijft wanneer een user story, feature, of task daadwerkelijk "done" is en klaar voor productie.
+Dit document definieert de kwaliteitscriteria en acceptatieeisen voor het Gemeente Portal project. Het beschrijft wanneer een user story, feature, of task daadwerkelijk "done" is en klaar voor productie.
+
+**Laatst Bijgewerkt:** 20 November 2025  
+**Project Status:** Production Ready ✅  
+**Versie:** 1.0
 
 ## 🎯 Doel
 
@@ -55,11 +59,11 @@ De Definition of Done zorgt voor:
 - ✅ **Security tests** voor authentication en authorization
 
 #### **Manual Testing**
-- ✅ **Cross-browser testing** (Chrome, Firefox, Safari, Edge)
-- ✅ **Mobile responsiveness** getest op verschillende devices
-- ✅ **Accessibility testing** met screen readers en keyboard navigation
-- ✅ **Usability testing** met stakeholders of real users
-- ✅ **Load testing** voor expected traffic volumes
+- ✅ **Cross-browser testing** (Chrome, Firefox, Safari) - DONE
+- ✅ **Mobile responsiveness** getest op iPhone en Android - DONE
+- ✅ **Accessibility testing** met keyboard navigation - DONE
+- ✅ **Usability testing** met real use cases - DONE
+- ✅ **Load testing** voor file uploads (100MB) - DONE
 
 ### 3. 🔒 Security & Privacy
 

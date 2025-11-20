@@ -1,10 +1,11 @@
-# 📝 PERSOONLIJK REFLECTIEVERSLAG - GEMEENTE KLACHTENSYSTEEM
+# 📝 PERSOONLIJK REFLECTIEVERSLAG - GEMEENTE PORTAL
 
 **Naam Student:** Abdisamad Abdulle  
-**Studentnummer:** [in te vullen]  
-**Project:** Gemeente Klachtenportaal  
-**Datum:** 7 november 2025  
-**Periode:** 2024-2025 (blok 1)  
+**Studentnummer:** [Uw studentnummer]  
+**Project:** Gemeente Portal - Klachten Management Systeem  
+**Datum:** 20 November 2025  
+**Periode:** September 2025 - November 2025  
+**Status:** ✅ Production Ready  
 
 ---
 

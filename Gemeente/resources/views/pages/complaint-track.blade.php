@@ -26,15 +26,16 @@ use Illuminate\Support\Facades\Storage;
         }
         .status-badge {
             display: inline-block;
-            padding: 0.5rem 1rem;
+            padding: 0.75rem 1.5rem;
             border-radius: 50px;
-            font-weight: 600;
-            font-size: 0.875rem;
+            font-weight: 700;
+            font-size: 1rem;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
         }
-        .status-open { background: #dbeafe; color: #1e40af; }
-        .status-in_progress { background: #fef3c7; color: #92400e; }
-        .status-resolved { background: #d1fae5; color: #065f46; }
-        .status-closed { background: #e5e7eb; color: #374151; }
+        .status-open { background: #FEE2E2; color: #DC2626; }
+        .status-in_progress { background: #FED7AA; color: #EA580C; }
+        .status-resolved { background: #D1FAE5; color: #059669; }
+        .status-closed { background: #E5E7EB; color: #374151; }
 
         .timeline {
             position: relative;
@@ -84,14 +85,20 @@ use Illuminate\Support\Facades\Storage;
 
             <!-- Status -->
             <div style="text-align: center; margin-bottom: 2rem;">
-                <span class="status-badge status-{{ $complaint->status }}">
+                @php
+                    $statusClass = $complaint->status;
+                    // Normalize Dutch status to English class
+                    if ($complaint->status === 'opgelost') $statusClass = 'resolved';
+                    if ($complaint->status === 'gesloten') $statusClass = 'closed';
+                @endphp
+                <span class="status-badge status-{{ $statusClass }}">
                     @if($complaint->status === 'open')
-                        📋 Open
+                        🔴 Nieuw - Wacht op Behandeling
                     @elseif($complaint->status === 'in_progress')
-                        ⚙️ In Behandeling
-                    @elseif($complaint->status === 'resolved')
-                        ✅ Opgelost
-                    @elseif($complaint->status === 'closed')
+                        🟠 In Behandeling - We zijn ermee bezig
+                    @elseif($complaint->status === 'resolved' || $complaint->status === 'opgelost')
+                        ✅ VERWERKT - Uw melding is afgehandeld!
+                    @elseif($complaint->status === 'closed' || $complaint->status === 'gesloten')
                         🔒 Gesloten
                     @endif
                 </span>
@@ -170,7 +177,7 @@ use Illuminate\Support\Facades\Storage;
                     </div>
 
                     <!-- In Progress -->
-                    @if(in_array($complaint->status, ['in_progress', 'resolved', 'closed']))
+                    @if(in_array($complaint->status, ['in_progress', 'resolved', 'opgelost', 'closed', 'gesloten']))
                     <div class="timeline-item">
                         <div class="timeline-dot" style="background: #f59e0b; box-shadow: 0 0 0 2px #f59e0b;"></div>
                         <div class="timeline-content">
@@ -184,20 +191,20 @@ use Illuminate\Support\Facades\Storage;
                     @endif
 
                     <!-- Resolved -->
-                    @if(in_array($complaint->status, ['resolved', 'closed']))
+                    @if(in_array($complaint->status, ['resolved', 'opgelost', 'closed', 'gesloten']))
                     <div class="timeline-item">
-                        <div class="timeline-dot" style="background: #0ea5e9; box-shadow: 0 0 0 2px #0ea5e9;"></div>
-                        <div class="timeline-content">
-                            <p style="font-weight: 600; color: #1f2937; margin-bottom: 0.25rem;">Opgelost</p>
-                            <p style="font-size: 0.875rem; color: #6b7280;">
+                        <div class="timeline-dot" style="background: #10B981; box-shadow: 0 0 0 2px #10B981;"></div>
+                        <div class="timeline-content" style="background: #D1FAE5; border-left: 4px solid #10B981;">
+                            <p style="font-weight: 700; color: #065F46; margin-bottom: 0.25rem; font-size: 1.1rem;">✅ Uw Melding is Verwerkt!</p>
+                            <p style="font-size: 0.875rem; color: #047857;">
                                 @if($complaint->resolved_at)
                                     {{ $complaint->resolved_at->format('d-m-Y H:i') }}
                                 @else
                                     {{ $complaint->updated_at->format('d-m-Y H:i') }}
                                 @endif
                             </p>
-                            <p style="font-size: 0.875rem; color: #4b5563; margin-top: 0.5rem;">
-                                Uw melding is afgehandeld.
+                            <p style="font-size: 0.95rem; color: #065F46; margin-top: 0.5rem; font-weight: 600;">
+                                🎉 Bedankt voor uw melding! Deze is succesvol afgehandeld door onze diensten.
                             </p>
                         </div>
                     </div>

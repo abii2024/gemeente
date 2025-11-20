@@ -1,0 +1,401 @@
+<x-guest-layout>
+    <div class="min-h-screen bg-gradient-to-br from-sky-500 via-cyan-500 to-cyan-600 relative overflow-hidden">
+        <!-- 3D Background Elements -->
+        <div class="absolute inset-0 overflow-hidden pointer-events-none">
+            <div class="absolute top-20 left-10 w-72 h-72 bg-white/10 rounded-full blur-3xl animate-pulse"></div>
+            <div class="absolute bottom-20 right-10 w-96 h-96 bg-cyan-300/20 rounded-full blur-3xl animate-pulse" style="animation-delay: 1s;"></div>
+            <div class="absolute top-1/2 left-1/3 w-64 h-64 bg-sky-400/10 rounded-full blur-2xl"></div>
+        </div>
+
+        <div class="relative z-10 px-6 py-12 lg:px-12 xl:px-16">
+            <!-- Header Section -->
+            <div class="text-center mb-12">
+                <div class="inline-flex items-center justify-center w-24 h-24 bg-white/20 backdrop-blur-md rounded-3xl mb-8 shadow-2xl transform hover:scale-110 transition-transform duration-300" style="box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.4), inset 0 2px 4px rgba(255, 255, 255, 0.3);">
+                    <span class="text-6xl">📝</span>
+                </div>
+                <h1 class="text-6xl md:text-7xl lg:text-8xl font-black text-white mb-6 tracking-tight" style="text-shadow: 0 10px 30px rgba(0, 0, 0, 0.3), 0 4px 8px rgba(0, 0, 0, 0.2);">
+                    Klacht of Melding Indienen
+                </h1>
+                <p class="text-xl md:text-2xl text-white/95 max-w-4xl mx-auto font-semibold drop-shadow-lg">
+                    Help ons uw buurt beter te maken. Meld problemen in de openbare ruimte of met gemeentelijke diensten.
+                </p>
+            </div>
+
+            <!-- Info boxes - Compact horizontal strip -->
+            <div class="bg-white/90 backdrop-blur-lg rounded-2xl p-6 mb-8 max-w-7xl mx-auto border border-white/60" style="box-shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.2);">
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <div class="flex items-center gap-4">
+                        <div class="flex-shrink-0 w-14 h-14 bg-gradient-to-br from-sky-400 to-cyan-500 rounded-2xl flex items-center justify-center shadow-lg">
+                            <span class="text-3xl">⚡</span>
+                        </div>
+                        <div>
+                            <h3 class="text-base font-bold text-gray-900">Snelle Afhandeling</h3>
+                            <p class="text-sm text-gray-600">Behandeltijd: 3-5 werkdagen</p>
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-4">
+                        <div class="flex-shrink-0 w-14 h-14 bg-gradient-to-br from-cyan-400 to-sky-500 rounded-2xl flex items-center justify-center shadow-lg">
+                            <span class="text-3xl">📧</span>
+                        </div>
+                        <div>
+                            <h3 class="text-base font-bold text-gray-900">Automatische Updates</h3>
+                            <p class="text-sm text-gray-600">E-mail bij statuswijzigingen</p>
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-4">
+                        <div class="flex-shrink-0 w-14 h-14 bg-gradient-to-br from-sky-500 to-cyan-600 rounded-2xl flex items-center justify-center shadow-lg">
+                            <span class="text-3xl">🔒</span>
+                        </div>
+                        <div>
+                            <h3 class="text-base font-bold text-gray-900">Privacy Gegarandeerd</h3>
+                            <p class="text-sm text-gray-600">Veilig behandeld</p>
+                        </div>
+                    </div>
+                </div>
+            </div>            <!-- Form Container -->
+            <div class="bg-white/95 backdrop-blur-xl rounded-3xl overflow-hidden border-2 border-white/60 max-w-7xl mx-auto" style="box-shadow: 0 30px 80px -15px rgba(0, 0, 0, 0.4), 0 20px 40px -10px rgba(0, 0, 0, 0.3), inset 0 2px 6px rgba(255, 255, 255, 0.5);">
+                <div class="p-12 md:p-16 lg:p-20">
+                </div>
+                <div class="bg-white/98 backdrop-blur-md p-8 rounded-2xl border-2 border-white/40 shadow-2xl hover:shadow-3xl transition-all duration-300 transform hover:-translate-y-2 hover:scale-105">
+                    <div class="flex items-center justify-center w-16 h-16 bg-gradient-to-br from-sky-500 to-cyan-600 rounded-2xl mb-5 mx-auto shadow-xl">
+                        <span class="text-4xl">🔒</span>
+                    </div>
+                    <h3 class="text-xl font-extrabold text-gray-900 mb-3 text-center">Privacy Gegarandeerd</h3>
+                    <p class="text-base text-gray-700 text-center font-medium">Uw gegevens worden veilig behandeld</p>
+                </div>
+            </div>
+
+            <!-- Form Container -->
+            <div class="bg-white/98 backdrop-blur-md rounded-3xl shadow-2xl overflow-hidden border-2 border-white/50">
+                <div class="p-10 md:p-12 lg:p-16">
+
+                    <form action="{{ route('complaint.store') }}" method="POST" enctype="multipart/form-data" class="space-y-8">
+                        @csrf
+
+                        <!-- Title -->
+                        <div>
+                            <label for="title" class="block text-base font-bold text-gray-800 mb-3">
+                                Titel van de klacht * <span class="text-gray-600 text-sm">(Kort en duidelijk)</span>
+                            </label>
+                            <input type="text"
+                                   id="title"
+                                   name="title"
+                                   value="{{ old('title') }}"
+                                   required
+                                   maxlength="100"
+                                   class="w-full px-5 py-4 text-base border-2 border-gray-300 rounded-xl focus:ring-4 focus:ring-sky-400 focus:border-sky-500 transition-all duration-200 shadow-sm hover:shadow-md"
+                                   placeholder="Bijvoorbeeld: Kapotte straatlantaarn Hoofdstraat">
+                            @error('title')
+                                <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+                            @enderror
+                        </div>
+
+                        <!-- Category -->
+                        <div>
+                            <label for="category" class="block text-base font-bold text-gray-800 mb-3">
+                                Categorie * <span class="text-gray-600 text-sm">(Selecteer het type dienst)</span>
+                            </label>
+                            <select id="category"
+                                    name="category"
+                                    required
+                                    class="w-full px-5 py-4 text-base border-2 border-gray-300 rounded-xl focus:ring-4 focus:ring-sky-400 focus:border-sky-500 transition-all duration-200 shadow-sm hover:shadow-md">
+                                <option value="">🔽 Selecteer een categorie...</option>
+
+                                <optgroup label="🚗 Wegen & Verkeer">
+                                    <option value="wegen_onderhoud" {{ old('category') == 'wegen_onderhoud' ? 'selected' : '' }}>🛣️ Wegen - Gaten, barsten</option>
+                                    <option value="stoepen" {{ old('category') == 'stoepen' ? 'selected' : '' }}>🚶 Stoepen - Losse tegels</option>
+                                    <option value="fietspaden" {{ old('category') == 'fietspaden' ? 'selected' : '' }}>🚴 Fietspaden - Slecht onderhoud</option>
+                                    <option value="verkeersborden" {{ old('category') == 'verkeersborden' ? 'selected' : '' }}>🚦 Verkeersborden - Beschadigd</option>
+                                    <option value="parkeren" {{ old('category') == 'parkeren' ? 'selected' : '' }}>🅿️ Parkeren - Illegaal geparkeerd</option>
+                                </optgroup>
+
+                                <optgroup label="💡 Openbare Verlichting">
+                                    <option value="straatverlichting" {{ old('category') == 'straatverlichting' ? 'selected' : '' }}>🔦 Straatverlichting - Kapot</option>
+                                    <option value="parkverlichting" {{ old('category') == 'parkverlichting' ? 'selected' : '' }}>🌳 Parkverlichting - Defect</option>
+                                </optgroup>
+
+                                <optgroup label="♻️ Afval & Reiniging">
+                                    <option value="afval_ophaling" {{ old('category') == 'afval_ophaling' ? 'selected' : '' }}>🗑️ Afval - Niet opgehaald</option>
+                                    <option value="afval_container" {{ old('category') == 'afval_container' ? 'selected' : '' }}>🚮 Container - Vol, beschadigd</option>
+                                    <option value="zwerfvuil" {{ old('category') == 'zwerfvuil' ? 'selected' : '' }}>🗑️ Zwerfvuil - Rommel</option>
+                                    <option value="graffiti" {{ old('category') == 'graffiti' ? 'selected' : '' }}>🎨 Graffiti - Vandalisme</option>
+                                </optgroup>
+
+                                <optgroup label="🌳 Groen & Natuur">
+                                    <option value="bomen" {{ old('category') == 'bomen' ? 'selected' : '' }}>🌲 Bomen - Gevaarlijk, ziek</option>
+                                    <option value="parken" {{ old('category') == 'parken' ? 'selected' : '' }}>🏞️ Parken - Onderhoud nodig</option>
+                                    <option value="speeltuinen" {{ old('category') == 'speeltuinen' ? 'selected' : '' }}>🛝 Speeltuinen - Kapot</option>
+                                </optgroup>
+
+                                <optgroup label="💧 Water & Riolering">
+                                    <option value="riool_verstopt" {{ old('category') == 'riool_verstopt' ? 'selected' : '' }}>🚰 Riool - Verstopt</option>
+                                    <option value="wateroverlast" {{ old('category') == 'wateroverlast' ? 'selected' : '' }}>💦 Wateroverlast</option>
+                                </optgroup>
+
+                                <optgroup label="😤 Overlast">
+                                    <option value="geluidsoverlast" {{ old('category') == 'geluidsoverlast' ? 'selected' : '' }}>🔊 Geluidsoverlast</option>
+                                    <option value="stankoverlast" {{ old('category') == 'stankoverlast' ? 'selected' : '' }}>👃 Stankoverlast</option>
+                                </optgroup>
+
+                                <optgroup label="🔍 Anders">
+                                    <option value="overig" {{ old('category') == 'overig' ? 'selected' : '' }}>📌 Overig</option>
+                                </optgroup>
+                            </select>
+                            @error('category')
+                                <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+                            @enderror
+                        </div>
+
+                        <!-- Priority -->
+                        <div>
+                            <label for="priority" class="block text-base font-bold text-gray-800 mb-3">
+                                Urgentie
+                            </label>
+                            <select id="priority"
+                                    name="priority"
+                                    class="w-full px-5 py-4 text-base border-2 border-gray-300 rounded-xl focus:ring-4 focus:ring-sky-400 focus:border-sky-500 transition-all duration-200 shadow-sm hover:shadow-md">
+                                <option value="low" {{ old('priority', 'medium') == 'low' ? 'selected' : '' }}>Laag</option>
+                                <option value="medium" {{ old('priority', 'medium') == 'medium' ? 'selected' : '' }}>Normaal</option>
+                                <option value="high" {{ old('priority', 'medium') == 'high' ? 'selected' : '' }}>Hoog</option>
+                                <option value="urgent" {{ old('priority', 'medium') == 'urgent' ? 'selected' : '' }}>Urgent</option>
+                            </select>
+                        </div>
+
+                        <!-- Description -->
+                        <div>
+                            <label for="description" class="block text-base font-bold text-gray-800 mb-3">
+                                Beschrijving * <span class="text-gray-600 text-sm">(Geef zoveel mogelijk details)</span>
+                            </label>
+                            <textarea id="description"
+                                      name="description"
+                                      rows="6"
+                                      required
+                                      class="w-full px-5 py-4 text-base border-2 border-gray-300 rounded-xl focus:ring-4 focus:ring-sky-400 focus:border-sky-500 transition-all duration-200 shadow-sm hover:shadow-md"
+                                      placeholder="Beschrijf het probleem zo uitgebreid mogelijk...">{{ old('description') }}</textarea>
+                            <p class="text-xs text-gray-500 mt-1">💡 Tip: Hoe meer details u geeft, hoe sneller we u kunnen helpen!</p>
+                            @error('description')
+                                <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+                            @enderror
+                        </div>
+
+                        <!-- Location Section -->
+                        <div x-data="locationPicker()" class="space-y-4">
+                            <div class="bg-gradient-to-r from-sky-50 to-cyan-50 p-6 rounded-xl border-2 border-sky-200 shadow-md">
+                                <div class="flex items-start gap-4">
+                                    <div class="flex-shrink-0 w-12 h-12 bg-gradient-to-br from-sky-500 to-cyan-500 rounded-full flex items-center justify-center shadow-lg">
+                                        <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                                        </svg>
+                                    </div>
+                                    <div class="flex-1">
+                                        <h3 class="font-bold text-sky-900 mb-2 text-lg">📍 Locatie toevoegen</h3>
+                                        <p class="text-sky-800">Met een precieze locatie kunnen we uw melding sneller behandelen.</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="flex items-center justify-between">
+                                <label class="block text-base font-bold text-gray-800">
+                                    Locatie (optioneel)
+                                </label>
+                                <button type="button"
+                                        @click="getCurrentLocation()"
+                                        :disabled="gettingLocation"
+                                        class="inline-flex items-center px-4 py-2.5 border border-transparent text-sm font-semibold rounded-lg text-white bg-gradient-to-r from-sky-500 to-cyan-500 hover:from-sky-600 hover:to-cyan-600 focus:outline-none focus:ring-4 focus:ring-sky-300 disabled:opacity-50 shadow-lg hover:shadow-xl transition-all duration-200 transform hover:scale-105">
+                                    <svg x-show="!gettingLocation" class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
+                                    </svg>
+                                    <span x-text="gettingLocation ? 'Locatie ophalen...' : 'Gebruik mijn locatie'"></span>
+                                </button>
+                            </div>
+
+                            <!-- Location Inputs -->
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <div>
+                                    <label for="lat" class="block text-base font-bold text-gray-800 mb-3">Latitude</label>
+                                    <input type="number" id="lat" name="lat" step="any" x-model="latitude" value="{{ old('lat') }}"
+                                           class="w-full px-5 py-4 text-base border-2 border-gray-300 rounded-xl focus:ring-4 focus:ring-sky-400 focus:border-sky-500 transition-all duration-200 shadow-sm hover:shadow-md" placeholder="52.3676">
+                                </div>
+                                <div>
+                                    <label for="lng" class="block text-base font-bold text-gray-800 mb-3">Longitude</label>
+                                    <input type="number" id="lng" name="lng" step="any" x-model="longitude" value="{{ old('lng') }}"
+                                           class="w-full px-5 py-4 text-base border-2 border-gray-300 rounded-xl focus:ring-4 focus:ring-sky-400 focus:border-sky-500 transition-all duration-200 shadow-sm hover:shadow-md" placeholder="4.9041">
+                                </div>
+                            </div>
+
+                            <div>
+                                <label for="location" class="block text-base font-bold text-gray-800 mb-3">📍 Adres</label>
+                                <input type="text" id="location" name="location" value="{{ old('location') }}"
+                                       class="w-full px-5 py-4 text-base border-2 border-gray-300 rounded-xl focus:ring-4 focus:ring-sky-400 focus:border-sky-500 transition-all duration-200 shadow-sm hover:shadow-md"
+                                       placeholder="Bijvoorbeeld: Damrak 1, Amsterdam">
+                            </div>
+
+                            <div x-show="locationError" class="bg-red-50 border border-red-200 rounded-md p-3">
+                                <p class="text-sm text-red-700" x-text="locationError"></p>
+                            </div>
+
+                            <div x-show="locationSuccess" class="bg-green-50 border border-green-200 rounded-md p-3">
+                                <p class="text-sm text-green-700">Locatie succesvol opgehaald!</p>
+                            </div>
+                        </div>
+
+                        <!-- Reporter Info -->
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div>
+                                <label for="reporter_name" class="block text-base font-bold text-gray-800 mb-3">Uw naam *</label>
+                                <input type="text" id="reporter_name" name="reporter_name" value="{{ old('reporter_name') }}" required
+                                       class="w-full px-5 py-4 text-base border-2 border-gray-300 rounded-xl focus:ring-4 focus:ring-sky-400 focus:border-sky-500 transition-all duration-200 shadow-sm hover:shadow-md">
+                                @error('reporter_name')
+                                    <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+                                @enderror
+                            </div>
+                            <div>
+                                <label for="reporter_email" class="block text-base font-bold text-gray-800 mb-3">Uw e-mailadres *</label>
+                                <input type="email" id="reporter_email" name="reporter_email" value="{{ old('reporter_email') }}" required
+                                       class="w-full px-5 py-4 text-base border-2 border-gray-300 rounded-xl focus:ring-4 focus:ring-sky-400 focus:border-sky-500 transition-all duration-200 shadow-sm hover:shadow-md">
+                                @error('reporter_email')
+                                    <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+                                @enderror
+                            </div>
+                        </div>
+
+                        <div>
+                            <label for="reporter_phone" class="block text-base font-bold text-gray-800 mb-3">Telefoonnummer (optioneel)</label>
+                            <input type="tel" id="reporter_phone" name="reporter_phone" value="{{ old('reporter_phone') }}"
+                                   class="w-full px-5 py-4 text-base border-2 border-gray-300 rounded-xl focus:ring-4 focus:ring-sky-400 focus:border-sky-500 transition-all duration-200 shadow-sm hover:shadow-md" placeholder="06-12345678">
+                        </div>
+
+                        <!-- File Upload -->
+                        <div x-data="fileUploader()" class="space-y-4">
+                            <div class="bg-gradient-to-r from-cyan-50 to-sky-50 p-6 rounded-xl border-2 border-cyan-200 shadow-md">
+                                <div class="flex items-start gap-4">
+                                    <div class="flex-shrink-0 w-12 h-12 bg-gradient-to-br from-cyan-500 to-sky-500 rounded-full flex items-center justify-center shadow-lg">
+                                        <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"></path>
+                                        </svg>
+                                    </div>
+                                    <div class="flex-1">
+                                        <h3 class="font-bold text-cyan-900 mb-2 text-lg">📸 Foto's toevoegen</h3>
+                                        <p class="text-cyan-800">Een foto zegt meer dan duizend woorden!</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div @click="$refs.fileInput.click()"
+                                 class="border-3 border-dashed border-gray-300 rounded-2xl p-12 text-center cursor-pointer hover:border-sky-500 hover:bg-sky-50 transition-all duration-300 shadow-sm hover:shadow-lg">
+                                <svg class="mx-auto h-16 w-16 text-gray-400" stroke="currentColor" fill="none" viewBox="0 0 48 48">
+                                    <path d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02" stroke-width="2"/>
+                                </svg>
+                                <p class="text-base text-gray-700 mt-5 font-medium">
+                                    <span class="font-bold text-sky-600">Klik om foto's te selecteren</span> of sleep ze hierheen
+                                </p>
+                                <p class="text-sm text-gray-500 mt-2">PNG, JPG tot 10MB (max 5 bestanden)</p>
+                            </div>
+
+                            <input type="file" x-ref="fileInput" @change="handleFiles($event.target.files)" name="attachments[]" multiple accept="image/*" class="hidden">
+
+                            <div x-show="files.length > 0" class="space-y-2">
+                                <template x-for="(file, index) in files" :key="index">
+                                    <div class="flex items-center justify-between bg-gray-50 p-3 rounded-lg">
+                                        <div class="flex items-center space-x-3">
+                                            <div class="w-12 h-12 rounded bg-gray-200"></div>
+                                            <p class="text-sm font-medium" x-text="file.name"></p>
+                                        </div>
+                                        <button type="button" @click="removeFile(index)" class="text-red-600 hover:text-red-800">
+                                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                                            </svg>
+                                        </button>
+                                    </div>
+                                </template>
+                            </div>
+                        </div>
+
+                        <!-- Submit Button -->
+                        <div class="bg-gradient-to-r from-sky-50 to-cyan-50 p-12 rounded-3xl border-2 border-sky-200" style="box-shadow: 0 20px 50px -10px rgba(14, 165, 233, 0.3), inset 0 2px 4px rgba(255, 255, 255, 0.8);">
+                            <div class="flex flex-col md:flex-row items-center justify-between gap-10">
+                                <div class="flex-1">
+                                    <h3 class="text-3xl font-black text-gray-900 mb-4">✅ Klaar om in te dienen?</h3>
+                                    <p class="text-lg text-gray-700 font-semibold">Controleer of alle gegevens correct zijn voordat u de melding indient.</p>
+                                </div>
+                                <button type="submit"
+                                        class="px-12 py-6 bg-gradient-to-r from-sky-500 to-cyan-500 hover:from-sky-600 hover:to-cyan-600 text-white text-2xl font-black rounded-2xl transform hover:scale-110 hover:-rotate-1 transition-all duration-300 flex items-center gap-4 shadow-xl hover:shadow-2xl" style="box-shadow: 0 25px 50px -12px rgba(6, 182, 212, 0.6), 0 10px 20px -5px rgba(14, 165, 233, 0.4);">
+                                    <span class="text-4xl">📤</span>
+                                    <span>Melding Indienen</span>
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+<script>
+function locationPicker() {
+    return {
+        latitude: '',
+        longitude: '',
+        gettingLocation: false,
+        locationError: '',
+        locationSuccess: false,
+
+        getCurrentLocation() {
+            if (!navigator.geolocation) {
+                this.locationError = 'Geolocation niet ondersteund.';
+                return;
+            }
+
+            this.gettingLocation = true;
+            this.locationError = '';
+            this.locationSuccess = false;
+
+            navigator.geolocation.getCurrentPosition(
+                (position) => {
+                    this.latitude = position.coords.latitude.toFixed(6);
+                    this.longitude = position.coords.longitude.toFixed(6);
+                    this.gettingLocation = false;
+                    this.locationSuccess = true;
+                    setTimeout(() => this.locationSuccess = false, 3000);
+                },
+                (error) => {
+                    this.gettingLocation = false;
+                    this.locationError = 'Locatie ophalen mislukt.';
+                }
+            );
+        }
+    }
+}
+
+function fileUploader() {
+    return {
+        files: [],
+        maxFiles: 5,
+
+        handleFiles(fileList) {
+            const files = Array.from(fileList);
+            if (this.files.length + files.length > this.maxFiles) return;
+
+            files.forEach(file => {
+                this.files.push({ file: file, name: file.name });
+            });
+            this.updateFileInput();
+        },
+
+        removeFile(index) {
+            this.files.splice(index, 1);
+            this.updateFileInput();
+        },
+
+        updateFileInput() {
+            const fileInput = this.$refs.fileInput;
+            const dt = new DataTransfer();
+            this.files.forEach(fileObj => dt.items.add(fileObj.file));
+            fileInput.files = dt.files;
+        }
+    }
+}
+</script>
+
+</x-guest-layout>
